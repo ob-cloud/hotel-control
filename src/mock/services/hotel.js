@@ -100,9 +100,25 @@ const unbindHotelUser = (options) => {
   return builder({}, '成功')
 }
 
+const editHotel = () => {
+  return builder({}, '成功')
+}
+
+const delHotel = (options) => {
+  const body = getBody(options)
+  if (!body.id) {
+    return builder({ code: false }, 'Id错误', 401)
+  }
+  return builder({}, '成功')
+}
+
 Mock.mock(/\/common\/getHotelList/, 'get', getHotelList)
 
 Mock.mock(/\/common\/getHotelUserList/, 'get', getUserListByHotel)
+
+Mock.mock(/\/common\/editHotel/, 'post', editHotel)
+Mock.mock(/\/common\/addHotel/, 'post', editHotel)
+Mock.mock(/\/common\/delHotel/, 'post', delHotel)
 
 Mock.mock(/\/common\/bindHotelUser/, 'post', bindHotelUser)
 Mock.mock(/\/common\/unbindHotelUser/, 'post', unbindHotelUser)

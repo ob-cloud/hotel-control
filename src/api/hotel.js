@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-15 17:57:47
+ * @Last Modified time: 2020-10-15 18:23:09
  */
 
 import { getAction, postFormAction, postAction } from '@/utils/ajax'
@@ -13,7 +13,7 @@ const getHotelList = (params) => getAction('/common/getHotelList', {
   ...params
 })
 const editHotel = () => postFormAction('/common/editHotel', {})
-const addHotel = () => postFormAction('/common/editHotel', {})
+const addHotel = () => postFormAction('/common/addHotel', {})
 const delHotel = (id) => postAction('/common/delHotel', {id})
 const getUserListByHotel = (params) => getAction('/common/getHotelUserList', params)
 const bindHotelUser = (hotelId, userId) => postAction('/common/bindHotelUser', { hotelId, userId })
