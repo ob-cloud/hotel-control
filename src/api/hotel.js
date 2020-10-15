@@ -2,11 +2,27 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-09-22 18:12:44
+ * @Last Modified time: 2020-10-15 17:57:47
  */
 
-import { getAction, postFormAction } from '@/utils/ajax'
+import { getAction, postFormAction, postAction } from '@/utils/ajax'
 
+// 酒店
+const getHotelList = (params) => getAction('/common/getHotelList', {
+  CMD: 'get_building_floor_room',
+  ...params
+})
+const editHotel = () => postFormAction('/common/editHotel', {})
+const addHotel = () => postFormAction('/common/editHotel', {})
+const delHotel = (id) => postAction('/common/delHotel', {id})
+const getUserListByHotel = (params) => getAction('/common/getHotelUserList', params)
+const bindHotelUser = (hotelId, userId) => postAction('/common/bindHotelUser', { hotelId, userId })
+const unbindHotelUser = (hotelId, userId) => postAction('/common/unbindHotelUser', { hotelId, userId })
+const getHotelSetting = (id) => getAction('/common/getHotelSetting', {id})
+const addHotelSetting = (params) => postAction('/common/addHotelSetting', params)
+const editHotelSetting = (params) => postAction('/common/editHotelSetting', params)
+
+// 房间
 const getRoomCascader = () => getAction('/common', {
   CMD: 'get_building_floor_room'
 })
@@ -108,98 +124,19 @@ const delFloor = (id) => postFormAction('/common', {
   floor: JSON.stringify({id})
 })
 
-// const RoomAPI = {
-//   getRoomList (params) {
-//     const page = params.pageNo
-//     const pageSize = params.pageSize
-//     delete params.pageNo
-//     delete params.pageSize
-//     return request.get('/consumer/common', {
-//       CMD: 'query_location',
-//       start: page,
-//       count: pageSize,
-//       ...params
-//     })
-//   },
-//   getRoomDeviceList (params) {
-//     return request.postForm('/consumer/common', {
-//       CMD: 'query_device_location',
-//       start: params.pageNo,
-//       count: params.pageSize,
-//       location: params.room
-//     })
-//   },
-//   getRoomSceneList (params) {
-//     return request.postForm('/consumer/common', {
-//       CMD: 'query_scene_location',
-//       start: params.pageNo,
-//       count: params.pageSize,
-//       location: params.room
-//     })
-//   },
-//   createRoom (params) {
-//     return request.postForm('/consumer/common', {
-//       CMD: 'create_location',
-//       action: '01',
-//       building: params.room,
-//       room: params.room,
-//       layer: params.layer
-//     })
-//   },
-//   editRoom (params) {
-
-//   },
-//   deleteRoom (params) {
-//     return request.get('/consumer/common', {
-//       CMD: 'create_location',
-//       action: '00',
-//       location: params.location,
-//       building: params.room,
-//       room: params.room,
-//       layer: params.layer
-//     })
-//   },
-//   // 添加设备到教室
-//   setRoomDevice (params) {
-//     return request.postForm('/consumer/common', {
-//       CMD: 'set_device_location',
-//       device_type: params.device_type,
-//       serialId: params.serialId,
-//       location: params.location,
-//       x_axis: 0,
-//       y_axis: 0
-//     })
-//   },
-//   removeRoomDevice (params) {
-//     return request.postForm('/consumer/common', {
-//       CMD: 'delete_device_location',
-//       device_type: params.device_type,
-//       serialId: params.serialId,
-//       location: params.location
-//     })
-//   },
-//   // 绑定场景到教室
-//   setRoomScene (params) {
-//     return request.postForm('/consumer/common', {
-//       CMD: 'set_scene_location',
-//       action: '01',
-//       scene_number: params.scene_number,
-//       location: params.location
-//     })
-//   },
-//   // 删除教室场景
-//   removeRoomScene (location, sceneNumber) {
-//     return request.postForm('/consumer/common', {
-//       CMD: 'delete_scene_location',
-//       location,
-//       scene_number: sceneNumber
-//     })
-//   },
-
-
-// export default {...RoomAPI, ...BuildingAPI, ...FloorAPI}
-
 export {
+  getHotelList,
+  editHotel,
+  addHotel,
+  delHotel,
+  getUserListByHotel,
+  bindHotelUser,
+  unbindHotelUser,
+  getHotelSetting,
+  addHotelSetting,
+  editHotelSetting,
+
+  // 房
   getRoomCascader,
   getRoomDeviceList,
   getRoomList,

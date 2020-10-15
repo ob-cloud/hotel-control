@@ -27,7 +27,7 @@
 
 <script>
 import pick from 'lodash.pick'
-import { getSelectBuildingList, getFloorByBuildingId, addRoom, editRoom } from '@/api/room'
+import { getSelectBuildingList, getFloorByBuildingId, addRoom, editRoom } from '@/api/hotel'
 export default {
   data () {
     return {

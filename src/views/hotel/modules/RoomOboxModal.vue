@@ -51,7 +51,7 @@
 <script>
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import { getRoomObox, unbindObox2Room } from '@/api/device'
-import { getRoomDeviceList } from '@/api/room'
+import { getRoomDeviceList } from '@/api/hotel'
 import { getSmartSceneList } from '@/api/scene'
 
 import { Descriptor } from 'hardware-suit'

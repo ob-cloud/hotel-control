@@ -4,7 +4,7 @@ import { builder, getBody } from '../util'
 const username = ['admin', 'super']
 // 强硬要求 ant.design 相同密码
 // '21232f297a57a5a743894a0e4a801fc3'
-const password = ['e10adc3949ba59abbe56e057f20f883e'] // admin, 123456
+const password = ['25d55ad283aa400af464c76d713c07ad'] // admin, 123456
 
 const login = (options) => {
   const body = getBody(options)
@@ -14,19 +14,26 @@ const login = (options) => {
   }
   const userInfo = {
     'id': Mock.mock('@guid'),
-    'realname': Mock.mock('@name'),
-    'username': 'admin',
-    'password': '',
-    'avatar': 'https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png',
-    'status': 1,
-    'telephone': '',
-    'lastLoginIp': '27.154.74.117',
-    'lastLoginTime': 1534837621348,
-    'creatorId': 'admin',
-    'createTime': 1497160610259,
-    'deleted': 0,
-    'roleId': 'admin',
-    'lang': 'zh-CN'
+    "username": "admin",
+    "realname": Mock.mock('@name'),
+    "password": "",
+    "salt": "WNWUAAmO",
+    "avatar": 'https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png',
+    "birthday": null,
+    "sex": null,
+    "email": null,
+    "phone": null,
+    "orgCode": null,
+    "status": 1,
+    "delFlag": 0,
+    "activitiSync": true,
+    "workNo": null,
+    "post": null,
+    "telephone": null,
+    "createBy": "cc6",
+    "createTime": "2020-08-20 16:32:48",
+    "updateBy": "admin",
+    "updateTime": "2020-09-01 17:42:41"
   }
   return builder({ token: '4291d7da9005377ec9aec4a71ea837f', userInfo }, '', 0, { 'Custom-Header': Mock.mock('@guid') }, true)
 }

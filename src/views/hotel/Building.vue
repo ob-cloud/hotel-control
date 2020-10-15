@@ -4,7 +4,6 @@
       <div slot="title" class="search-bar">
         <div class="caption">
           <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.buildName" placeholder="楼栋"></a-input>
-          <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.floorName" placeholder="楼层"></a-input>
           <a-button type="primary" @click="handleSearch" icon="search">查询</a-button>
           <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
         </div>
@@ -12,49 +11,48 @@
       <div slot="extra">
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
-          <a-button v-isPermitted="'room:floor:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
-          <a-button v-isPermitted="'room:floor:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button>
-
+          <a-button v-isPermitted="'room:building:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
+          <a-button v-isPermitted="'room:building:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button>
         </a-button-group>
       </div>
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
         <a-spin :spinning="loading">
           <div class="block-item" :class="{'active': item.lightState}" v-for="item in dataList" :key="item.id">
             <div class="toolbar">
-              <a-popconfirm :title="`${item.lightState ? '关' : '开'}楼层灯?`" @confirm="() => handleLamp(item)">
-                <!-- <i v-isPermitted="'room:classroom:lamp'" class="icon obicon obicon-lamp" :class="{active: item.lightState}" title="楼层灯"></i> -->
-                <i v-isPermitted="'room:floor:lamp'" class="icon obicon obicon-droplight" style="font-weight: 600;" :class="{active: item.lightState}" title="楼层灯"></i>
+              <a-popconfirm :title="`${item.lightState ? '关' : '开'}楼栋灯?`" @confirm="() => handleLamp(item)">
+                <!-- <i v-isPermitted="'room:classroom:lamp'" class="icon obicon obicon-lamp" title="楼栋灯"></i> -->
+                <i v-isPermitted="'room:building:lamp'" class="icon obicon obicon-droplight" style="font-weight: 600;" :class="{active: item.lightState}" title="楼栋灯"></i>
               </a-popconfirm>
-              <a-popconfirm :title="`${item.switchState ? '关闭' : '开启'}楼层开关?`" @confirm="() => handlePower(item)">
-                <i v-isPermitted="'room:floor:switch'" class="icon obicon obicon-power" :class="{active: item.switchState}" title="楼层开关"></i>
+              <a-popconfirm :title="`${item.switchState ? '关闭' : '开启'}楼栋开关?`" @confirm="() => handlePower(item)">
+                <i v-isPermitted="'room:building:switch'" class="icon obicon obicon-power" :class="{active: item.switchState}" title="楼层开关"></i>
               </a-popconfirm>
-              <a-icon v-isPermitted="'room:floor:edit'" class="icon" type="edit" title="编辑" @click="handleEdit(item)" />
+              <a-icon v-isPermitted="'room:building:edit'" class="icon" type="edit" title="编辑" @click="handleEdit(item)" />
               <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
-                <a-icon v-isPermitted="'room:floor:delete'" class="icon" type="delete" />
+                <a-icon v-isPermitted="'room:building:delete'" class="icon" type="delete" />
               </a-popconfirm>
             </div>
             <div class="content">
-              <i class="building-sign obicon obicon-building"></i>
+              <i class="building-sign obicon obicon-building-o"></i>
               <p class="text">
-                {{ item.buildingName }}栋{{ item.floorName }}层
+                {{ item.buildName }}栋
               </p>
             </div>
           </div>
         </a-spin>
         <a-pagination style="position: fixed; right: 70px; bottom: 30px;" simple :current="queryParam.pageNo" :pageSize.sync="queryParam.pageSize" :total="total" @change="handlePageChange" />
       </div>
-      <floor-modal ref="modalForm" @ok="modalFormOk"></floor-modal>
+      <building-modal ref="modalForm" @ok="modalFormOk"></building-modal>
     </a-card>
   </div>
 </template>
 
 <script>
-import { getFloorList, delFloor, handleLampPower, handleSwitchPower, getPowerStatus, triggerAllPower } from '@/api/room'
+import { getBuildingList, delBuilding, handleLampPower, handleSwitchPower, getPowerStatus, triggerAllPower } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
-import FloorModal from './modules/FloorModal'
+import BuildingModal from './modules/BuildingModal'
 export default {
-  components: { FloorModal },
+  components: { BuildingModal },
   mixins: [ProListMixin],
   data () {
     return {
@@ -89,7 +87,7 @@ export default {
         this.queryParam.pageNo = 1
       }
       this.loading = true
-      getFloorList(this.queryParam).then(res => {
+      getBuildingList(this.queryParam).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataList = res.result.records
           this.total = res.result.total
@@ -111,8 +109,19 @@ export default {
       this.loadData(1)
     },
     handleLamp (item) {
+      // console.log(state)
+      // const val = state ? 100 : 0
+      // const ledLampEquip = new LedLampEquip('')
+      // ledLampEquip.setBrightness(val).setColdColor(0).setWarmColor().getBytes()
+      // // editSwitchStatus(this.model.serialId, status).then(res => {
+      // //   if (this.$isAjaxSuccess(res.code)) {
+      // //     this.$message.success('成功')
+      // //   } else {
+      // //     this.$message.error('失败')
+      // //   }
+      // // })
       const params = {
-        floorId: item.id,
+        buildingId: item.id,
         deviceType: item.lightState ? 2 : 1
       }
       handleLampPower(params).then(res => {
@@ -124,7 +133,7 @@ export default {
     handlePower (item) {
       // const isPowerOn = this.isLightActive(item.deviceState)
       // const params = {
-      //   floorId: item.id,
+      //   buildingId: item.id,
       //   deviceType: item.allType === 1 ? 2 : 1
       // }
       // handleLampPower(params).then(res => {
@@ -134,12 +143,13 @@ export default {
       //   } else this.$message.error(res.message)
       // })
       const params = {
-        floorId: item.id,
+        buildingId: item.id,
         deviceType: item.switchState ? 2 : 1
       }
       handleSwitchPower(params).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
+          // this.loadData()
         } else this.$message.error(res.message)
       })
     },
@@ -161,7 +171,7 @@ export default {
       })
     },
     handleRemove (id) {
-      delFloor(id).then(res => {
+      delBuilding(id).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('删除成功')
           this.loadData(1)
@@ -223,8 +233,6 @@ export default {
   padding: 20px;
   background: #fff;
   margin: 10px;
-  // width: 218px;
-  // height: 156px;
   width: 230px;
   height: 164px;
   border-radius: 4px;
@@ -261,7 +269,6 @@ export default {
       & + .icon{
         right: 5px;
       }
-
       &.active{
         color: #0cadf8;
         font-weight: bolder;

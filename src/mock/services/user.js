@@ -1,5 +1,5 @@
 import Mock from 'mockjs2'
-import { builder } from '../util'
+import { builder, getQueryParameters } from '../util'
 
 const info = (options) => {
   console.log('options', options)
@@ -370,7 +370,7 @@ const info = (options) => {
   return builder(userInfo)
 }
 
-const userNav = (options) => {
+const userNav = () => {
   const nav = [
     // dashboard
     {
@@ -766,7 +766,7 @@ const userNav = (options) => {
   return json
 }
 
-const queryPermissionList = (options) => {
+const queryPermissionList = () => {
   const menu = [
     {
       component: 'dashboard/Analysis',
@@ -823,6 +823,65 @@ const queryPermissionList = (options) => {
   }
 }
 
+const getUserList = () => {
+  const result = []
+  for (let i = 1; i < Mock.mock('@integer(1,10)'); i++) {
+    const tmpKey = i
+    result.push({
+      key: tmpKey,
+      id: tmpKey,
+      name: Mock.mock('@cname()'),
+    })
+  }
+
+  console.log('mock: ', builder({
+    records: result
+  }))
+
+  return builder({
+    records: result
+  })
+}
+
+const totalCount = 5701
+const getUserListPage = (options) => {
+  const parameters = getQueryParameters(options)
+
+  const result = []
+  const pageNo = parseInt(parameters.pageNo)
+  const pageSize = parseInt(parameters.pageSize)
+  const totalPage = Math.ceil(totalCount / pageSize)
+  const key = (pageNo - 1) * pageSize
+  const next = (pageNo >= totalPage ? (totalCount % pageSize) : pageSize) + 1
+
+  for (let i = 1; i < next; i++) {
+    const tmpKey = key + i
+    result.push({
+      id: tmpKey,
+      username: Mock.mock('@cname()'),
+      account: Mock.mock('@name()'),
+    })
+  }
+  console.log('mock: ', builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  }))
+
+  return builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  })
+}
+
 Mock.mock(/\/api\/user\/info/, 'get', info)
 Mock.mock(/\/api\/user\/nav/, 'get', userNav)
 Mock.mock(/\/api\/user\/queryPermissionList/, 'get', queryPermissionList)
+
+Mock.mock(/\/sys\/user\/listAll/, 'get', getUserList)
+Mock.mock(/\/sys\/user\/list/, 'get', getUserListPage)

@@ -1,0 +1,231 @@
+<template>
+  <a-drawer
+    :title="title"
+    :maskClosable="true"
+    :width="drawerWidth"
+    placement="right"
+    :closable="true"
+    @close="handleCancel"
+    :visible="visible"
+  >
+
+    <template slot="title">
+      <div style="width: 100%;">
+        <span>{{ title }}</span>
+        <span style="display:inline-block;width:calc(100% - 51px);padding-right:10px;text-align: right">
+          <a-button @click="toggleScreen" icon="appstore" style="height:20px;width:20px;border:0px"></a-button>
+        </span>
+      </div>
+
+    </template>
+
+    <a-spin :spinning="confirmLoading">
+      <a-form :form="form">
+
+        <a-form-item label="酒店名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入酒店名称" v-decorator="[ 'name', validatorRules.name]" :readOnly="!!model.id" />
+        </a-form-item>
+
+        <a-form-item label="所属公司" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input type="company" placeholder="请输入所属公司" v-decorator="[ 'company', validatorRules.normal]" />
+        </a-form-item>
+
+        <a-form-item label="联系人" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入联系人" v-decorator="[ 'contacts', validatorRules.normal]" />
+        </a-form-item>
+
+        <a-form-item label="联系方式" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入联系方式" v-decorator="[ 'contact', validatorRules.normal]" />
+        </a-form-item>
+
+        <a-form-item label="前台电话" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入前台电话" v-decorator="[ 'frontPhone', validatorRules.normal]" />
+        </a-form-item>
+
+        <a-form-item label="业务员" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-select
+            style="width: 100%"
+            placeholder="请选择绑定业务员"
+            optionFilterProp="children"
+            v-model="selectedUser"
+          >
+            <a-select-option v-for="(user, userIndex) in userList" :key="userIndex.toString()" :value="user.id">
+              {{ user.name }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+
+        <a-form-item label="是否连锁" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-select v-decorator="[ 'isChain', {}]" placeholder="请选择连锁状态">
+            <a-select-option :value="1">连锁酒店</a-select-option>
+            <a-select-option :value="0">非连锁酒店</a-select-option>
+          </a-select>
+        </a-form-item>
+      </a-form>
+    </a-spin>
+
+    <div class="drawer-bootom-button" v-show="!disableSubmit">
+      <a-popconfirm title="确定放弃编辑？" @confirm="handleCancel" okText="确定" cancelText="取消">
+        <a-button style="margin-right: .8rem">取消</a-button>
+      </a-popconfirm>
+      <a-button @click="handleSubmit" type="primary" :loading="confirmLoading">提交</a-button>
+    </div>
+  </a-drawer>
+</template>
+
+<script>
+  import pick from 'lodash.pick'
+  import { addHotel, editHotel } from '@/api/hotel'
+  import { getUserListUnPage } from '@/api/system'
+
+  export default {
+    name: 'HotelModal',
+    components: {
+    },
+    data () {
+      return {
+        modalWidth: 800,
+        drawerWidth: 700,
+        modaltoggleFlag: true,
+        confirmDirty: false,
+        hotelId: '', //保存酒店id
+        disableSubmit: false,
+        validatorRules: {
+          username: {
+            rules: [{
+              required: true, message: '请输入用户账号!'
+            }]
+          },
+          normal: { rules: [{required: true, message: '不能为空!'}]},
+          realname: {rules: [{ required: true, message: '请输入用户名称!' }]},
+          phone: {rules: [{validator: this.validatePhone}]}
+        },
+        title: '操作',
+        visible: false,
+        model: {},
+        userList: [],
+        selectedUser: undefined,
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 5 },
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 16 },
+        },
+        confirmLoading: false,
+        form: this.$form.createForm(this),
+      }
+    },
+    methods: {
+      //窗口最大化切换
+      toggleScreen () {
+        this.modalWidth = this.modaltoggleFlag ? window.innerWidth : 800
+        this.modaltoggleFlag = !this.modaltoggleFlag;
+      },
+      initialUserList () {
+        getUserListUnPage().then((res) => {
+          if (this.$isAjaxSuccess(res.code)) {
+            this.userList = res.result.records
+          } else {
+            console.log(res.message)
+          }
+        })
+      },
+      refresh () {
+        this.userId = ''
+      },
+      add () {
+        this.refresh()
+        this.edit({})
+      },
+      edit (record) {
+        this.resetScreenSize() // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
+        this.initialUserList()
+        this.form.resetFields()
+        this.hotelId = record.id
+        this.visible = true
+        this.model = Object.assign({}, record)
+        this.$nextTick(() => {
+          this.form.setFieldsValue(pick(this.model, 'name', 'company', 'contacts', 'contact', 'frontPhone', 'salemanId', 'isChain'))
+        })
+      },
+      close () {
+        this.$emit('close')
+        this.visible = false
+        this.disableSubmit = false
+        this.selectedUser = ''
+      },
+      handleSubmit () {
+        const that = this
+        // 触发表单验证
+        this.form.validateFields((err, values) => {
+          if (!err) {
+            that.confirmLoading = true
+            let formData = Object.assign(this.model, values)
+            formData.salesmanId = this.selectedUser || ''
+
+            if (!this.model.id) {
+              formData.id = this.hotelId
+            }
+            let obj = !this.model.id ? addHotel(formData) : editHotel(formData)
+            obj.then((res) => {
+              if (this.$isAjaxSuccess(res.code)) {
+                that.$message.success(res.message)
+                that.$emit('ok')
+              } else {
+                that.$message.warning(res.message)
+              }
+            }).finally(() => {
+              that.confirmLoading = false
+              that.close()
+            })
+          }
+        })
+      },
+      handleCancel () {
+        this.close()
+      },
+      validatePhone(rule, value, callback) {
+        if (!value) {
+          callback()
+        } else {
+          if (new RegExp(/^1[3|4|5|7|8][0-9]\d{8}$/).test(value)) {
+            callback()
+          } else {
+            callback('请输入正确格式的手机号码!')
+          }
+        }
+      },
+      handleConfirmBlur (e) {
+        const value = e.target.value
+        this.confirmDirty = this.confirmDirty || !!value
+      },
+
+      // 根据屏幕变化,设置抽屉尺寸
+      resetScreenSize() {
+        let screenWidth = document.body.clientWidth
+        this.drawerWidth = screenWidth < 500 ? screenWidth : 700
+      },
+    }
+  }
+</script>
+
+<style scoped>
+  .ant-table-tbody .ant-table-row td{
+    padding-top:10px;
+    padding-bottom:10px;
+  }
+
+  .drawer-bootom-button {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #e8e8e8;
+    padding: 10px 16px;
+    text-align: right;
+    left: 0;
+    background: #fff;
+    border-radius: 0 0 2px 2px;
+  }
+</style>

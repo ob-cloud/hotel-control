@@ -11,7 +11,7 @@ export const builder = (data, message, code = 0, headers = {}, isSuccess = true)
     responseBody.message = message
   }
   if (code !== undefined) {
-    responseBody.code = code
+    responseBody.code = code === 0 ? 'OK' : ''
     responseBody._status = code
   }
   if (headers !== null && typeof headers === 'object' && Object.keys(headers).length > 0) {

@@ -1,0 +1,124 @@
+<template>
+  <a-modal :title="title" :width="700" :visible="visible" :confirmLoading="confirmLoading" @ok="handleOk" @cancel="handleCancel" cancelText="关闭">
+    <a-spin :spinning="confirmLoading">
+      <a-form :form="form">
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="入住时间">
+          <a-date-picker
+            placeholder="请选择入住时间"
+            v-decorator="['checkIn', {initialValue: !model.checkIn ? null : moment(model.checkIn, dateFormat), rules: [{ required: true, message: '请选择入住时间!' }]}]"
+          />
+        </a-form-item>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="退房时间">
+          <a-date-picker
+            placeholder="请选择退房时间"
+            v-decorator="['checkOut', {initialValue: !model.checkIn ? null : moment(model.checkIn, dateFormat), rules: [{ required: true, message: '请选择退房时间!' }]}]"
+          />
+        </a-form-item>
+
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="收费">
+          超过 <a-input-number v-decorator="[ 'fee.charge', {rules: [{ required: true, message: '请填写收费时间!' }]}]" controls-position="right" :min="1"></a-input-number> 小时，收取租金
+          <a-input-number v-decorator="[ 'rent', {rules: [{ required: true, message: '请填写租金!' }]} ]" controls-position="right" :min="1"></a-input-number> 元
+        </a-form-item>
+
+        <!-- <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="租金">
+          <a-input-number v-decorator="[ 'rent', {rules: [{ required: true, message: '请填写租金!' }]} ]" controls-position="right" :min="1"></a-input-number>
+        </a-form-item> -->
+
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="签约时间">
+          <a-range-picker
+            v-decorator="[ 'signTime', {rules: [{ required: true, message: '请选择签约时间!' }]} ]"
+            format="YYYY-MM-DD HH:mm"
+            :placeholder="['入住时间', '退房时间']"
+          />
+        </a-form-item>
+      </a-form>
+    </a-spin>
+  </a-modal>
+</template>
+
+<script>
+import pick from 'lodash.pick'
+import moment from 'moment'
+import { getHotelSetting, addHotelSetting, editHotelSetting } from '@/api/hotel'
+export default {
+  data () {
+    return {
+      title: '酒店设置',
+      visible: false,
+      model: {},
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      },
+      confirmLoading: false,
+      form: this.$form.createForm(this),
+      moment,
+      hotelId: ''
+    }
+  },
+  methods: {
+    add () {
+      this.edit({})
+    },
+    edit (record) {
+      this.form.resetFields()
+      this.hotelId = record.id
+      // this.model = Object.assign({}, record)
+      this.visible = true
+      // this.$nextTick(() => {
+      //   this.form.setFieldsValue(pick(this.model, 'buildName'))
+      // })
+      this.initHotelSetting()
+    },
+    initHotelSetting () {
+      getHotelSetting(this.hotelId).then(res => {
+        if(this.$isAjaxSuccess(res.code)) {
+          this.model = Object.assign({}, res.result)
+          this.$nextTick(() => {
+            this.form.setFieldsValue(pick(this.model, 'checkIn', 'checkOut', 'charge', 'rent', 'signTime'))
+          })
+        }
+      })
+    },
+    // 确定
+    handleOk () {
+      const that = this
+      // 触发表单验证
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          that.confirmLoading = true
+          let formData = Object.assign(this.model, values)
+          let obj = !this.model.id ? addHotelSetting(formData) : editHotelSetting(formData)
+          obj.then((res) => {
+            if (that.$isAjaxSuccess(res.code)) {
+              that.$message.success(res.message)
+              that.$emit('ok')
+            } else {
+              that.$message.warning(res.message)
+            }
+          }).finally(() => {
+            that.confirmLoading = false
+            that.close()
+          })
+        }
+      })
+    },
+    // 关闭
+    handleCancel () {
+      this.close()
+    },
+    close () {
+      this.$emit('close')
+      this.visible = false
+    }
+  },
+}
+</script>
+
+<style lang="less" scoped>
+
+</style>

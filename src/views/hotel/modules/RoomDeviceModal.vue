@@ -29,7 +29,7 @@
 
 <script>
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
-import { getRoomDeviceList, bindRoomDevice, unbindRoomDevice } from '@/api/room'
+import { getRoomDeviceList, bindRoomDevice, unbindRoomDevice } from '@/api/hotel'
 import { Descriptor } from 'hardware-suit'
 import BindDeviceModal from './BindDeviceModal'
 export default {

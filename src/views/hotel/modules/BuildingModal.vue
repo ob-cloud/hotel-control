@@ -2,8 +2,8 @@
   <a-modal :title="title" :width="600" :visible="visible" :confirmLoading="confirmLoading" @ok="handleOk" @cancel="handleCancel" cancelText="关闭">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="组名">
-          <a-input placeholder="请输入组名" v-decorator="[ 'groupName', validatorRules.name]" />
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="楼栋">
+          <a-input placeholder="请输入楼栋" v-decorator="[ 'buildName', validatorRules.buildName]" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -12,13 +12,15 @@
 
 <script>
 import pick from 'lodash.pick'
-import { editDeviceGroup } from '@/api/device'
+import { addBuilding, editBuilding } from '@/api/hotel'
 export default {
   data () {
     return {
-      title: '编辑',
+      title: '操作',
       visible: false,
       model: {},
+      buildingList: [],
+      layerList: [],
       labelCol: {
         xs: { span: 24 },
         sm: { span: 5 }
@@ -30,7 +32,7 @@ export default {
       confirmLoading: false,
       form: this.$form.createForm(this),
       validatorRules: {
-        name: { rules: [{ required: true, message: '组名不能为空!' }] },
+        buildName: { rules: [{ required: true, message: '请输入楼栋!' }] },
       }
     }
   },
@@ -43,7 +45,7 @@ export default {
       this.model = Object.assign({}, record)
       this.visible = true
       this.$nextTick(() => {
-        this.form.setFieldsValue(pick(this.model, 'groupName'))
+        this.form.setFieldsValue(pick(this.model, 'buildName'))
       })
     },
     // 确定
@@ -54,7 +56,8 @@ export default {
         if (!err) {
           that.confirmLoading = true
           let formData = Object.assign(this.model, values)
-          editDeviceGroup(formData.groupId, formData.groupName).then((res) => {
+          let obj = !this.model.id ? addBuilding(formData) : editBuilding(formData)
+          obj.then((res) => {
             if (that.$isAjaxSuccess(res.code)) {
               that.$message.success(res.message)
               that.$emit('ok')
