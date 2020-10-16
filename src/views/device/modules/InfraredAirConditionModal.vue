@@ -21,7 +21,7 @@ export default {
   components: { AirCondition },
   data () {
     return {
-      drawerWidth: 700,
+      drawerWidth: 600,
       title: "操作",
       visible: false,
       model: {},
@@ -48,7 +48,7 @@ export default {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
-      this.title = `灯控 - ${Descriptor.getTypeDescriptor(record.device_type, record.device_child_type)}(${record.serialId})`
+      this.title = `红外控制 - ${Descriptor.getTypeDescriptor(record.type, record.device_child_type)}(${record.deviceId})`
     },
     close () {
       this.$emit('close')

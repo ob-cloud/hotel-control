@@ -5,8 +5,8 @@
       <p>温度</p>
     </div>
     <div class="mode">
-      <div class="mode">{{ speedValue }} 风速</div>
-      <div class="fans">{{ modeValue }} 模式</div>
+      <div class="fans"><span>{{ speedValue }}</span> 风速</div>
+      <div class="imode"><span>{{ modeValue }}</span> 模式</div>
     </div>
     <div class="toolbar">
       <div class="key" :class="{disabled: !isSpeedSettable}">
@@ -120,6 +120,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+p{
+  margin-bottom: 0;
+}
 .air.panel {
   width: 380px;
   text-align: center;
@@ -136,19 +139,25 @@ export default {
     padding: 30px 0 20px;
     background: #fff;
 
-    >p {
+    > p {
       font-size: 26px;
-
       span {
         color: #999;
         font-size: 14px;
         margin-left: 4px;
       }
     }
+    > p + p{
+      font-size: 16px;
+    }
   }
 
   .mode {
     background: #fff;
+
+    span{
+
+    }
 
     div {
       display: inline-block;
