@@ -1,6 +1,7 @@
 <template>
   <div class="user-wrapper">
     <div class="content-box">
+      <bizz-conserve-select :value="hotelId" :dataSource="hotelList" :optionItemProp="{label: 'name'}" @select="onHotelSelect" placeholder="请选择酒店" />
       <notice-icon class="action" />
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">
@@ -39,6 +40,7 @@
 </template>
 
 <script>
+import BizzConserveSelect from '@/components/Bizz/BizzConserveSelect'
 import NoticeIcon from '@/components/NoticeIcon'
 import UserPassword from './UserPassword'
 import { mapActions, mapGetters } from 'vuex'
@@ -46,14 +48,18 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'UserMenu',
   components: {
+    BizzConserveSelect,
     NoticeIcon,
     UserPassword
   },
   computed: {
-    ...mapGetters(['nickname', 'avatar', 'userInfo'])
+    ...mapGetters(['nickname', 'avatar', 'userInfo', 'hotelId', 'hotelList'])
+  },
+  mounted () {
+    console.log('-=-=-===-=-=-=========== ', this.hotelId)
   },
   methods: {
-    ...mapActions(['Logout']),
+    ...mapActions(['Logout', 'UpdateHotelId']),
     handleLogout () {
       this.$confirm({
         title: '提示',
@@ -78,6 +84,10 @@ export default {
       let username = this.userInfo.username
       this.$refs.userPassword.show(username)
     },
+    onHotelSelect (hotel) {
+      console.log('[hotel] ', hotel)
+      this.UpdateHotelId(hotel)
+    }
   }
 }
 </script>

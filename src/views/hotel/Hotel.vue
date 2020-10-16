@@ -84,6 +84,9 @@
               <a-menu-item>
                 <a @click="handleSetting(record)">酒店设置</a>
               </a-menu-item>
+              <a-menu-item>
+                <a tille="选择为当前系统酒店">选择</a>
+              </a-menu-item>
               <a-menu-item v-isPermitted="'device:gateway:delete'">
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
                   <a>删除</a>
@@ -107,7 +110,6 @@
   import HotelModal from './modules/HotelModal'
   import HotelUserModal from './modules/HotelUserModal'
   import HotelSettingModal from './modules/HotelSettingModal'
-  // import { getOboxList, delObox } from '@/api/device'
   import { getHotelList, delHotel } from '@/api/hotel'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
 

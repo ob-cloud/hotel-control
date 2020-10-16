@@ -16,6 +16,9 @@ export const USER_INFO = 'USER_INFO'
 export const USER_AUTH = 'USER_AUTH'
 export const SYS_BUTTON_AUTH = 'SYS_BUTTON_AUTH'
 
+export const HOTELID = "HOTELID"
+export const HOTEL_LIST = "HOTEL_LIST"
+
 export const SYSTEM_SETTING = 'SYSTEM_SETTING'
 
 export const CONTENT_WIDTH_TYPE = {

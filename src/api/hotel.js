@@ -2,16 +2,14 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-15 18:23:09
+ * @Last Modified time: 2020-10-16 14:22:56
  */
 
 import { getAction, postFormAction, postAction } from '@/utils/ajax'
 
 // 酒店
-const getHotelList = (params) => getAction('/common/getHotelList', {
-  CMD: 'get_building_floor_room',
-  ...params
-})
+const getHotelList = (params) => getAction('/common/hotel/list', { ...params })
+const getHotelListAll = () => getAction('/common/hotel/all')
 const editHotel = () => postFormAction('/common/editHotel', {})
 const addHotel = () => postFormAction('/common/addHotel', {})
 const delHotel = (id) => postAction('/common/delHotel', {id})
@@ -126,6 +124,7 @@ const delFloor = (id) => postFormAction('/common', {
 
 export {
   getHotelList,
+  getHotelListAll,
   editHotel,
   addHotel,
   delHotel,

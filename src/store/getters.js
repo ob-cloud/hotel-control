@@ -14,7 +14,9 @@ const getters = {
   userInfo: state => { state.user.info = Vue.ls.get(USER_INFO); return state.user.info },
   addRouters: state => state.permission.addRouters,
   multiTab: state => state.app.multiTab,
-  lang: state => state.i18n.lang
+  lang: state => state.i18n.lang,
+  hotelId: state => state.hotel.hotelId,
+  hotelList: state => state.hotel.hotelList
 }
 
 export default getters

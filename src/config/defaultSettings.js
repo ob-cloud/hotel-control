@@ -35,7 +35,7 @@ export default {
   // TODO Delete
   pageOptions: {
     logo: 'logo.png',
-    title: '酒店可控系统',
+    title: '酒店客控系统',
     // description: 'On-Bright Admin Pro',
     hasFooter: false, // hasFooter 为 true 时， 下面脚注配置生效
     copyright: 'OnBright.tld',

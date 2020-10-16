@@ -5,22 +5,19 @@ import { builder, getQueryParameters, getBody } from '../util'
 const totalCount = 5701
 
 const getHotelList = (options) => {
-  console.log('mock: ', options)
+  // console.log('mock getHotelList: ', options)
   const parameters = getQueryParameters(options)
 
   const result = []
   const pageNo = parseInt(parameters.pageNo)
   const pageSize = parseInt(parameters.pageSize)
   const totalPage = Math.ceil(totalCount / pageSize)
-  const key = (pageNo - 1) * pageSize
   const next = (pageNo >= totalPage ? (totalCount % pageSize) : pageSize) + 1
 
   for (let i = 1; i < next; i++) {
-    const tmpKey = key + i
     result.push({
-      key: tmpKey,
-      id: tmpKey,
-      name: Mock.mock('@cword(5, 10)'),
+      id: Mock.mock('@id()'),
+      name: Mock.mock('@cword(3, 5)') + '酒店',
       company: Mock.mock('@cword(5, 10)'),
       contacts: Mock.mock('@cname()'),
       contact: Mock.mock('@integer(10000000000, 19000000000)'),
@@ -33,7 +30,7 @@ const getHotelList = (options) => {
     })
   }
 
-  console.log('mock: ', builder({
+  console.log('mock getHotelList: ', builder({
     pageSize: pageSize,
     pageNo: pageNo,
     total: totalCount,
@@ -46,6 +43,34 @@ const getHotelList = (options) => {
     pageNo: pageNo,
     total: totalCount,
     totalPage: totalPage,
+    records: result
+  })
+}
+
+
+const getHotelListAll = () => {
+  const result = []
+  for (let i = 1; i < Mock.mock('@integer(2, 6)'); i++) {
+    result.push({
+      id: Mock.mock('@id()'),
+      name: Mock.mock('@cword(3, 5)') + '酒店',
+      company: Mock.mock('@cword(5, 10)'),
+      contacts: Mock.mock('@cname()'),
+      contact: Mock.mock('@integer(10000000000, 19000000000)'),
+      frontPhone: Mock.mock('@integer(10000000000, 19000000000)'),
+      isChain: Mock.mock('@integer(0,1)'),
+      salesmanId: Mock.mock('@id()'),
+      salesman: Mock.mock('@cname()'),
+      createAt: Mock.mock('@datetime'),
+      updatedAt: Mock.mock('@datetime'),
+    })
+  }
+
+  console.log('mock getHotelListAll: ', builder({
+    records: result
+  }))
+
+  return builder({
     records: result
   })
 }
@@ -67,7 +92,7 @@ const getUserListByHotel = (options) => {
       username: Mock.mock('@cname()'),
     })
   }
-  console.log('mock: ', builder({
+  console.log('mock getUserListByHotel: ', builder({
     pageSize: pageSize,
     pageNo: pageNo,
     total: totalCount,
@@ -112,7 +137,8 @@ const delHotel = (options) => {
   return builder({}, '成功')
 }
 
-Mock.mock(/\/common\/getHotelList/, 'get', getHotelList)
+Mock.mock(/\/common\/hotel\/list/, 'get', getHotelList)
+Mock.mock(/\/common\/hotel\/all/, 'get', getHotelListAll)
 
 Mock.mock(/\/common\/getHotelUserList/, 'get', getUserListByHotel)
 

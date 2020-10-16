@@ -834,7 +834,7 @@ const getUserList = () => {
     })
   }
 
-  console.log('mock: ', builder({
+  console.log('mock getUserList: ', builder({
     records: result
   }))
 
@@ -862,7 +862,7 @@ const getUserListPage = (options) => {
       account: Mock.mock('@name()'),
     })
   }
-  console.log('mock: ', builder({
+  console.log('mock getUserListPage: ', builder({
     pageSize: pageSize,
     pageNo: pageNo,
     total: totalCount,

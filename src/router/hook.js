@@ -16,6 +16,7 @@ export const initRouteHook = (router) => {
 
     if (Vue.ls.get(ACCESS_TOKEN)) {
       // store.dispatch('GetSystemSetting')
+      store.dispatch('GetHotelList')
       /* has token */
       if (to.path === '/user/login') {
         next({ path: '/dashboard/analysis' })

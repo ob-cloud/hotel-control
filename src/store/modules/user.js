@@ -12,7 +12,7 @@ const user = {
     avatar: '',
     roles: [],
     info: {},
-    permissionList: []
+    permissionList: [],
   },
 
   mutations: {

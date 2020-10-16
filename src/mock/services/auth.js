@@ -33,8 +33,13 @@ const login = (options) => {
     "createBy": "cc6",
     "createTime": "2020-08-20 16:32:48",
     "updateBy": "admin",
-    "updateTime": "2020-09-01 17:42:41"
+    "updateTime": "2020-09-01 17:42:41",
+    "hotels": [{
+      id: Mock.mock('@id'),
+      name: Mock.mock('@cword(3, 5)') + '酒店',
+    }]
   }
+  console.log('mock login: ', builder({ token: '4291d7da9005377ec9aec4a71ea837f', userInfo }, '', 0, { 'Custom-Header': Mock.mock('@guid') }, true))
   return builder({ token: '4291d7da9005377ec9aec4a71ea837f', userInfo }, '', 0, { 'Custom-Header': Mock.mock('@guid') }, true)
 }
 
