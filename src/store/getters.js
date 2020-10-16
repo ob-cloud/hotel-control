@@ -16,7 +16,8 @@ const getters = {
   multiTab: state => state.app.multiTab,
   lang: state => state.i18n.lang,
   hotelId: state => state.hotel.hotelId,
-  hotelList: state => state.hotel.hotelList
+  hotelList: state => state.hotel.hotelList,
+  reloadFlag: state => state.app.reloadFlag
 }
 
 export default getters

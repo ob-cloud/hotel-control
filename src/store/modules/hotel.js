@@ -43,6 +43,7 @@ const hotel = {
     UpdateHotelId ({ commit }, hotelId) {
       console.log('UpdateHotelId: ', hotelId)
       commit('SET_HOTELID', hotelId)
+      return Promise.resolve()
     }
   }
 }

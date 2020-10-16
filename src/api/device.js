@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-09-30 10:27:29
+ * @Last Modified time: 2020-10-16 16:34:13
  */
 
 // import {request} from '@/common/request'
@@ -43,7 +43,7 @@ const scanAndSaveDevicesToObox = (oboxSerialId, params) => postFormAction(`/aliS
 const pauseScanDevices = (oboxSerialId) => deleteAction(`/facade/scan/${oboxSerialId}`)
 
 // OBOX
-const getOboxList = (params) => getAction('/common', {
+const getOboxList = (params) => getAction('/common/obox/list', {
   CMD: 'get_obox',
   obox: JSON.stringify(params)
 })
@@ -52,7 +52,7 @@ const getAllOboxList = () => getAction('/common', {
   CMD: 'get_allobox'
 })
 
-const getOboxDeviceList = (params) => getAction('/common', {
+const getOboxDeviceList = (params) => getAction('/common/device/list', {
   CMD: 'get_obox_device',
   oboxdevice: JSON.stringify(params)
 })
@@ -285,7 +285,7 @@ const getTransponderDevice = (serialId) => getAction('/common', {
   CMD: 'query_ir_device',
   serialId
 })
-const getInfratedDeviceList = (params) => getAction('/common', {
+const getInfratedDeviceList = (params) => getAction('/common/infrared/list', {
   CMD: 'get_wifi',
   wifi: JSON.stringify(params)
 })

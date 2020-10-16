@@ -44,7 +44,6 @@ import BizzConserveSelect from '@/components/Bizz/BizzConserveSelect'
 import NoticeIcon from '@/components/NoticeIcon'
 import UserPassword from './UserPassword'
 import { mapActions, mapGetters } from 'vuex'
-
 export default {
   name: 'UserMenu',
   components: {
@@ -86,7 +85,18 @@ export default {
     },
     onHotelSelect (hotel) {
       console.log('[hotel] ', hotel)
-      this.UpdateHotelId(hotel)
+      this.UpdateHotelId(hotel).then(() => {
+        // window.location.reload()
+        this.reload()
+      })
+    },
+    reload () {
+      this.$store.dispatch('ToggleMultiTab', false)
+      this.$store.dispatch('SetReloadFlag', false)
+      this.$nextTick(()=>{
+        this.$store.dispatch('ToggleMultiTab', true)
+      this.$store.dispatch('SetReloadFlag', true)
+      })
     }
   }
 }

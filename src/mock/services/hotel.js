@@ -2,7 +2,7 @@ import Mock from 'mockjs2'
 import { builder, getQueryParameters, getBody } from '../util'
 
 
-const totalCount = 5701
+const totalCount = 60
 
 const getHotelList = (options) => {
   // console.log('mock getHotelList: ', options)
@@ -137,6 +137,87 @@ const delHotel = (options) => {
   return builder({}, '成功')
 }
 
+
+// 房间
+const getRoomList = () => {
+  const result = []
+  for (let i = 1; i < Mock.mock('@integer(5, 20)'); i++) {
+    result.push({
+      id: Mock.mock('@id()'),
+      buildingId: Mock.mock('@id()'),
+      buildingName: Mock.mock('@word(1,2)'),
+      deviceState: "",
+      floorId: Mock.mock('@id()'),
+      floorName: Mock.mock('@word(1,2)'),
+      roomName: Mock.mock('@integer(3,4)'),
+      lightState: Mock.mock('@integer(0, 1)'),
+      switchState: Mock.mock('@integer(0, 1)'),
+    })
+  }
+  console.log('mock getRoomList: ', builder({
+    total: totalCount,
+    records: result
+  }))
+
+  return builder({
+    total: totalCount,
+    records: result
+  })
+}
+
+
+// 栋
+const getBuildingList = () => {
+  const result = []
+  for (let i = 1; i < Mock.mock('@integer(5, 20)'); i++) {
+    result.push({
+      id: Mock.mock('@id()'),
+      buildingId: Mock.mock('@id()'),
+      buildingName: Mock.mock('@word(1,2)'),
+      deviceState: "",
+      lightState: Mock.mock('@integer(0, 1)'),
+      switchState: Mock.mock('@integer(0, 1)'),
+      allType: 0
+    })
+  }
+  console.log('mock getBuildingList: ', builder({
+    total: totalCount,
+    records: result
+  }))
+
+  return builder({
+    total: totalCount,
+    records: result
+  })
+}
+
+
+// 层
+const getFloorList = () => {
+  const result = []
+  for (let i = 1; i < Mock.mock('@integer(5, 20)'); i++) {
+    result.push({
+      id: Mock.mock('@id()'),
+      buildingId: Mock.mock('@id()'),
+      buildingName: Mock.mock('@word(1,2)'),
+      deviceState: "",
+      floorId: Mock.mock('@id()'),
+      lightState: Mock.mock('@integer(0, 1)'),
+      switchState: Mock.mock('@integer(0, 1)'),
+      allType: 0
+    })
+  }
+  console.log('mock getFloorList: ', builder({
+    total: totalCount,
+    records: result
+  }))
+
+  return builder({
+    total: totalCount,
+    records: result
+  })
+}
+
 Mock.mock(/\/common\/hotel\/list/, 'get', getHotelList)
 Mock.mock(/\/common\/hotel\/all/, 'get', getHotelListAll)
 
@@ -148,3 +229,8 @@ Mock.mock(/\/common\/delHotel/, 'post', delHotel)
 
 Mock.mock(/\/common\/bindHotelUser/, 'post', bindHotelUser)
 Mock.mock(/\/common\/unbindHotelUser/, 'post', unbindHotelUser)
+
+
+Mock.mock(/\/common\/room\/list/, 'get', getRoomList)
+Mock.mock(/\/common\/building\/list/, 'get', getBuildingList)
+Mock.mock(/\/common\/floor\/list/, 'get', getFloorList)

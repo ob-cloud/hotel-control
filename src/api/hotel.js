@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-16 14:22:56
+ * @Last Modified time: 2020-10-16 15:58:41
  */
 
 import { getAction, postFormAction, postAction } from '@/utils/ajax'
@@ -28,7 +28,7 @@ const getRoomDeviceList = (params) => getAction('/common', {
   CMD: 'get_room_device',
   device: JSON.stringify(params)
 })
-const getRoomList = (params) => getAction('/common', {
+const getRoomList = (params) => getAction('/common/room/list', {
   CMD: 'get_room',
   room: JSON.stringify(params)
 })
@@ -77,7 +77,7 @@ const triggerAllPower = (deviceType) => getAction('/common', {
 })
 
 // 楼栋
-const getBuildingList = (params = {}) => getAction('/common', {
+const getBuildingList = (params = {}) => getAction('/common/building/list', {
   CMD: 'get_building',
   building: JSON.stringify(params)
 })
@@ -99,7 +99,7 @@ const delBuilding = (id) => postFormAction('/common', {
 })
 
 // floor
-const getFloorList = (params = {}) => getAction('/common', {
+const getFloorList = (params = {}) => getAction('/common/floor/list', {
   CMD: 'get_floor',
   floor: JSON.stringify(params)
 })

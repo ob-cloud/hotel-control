@@ -11,7 +11,8 @@ import {
   DEFAULT_CONTENT_WIDTH_TYPE,
   DEFAULT_MULTI_TAB,
   DEFAULT_FIXED_MULTITAB,
-  SYSTEM_SETTING
+  SYSTEM_SETTING,
+  RELOAD_FLAG
 } from '@/store/mutation-types'
 
 import { getSystemConfig } from '@/api/system'
@@ -30,7 +31,8 @@ const app = {
     weak: false,
     multiTab: true,
     fixedMultiTab: false,
-    setting: {}
+    setting: {},
+    reloadFlag: true
   },
   mutations: {
     SET_SIDEBAR_TYPE: (state, type) => {
@@ -88,6 +90,10 @@ const app = {
     GET_SYSTEM_SETTING: (state, setting) => {
       window.localStorage.setItem(SYSTEM_SETTING, setting)
       state.setting = setting
+    },
+    SET_RELOAD_FLAG: (state, reloadFlag) => {
+      Vue.ls.set(RELOAD_FLAG, reloadFlag)
+      state.reloadFlag = reloadFlag
     }
   },
   actions: {
@@ -140,6 +146,10 @@ const app = {
           resolve(response)
         }).catch(reject)
       })
+    },
+    SetReloadFlag ({ commit }, reloadFlag) {
+      commit('SET_RELOAD_FLAG', reloadFlag)
+      return Promise.resolve()
     }
   }
 }
