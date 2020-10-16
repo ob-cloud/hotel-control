@@ -54,9 +54,6 @@ export default {
   computed: {
     ...mapGetters(['nickname', 'avatar', 'userInfo', 'hotelId', 'hotelList'])
   },
-  mounted () {
-    console.log('-=-=-===-=-=-=========== ', this.hotelId)
-  },
   methods: {
     ...mapActions(['Logout', 'UpdateHotelId']),
     handleLogout () {
@@ -90,6 +87,7 @@ export default {
         this.reload()
       })
     },
+    // 当前页刷新
     reload () {
       this.$store.dispatch('ToggleMultiTab', false)
       this.$store.dispatch('SetReloadFlag', false)

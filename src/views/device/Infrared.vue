@@ -46,7 +46,7 @@
 
     <!-- 操作按钮区域 -->
     <!-- <div class="table-operator" style="border-top: 5px">
-      <a-button @click="handleAdd" type="primary" icon="plus">添加设备</a-button>
+      <a-button @click="handleAdd" type="primary" icon="plus">添加红外</a-button>
     </div> -->
 
     <!-- table区域-begin -->
@@ -60,7 +60,7 @@
         ref="table"
         bordered
         size="middle"
-        rowKey="id"
+        rowKey="deviceId"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -78,8 +78,8 @@
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item v-isPermitted="'device:infrared:control'" v-if="TypeHints.isTransponder(record.type)">
-                <a @click="handleAction(record)">红外控制</a>
+              <a-menu-item v-isPermitted="'device:infrared:control'" v-if="TypeHints.isInfrared(record.type)">
+                <a @click="handleControl(record)">红外控制</a>
               </a-menu-item>
 
               <a-menu-item v-isPermitted="'device:infrared:delete'">
@@ -96,11 +96,13 @@
     <!-- table区域-end -->
 
     <infrared-modal ref="modalForm" @ok="modalFormOk"></infrared-modal>
+    <infrared-air-condition-modal ref="airModal" @ok="airModalOk"></infrared-air-condition-modal>
   </a-card>
 </template>
 
 <script>
   import InfraredModal from './modules/InfraredModal'
+  import InfraredAirConditionModal from './modules/InfraredAirConditionModal'
   import { getInfratedDeviceList, delInfratedDevice } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { Descriptor, TypeHints } from 'hardware-suit'
@@ -110,6 +112,7 @@
     mixins: [ ProListMixin ],
     components: {
       InfraredModal,
+      InfraredAirConditionModal
     },
     data() {
       return {
@@ -179,10 +182,10 @@
           this.loading = false
         })
       },
-      handleAction (type, record) {
-        type === 1 && this.$refs.humidityModal.show(record)
-        type === 2 && this.$refs.keypanelModal.show(record)
-        type === 3 && this.$refs.lampModal.show(record)
+      handleControl (record) {
+        this.$refs.airModal.show(record)
+      },
+      airModalOk () {
       },
       actionModalClose () {
         this.loadData()

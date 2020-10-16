@@ -45,9 +45,9 @@
     </div>
 
     <!-- 操作按钮区域 -->
-    <div class="table-operator" style="border-top: 5px">
+    <!-- <div class="table-operator" style="border-top: 5px">
       <a-button v-isPermitted="'device:gateway:add'" @click="handleScan" type="primary" icon="plus">添加网关</a-button>
-    </div>
+    </div> -->
 
     <!-- table区域-begin -->
     <div>
