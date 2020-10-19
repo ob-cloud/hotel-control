@@ -85,7 +85,9 @@
                 <a @click="handleSetting(record)">酒店设置</a>
               </a-menu-item>
               <a-menu-item>
-                <a tille="选择为当前系统酒店">选择</a>
+                <a-popconfirm title="切换到当前酒店?" @confirm="() => handleSelect(record.id)">
+                  <a tille="切换为当前系统酒店">切换酒店</a>
+                </a-popconfirm>
               </a-menu-item>
               <a-menu-item v-isPermitted="'device:gateway:delete'">
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
@@ -112,6 +114,7 @@
   import HotelSettingModal from './modules/HotelSettingModal'
   import { getHotelList, delHotel } from '@/api/hotel'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
+  import { mapActions } from 'vuex'
 
   export default {
     name: '',
@@ -186,6 +189,7 @@
       // this.$bus.$on('obox-state', () => this.loadData())
     },
     methods: {
+      ...mapActions(['UpdateHotelId']),
       loadData (arg) {
         this.getDataList(arg)
       },
@@ -217,6 +221,9 @@
           }
         })
       },
+      handleSelect (hotelId) {
+        this.UpdateHotelId(hotelId).then(() => this.pageReload())
+      },
       handleAccount (record) {
         this.$refs.userModal.edit(record)
       },
@@ -227,6 +234,5 @@
         this.loadData()
       }
     }
-
   }
 </script>

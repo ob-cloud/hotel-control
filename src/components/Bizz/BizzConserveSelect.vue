@@ -61,6 +61,11 @@ export default {
       render: (h, ctx) => ctx.props.vnodes,
     },
   },
+  watch: {
+    value (val) {
+      console.log('[ConserveSelect] ', val)
+    }
+  },
   computed: {
     viewItemsInUsage () {
       if (this.listCount === Infinity || this.listCount === 0) { // 全部展示

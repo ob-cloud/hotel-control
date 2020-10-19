@@ -80,9 +80,9 @@ export default {
       let username = this.userInfo.username
       this.$refs.userPassword.show(username)
     },
-    onHotelSelect (hotel) {
-      console.log('[hotel] ', hotel)
-      this.UpdateHotelId(hotel).then(() => {
+    onHotelSelect (hotelId) {
+      console.log('[hotel] ', hotelId)
+      this.UpdateHotelId(hotelId).then(() => {
         // window.location.reload()
         this.reload()
       })

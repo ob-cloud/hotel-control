@@ -91,9 +91,9 @@
         hotelId: '', //保存酒店id
         disableSubmit: false,
         validatorRules: {
-          username: {
+          name: {
             rules: [{
-              required: true, message: '请输入用户账号!'
+              required: true, message: '请输入酒店名称!'
             }]
           },
           normal: { rules: [{required: true, message: '不能为空!'}]},

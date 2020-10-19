@@ -291,6 +291,15 @@ export const ProListMixin = {
     },
     calculateContentHeight () {
       this.contentHeight = document.body.clientHeight - 64 - 40 - 85/* search */ - 48/* margin */ - 48/* padding */
+    },
+    // 页面刷新
+    pageReload () {
+      this.$store.dispatch('ToggleMultiTab', false)
+      this.$store.dispatch('SetReloadFlag', false)
+      this.$nextTick(()=>{
+        this.$store.dispatch('ToggleMultiTab', true)
+      this.$store.dispatch('SetReloadFlag', true)
+      })
     }
   }
 }
