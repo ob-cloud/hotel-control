@@ -18,6 +18,7 @@ if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'tr
   require('./services/hotel')
   require('./services/device')
   require('./services/system')
+  require('./services/reports')
 
   Mock.setup({
     timeout: 800 // setter delay time

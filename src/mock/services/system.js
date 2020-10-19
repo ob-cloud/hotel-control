@@ -384,7 +384,7 @@ const getUserPermission = () => {
       "route": "1",
       "children": [{
         "path": "/reports/enterprise",
-        "component": "scene/Index",
+        "component": "reports/Enterprise",
         "route": "1",
         "meta": {
           "keepAlive": false,
@@ -395,7 +395,7 @@ const getUserPermission = () => {
         "id": "1280341032697974786"
       }, {
         "path": "/reports/hotel",
-        "component": "scene/Index",
+        "component": "reports/Hotel",
         "route": "1",
         "meta": {
           "keepAlive": false,
@@ -406,7 +406,7 @@ const getUserPermission = () => {
         "id": "1280341032697974786"
       }, {
         "path": "/reports/mine",
-        "component": "scene/Index",
+        "component": "reports/Mine",
         "route": "1",
         "meta": {
           "keepAlive": false,
@@ -417,7 +417,7 @@ const getUserPermission = () => {
         "id": "1280341032697974786"
       }, {
         "path": "/reports/equips",
-        "component": "scene/Index",
+        "component": "reports/Equips",
         "route": "1",
         "meta": {
           "keepAlive": false,
@@ -428,7 +428,7 @@ const getUserPermission = () => {
         "id": "1280341032697974786"
       }, {
         "path": "/reports/offline",
-        "component": "scene/Index",
+        "component": "reports/Offline",
         "route": "1",
         "meta": {
           "keepAlive": false,
@@ -439,7 +439,7 @@ const getUserPermission = () => {
         "id": "1280341032697974786"
       }, {
         "path": "/reports/exception",
-        "component": "scene/Index",
+        "component": "reports/Exception",
         "route": "1",
         "meta": {
           "keepAlive": false,
