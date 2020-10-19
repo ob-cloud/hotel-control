@@ -152,7 +152,7 @@ export default {
       }
       if (icon.includes('obicon')) {
         return (
-          <i class={'anticon obicon ' + icon} style="color: #000;" alt="icon"></i>
+          <i class={'anticon obicon s ' + icon} alt="icon"></i>
         )
       }
       const props = {}
