@@ -78,8 +78,14 @@
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item v-isPermitted="'device:infrared:control'" v-if="TypeHints.isInfrared(record.type)">
-                <a @click="handleControl(record)">红外控制</a>
+              <!--  v-if="TypeHints.isInfrared(record.type)"  -->
+              <a-menu-item v-isPermitted="'device:infrared:control'">
+                <a @click="handleControl(record)">控制</a>
+              </a-menu-item>
+              <a-menu-item v-isPermitted="'device:infrared:control'">
+                <a-popconfirm title="确定停用吗?请谨慎操作" @confirm="() => handleStopService(record.deviceId)">
+                  <a>停用</a>
+                </a-popconfirm>
               </a-menu-item>
 
               <a-menu-item v-isPermitted="'device:infrared:delete'">
@@ -103,9 +109,9 @@
 <script>
   import InfraredModal from './modules/InfraredModal'
   import InfraredAirConditionModal from './modules/InfraredAirConditionModal'
-  import { getInfratedDeviceList, delInfratedDevice } from '@/api/device'
+  import { getInfratedDeviceList, delInfratedDevice, stopInfrared } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
-  import { Descriptor, TypeHints } from 'hardware-suit'
+  import { TypeHints } from 'hardware-suit'
 
   export default {
     name: '',
@@ -140,13 +146,18 @@
               return status === 0 ? '在线' : '离线'
             }
           },
+          // {
+          //   title: '设备类型',
+          //   align: 'center',
+          //   dataIndex: 'type',
+          //   customRender (t) {
+          //     return Descriptor.getEquipTypeDescriptor(t)
+          //   }
+          // },
           {
-            title: '设备类型',
+            title: '设备版本',
             align: 'center',
-            dataIndex: 'type',
-            customRender (t) {
-              return Descriptor.getEquipTypeDescriptor(t)
-            }
+            dataIndex: 'version'
           },
           {
             title: '操作',
@@ -184,6 +195,14 @@
       },
       handleControl (record) {
         this.$refs.airModal.show(record)
+      },
+      handleStopService (id) {
+        this.loading = true
+        stopInfrared(id).then(res => {
+          if (this.$isAjaxSuccess(res.code)) {
+            this.$message.success('操作成功')
+          }else this.$message.error(res.message || '操作失败')
+        }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
       },
       airModalOk () {
       },

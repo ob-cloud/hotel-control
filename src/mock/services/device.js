@@ -1,5 +1,5 @@
 import Mock from 'mockjs2'
-import { builder } from '../util'
+import { builder, getBody } from '../util'
 
 
 const totalCount = 60
@@ -107,6 +107,21 @@ const deviceList = [{
   "obox_serial_id": "15ed1ea281",
   "online": 1,
   "serialId": "083ebba201",
+  "state": "0000000000000000",
+  "version": "ffffffffffffffff",
+  "userId": 0
+}, {
+  "userName": "",
+  "device_child_type": "0f",
+  "device_type": "0b",
+  "addr": "01",
+  "name": "插卡取电",
+  "oboxId": 14,
+  "id": 19,
+  "lastOpTime": 2020,
+  "obox_serial_id": "15ed1ea281",
+  "online": 1,
+  "serialId": "083ebca201",
   "state": "0000000000000000",
   "version": "ffffffffffffffff",
   "userId": 0
@@ -248,6 +263,7 @@ const infrared = [{
   "online": 0,
   "state": "[]",
   "type": "51",
+  "version": Mock.mock('@integer(100000000, 12900000000)'),
   "action": "[{\"functionId\":1,\"data\":[\"\"],\"functionName\":\"send\",\"function\":\"send\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"download\"]},{\"functionId\":2,\"data\":[\"\"],\"functionName\":\"receive learning\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":3,\"data\":[\"\"],\"functionName\":\"receive pairing\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":4,\"data\":[0],\"functionName\":\"learning\",\"function\":\"learning\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]},{\"functionId\":5,\"data\":[0],\"functionName\":\"pairing\",\"function\":\"pairing\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]}]",
   "userId": 0
 }, {
@@ -257,6 +273,7 @@ const infrared = [{
   "online": 0,
   "state": "[]",
   "type": "51",
+  "version": Mock.mock('@integer(100000000, 12900000000)'),
   "action": "[{\"functionId\":1,\"data\":[\"\"],\"functionName\":\"send\",\"function\":\"send\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"download\"]},{\"functionId\":2,\"data\":[\"\"],\"functionName\":\"receive learning\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":3,\"data\":[\"\"],\"functionName\":\"receive pairing\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":4,\"data\":[0],\"functionName\":\"learning\",\"function\":\"learning\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]},{\"functionId\":5,\"data\":[0],\"functionName\":\"pairing\",\"function\":\"pairing\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]}]",
   "userId": 0
 }, {
@@ -266,6 +283,7 @@ const infrared = [{
   "online": 0,
   "state": "[]",
   "type": "51",
+  "version": Mock.mock('@integer(100000000, 12900000000)'),
   "action": "[{\"data\":[\"\"],\"dataTranType\":[\"download\"],\"dataType\":\"raw\",\"function\":\"send\",\"functionId\":1,\"functionName\":\"send\",\"functionTag\":\"control\"},{\"data\":[\"\"],\"dataTranType\":[\"upload\"],\"dataType\":\"raw\",\"function\":\"receive\",\"functionId\":2,\"functionName\":\"receive learning\",\"functionTag\":\"control\"},{\"data\":[\"\"],\"dataTranType\":[\"upload\"],\"dataType\":\"raw\",\"function\":\"receive\",\"functionId\":3,\"functionName\":\"receive pairing\",\"functionTag\":\"control\"},{\"data\":[0],\"dataTranType\":[\"upload\",\"download\"],\"dataType\":\"int\",\"function\":\"learning\",\"functionId\":4,\"functionName\":\"learning\",\"functionTag\":\"config\"},{\"data\":[0],\"dataTranType\":[\"upload\",\"download\"],\"dataType\":\"int\",\"function\":\"pairing\",\"functionId\":5,\"functionName\":\"pairing\",\"functionTag\":\"config\"}]",
   "userId": 0
 }, {
@@ -275,6 +293,7 @@ const infrared = [{
   "online": 0,
   "state": "[]",
   "type": "51",
+  "version": Mock.mock('@integer(100000000, 12900000000)'),
   "action": "[{\"data\":[\"\"],\"dataTranType\":[\"download\"],\"dataType\":\"raw\",\"function\":\"send\",\"functionId\":1,\"functionName\":\"send\",\"functionTag\":\"control\"},{\"data\":[\"\"],\"dataTranType\":[\"upload\"],\"dataType\":\"raw\",\"function\":\"receive\",\"functionId\":2,\"functionName\":\"receive learning\",\"functionTag\":\"control\"},{\"data\":[\"\"],\"dataTranType\":[\"upload\"],\"dataType\":\"raw\",\"function\":\"receive\",\"functionId\":3,\"functionName\":\"receive pairing\",\"functionTag\":\"control\"},{\"data\":[0],\"dataTranType\":[\"upload\",\"download\"],\"dataType\":\"int\",\"function\":\"learning\",\"functionId\":4,\"functionName\":\"learning\",\"functionTag\":\"config\"},{\"data\":[0],\"dataTranType\":[\"upload\",\"download\"],\"dataType\":\"int\",\"function\":\"pairing\",\"functionId\":5,\"functionName\":\"pairing\",\"functionTag\":\"config\"}]",
   "userId": 0
 }]
@@ -290,6 +309,26 @@ const getInfraredList = () => {
   })
 }
 
+const stopCardPower = (options) => {
+  const body = getBody(options)
+  if (!body.id) {
+    return builder({ code: false }, 'id不能为空', 401)
+  }
+  return builder({}, '成功')
+}
+
+const stopInfrared = (options) => {
+  const body = getBody(options)
+  if (!body.id) {
+    return builder({ code: false }, 'id不能为空', 401)
+  }
+  return builder({}, '成功')
+}
+
+
 Mock.mock(/\/common\/device\/list/, 'get', getDeviceList)
 Mock.mock(/\/common\/obox\/list/, 'get', getOBOXList)
 Mock.mock(/\/common\/infrared\/list/, 'get', getInfraredList)
+Mock.mock(/\/common\/stopCardPower/, 'post', stopCardPower)
+Mock.mock(/\/common\/stopInfrared/, 'post', stopInfrared)
+

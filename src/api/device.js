@@ -2,12 +2,11 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-16 16:34:13
+ * @Last Modified time: 2020-10-20 14:26:24
  */
 
 // import {request} from '@/common/request'
-import { getAction, postFormAction, deleteAction } from '@/utils/ajax'
-
+import { getAction, postFormAction, deleteAction, postAction } from '@/utils/ajax'
 
 // device
 const getDeviceList = (params) => getAction('/common', {
@@ -41,6 +40,7 @@ const scanAndSaveDevicesToObox = (oboxSerialId, params) => postFormAction(`/aliS
   ...params
 })
 const pauseScanDevices = (oboxSerialId) => deleteAction(`/facade/scan/${oboxSerialId}`)
+const stopCardPower = (id) => postAction(`/common/stopCardPower`, { id })
 
 // OBOX
 const getOboxList = (params) => getAction('/common/obox/list', {
@@ -100,7 +100,6 @@ const unbindObox2Room = (roomId, oboxId, oboxSerialId) => postFormAction('/commo
 })
 
 // 开关
-
 const getSwitchStatus = (serialId) => postFormAction('/common', {
   CMD: 'query_node_real_status',
   serialId
@@ -275,7 +274,6 @@ const getDeviceStatusHistory = (serialId, fromDate, toDate, type = '02') => getA
 })
 
 // 红外
-
 const editIrDevice = (serialId, name) => postFormAction('/common', {
   CMD: 'update_ir_name',
   device_serial_id: serialId,
@@ -299,64 +297,7 @@ const getIrCustomKeys = () => getAction('/common', {
   tId: 0
 })
 
-// const DeviceAPI = {
-//   // getDeviceList (params) {
-//   //   const page = params.pageNo
-//   //   const pageSize = params.pageSize
-//   //   delete params.pageNo
-//   //   delete params.pageSize
-//   //   return request.get('/consumer/common', {
-//   //     CMD: 'query_device',
-//   //     start_index: page,
-//   //     count: pageSize,
-//   //     ...params
-//   //   })
-//   // },
-
-//   // getCameraList () {
-//   //   return request.get('/consumer/nvr/device', {
-//   //     start_index: 1
-//   //   })
-//   // },
-//   // getOboxList (page = 0, pageSize = 300) {
-//   //   return request.get('/consumer/common', {
-//   //     CMD: 'query_obox',
-//   //     start_index: page,
-//   //     count: pageSize
-//   //   })
-//   // },
-//   // getDeviceOperationHistory (params) {
-//   //   return request.get('/consumer/common', {
-//   //     CMD: 'query_device_status_history',
-//   //     serialId: params.serialId,
-//   //     type: '00',
-//   //     start: params.pageNo,
-//   //     count: params.pageSize
-//   //   })
-//   // },
-//   // modifyDeviceName (serialId, name) {
-//   //   return request.postForm('/consumer/common', {
-//   //     CMD: 'modify_device',
-//   //     serialId,
-//   //     operate_type: '01',
-//   //     name
-//   //   })
-//   // },
-
-//   // searchToAddDevice (oboxId, deviceType, deviceSubType) {
-//   //   return request.postForm('/consumer/common', {
-//   //     CMD: 'search_new_device',
-//   //     obox_serial_id: oboxId,
-//   //     serialId: '',
-//   //     device_type: deviceType,
-//   //     device_child_type: deviceSubType,
-//   //     state: '02',
-//   //     timeout: 60
-//   //   })
-//   // },
-
-
-// }
+const stopInfrared = (id) => postAction(`/common/stopInfrared`, { id })
 
 // const WifiDeviceAPI = {
 //   // getWifiDeviceList () {
@@ -366,11 +307,7 @@ const getIrCustomKeys = () => getAction('/common', {
 //   // },
 //   // // 红外转发器下的设备
 
-
-
-
 // }
-
 
 // 空调控制
 // const AcControlAPI = {
@@ -386,6 +323,7 @@ const getIrCustomKeys = () => getAction('/common', {
 // }
 
 export {
+  // 设备
   getDeviceList,
   getAllBuildingDeviceList,
   delDevice,
@@ -393,6 +331,12 @@ export {
   scanAndSaveDevicesToObox,
   pauseScanDevices,
 
+  getDeviceStatusHistory,
+  getSwitchStatus,
+  editSwitchStatus,
+  stopCardPower,
+
+  // 网关obox
   getOboxList,
   getAllOboxList,
   getOboxDeviceList,
@@ -405,9 +349,7 @@ export {
   bindObox2Room,
   unbindObox2Room,
 
-  getSwitchStatus,
-  editSwitchStatus,
-
+  // 面板设置
   getPanelGroupList,
   getPanelChildGroupList,
   getPanelGroupDeviceList,
@@ -423,6 +365,7 @@ export {
   getGroupListByPanelId,
   getGrouplListPanelKey,
 
+  // 设备分组
   getDeviceGroupList,
   getLocalDeviceGroupList,
   getGroupMemberById,
@@ -434,11 +377,11 @@ export {
   editDeviceGroupMember,
   delDeviceGroupMember,
 
-  getDeviceStatusHistory,
-
+  // 红外
   editIrDevice,
   getTransponderDevice,
   getInfratedDeviceList,
   delInfratedDevice,
   getIrCustomKeys,
+  stopInfrared
 }

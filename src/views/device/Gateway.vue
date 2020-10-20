@@ -118,12 +118,12 @@
             dataIndex: 'obox_serial_id',
           },
           {
-            title: '名称',
+            title: '设备名称',
             align: 'center',
             dataIndex: 'obox_name',
           },
           {
-            title: '状态',
+            title: '设备状态',
             align: 'center',
             dataIndex: 'obox_status',
             customRender (status) {
@@ -131,7 +131,7 @@
             }
           },
           {
-            title: '版本',
+            title: '设备版本',
             align: 'center',
             dataIndex: 'obox_version'
           },

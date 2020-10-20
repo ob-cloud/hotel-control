@@ -95,6 +95,12 @@
                 <a @click="handleAction(3, record)">灯控</a>
               </a-menu-item>
 
+              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isPluginPowerSensors(record.device_child_type)">
+                <a-popconfirm title="确认停用？请谨慎操作！" @confirm="() => handleStopService(record)">
+                  <a>停用</a>
+                </a-popconfirm>
+              </a-menu-item>
+
               <a-menu-item v-isPermitted="'device:normal:delete'">
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record)">
                   <a>删除</a>
@@ -124,8 +130,7 @@
   import KeypanelActionModal from './modules/KeyPanelActionModal'
   import HumidityActionModal from './modules/HumidityActionModal'
   import PowerSwitchModal from './modules/PowerSwitchModal'
-  // import PasswordModal from './modules/PasswordModal'
-  import { getOboxDeviceList, getAllOboxList, delDevice } from '@/api/device'
+  import { getOboxDeviceList, getAllOboxList, delDevice, stopCardPower } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { Descriptor, TypeHints, LedLampEquip } from 'hardware-suit'
 
@@ -244,6 +249,14 @@
         type === 1 && this.$refs.humidityModal.show(record)
         type === 2 && this.$refs.keypanelModal.show(record)
         type === 3 && this.$refs.lampModal.show(record)
+      },
+      handleStopService (record) {
+        this.loading = true
+        stopCardPower(record.id).then(res => {
+          if (this.$isAjaxSuccess(res.code)) {
+            this.$message.success('操作成功')
+          }else this.$message.error(res.message || '操作失败')
+        }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
       },
       actionModalClose () {
         this.loadData()
