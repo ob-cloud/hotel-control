@@ -125,6 +125,50 @@ const getMineReportList = (options) => {
   })
 }
 
+
+const getEquipsReportList = (options) => {
+  const parameters = getQueryParameters(options)
+
+  const result = []
+  const pageNo = parseInt(parameters.pageNo)
+  const pageSize = parseInt(parameters.pageSize)
+  const totalPage = Math.ceil(totalCount / pageSize)
+  const next = (pageNo >= totalPage ? (totalCount % pageSize) : pageSize) + 1
+
+  for (let i = 1; i < next; i++) {
+    result.push({
+      id: Mock.mock('@id()'),
+      businessDay: Mock.mock('@date'),
+      hotelName: Mock.mock('@cword(3, 5)') + '酒店',
+      roomCount: Mock.mock('@integer(10, 1000)'),
+      deviceCount: Mock.mock('@integer(10, 1000)'),
+      gatewayOfflineCount: Mock.mock('@integer(0, 100)'),
+      infraredOfflineCount: Mock.mock('@integer(0, 100)'),
+      gatewayOfflineRate: Mock.mock('@integer(0, 100)'),
+      infraredOfflineRate: Mock.mock('@integer(0, 100)'),
+      createAt: Mock.mock('@datetime'),
+      updatedAt: Mock.mock('@datetime'),
+    })
+  }
+
+  console.log('mock getEquipsReportList: ', builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  }))
+
+  return builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  })
+}
+
 Mock.mock(/\/common\/reports\/enterprise/, 'get', getEnterpriseReportList)
 Mock.mock(/\/common\/reports\/hotel/, 'get', getHotelReportList)
 Mock.mock(/\/common\/reports\/mine/, 'get', getMineReportList)
+Mock.mock(/\/common\/reports\/equips/, 'get', getEquipsReportList)
