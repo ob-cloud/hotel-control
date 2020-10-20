@@ -18,7 +18,7 @@ const getHotelList = (options) => {
     result.push({
       id: Mock.mock('@id()'),
       name: Mock.mock('@cword(3, 5)') + '酒店',
-      company: Mock.mock('@cword(5, 10)'),
+      company: Mock.mock('@cword(3, 5)') + '有限公司',
       contacts: Mock.mock('@cname()'),
       contact: Mock.mock('@integer(10000000000, 19000000000)'),
       frontPhone: Mock.mock('@integer(10000000000, 19000000000)'),
@@ -54,7 +54,7 @@ const getHotelListAll = () => {
     result.push({
       id: Mock.mock('@id()'),
       name: Mock.mock('@cword(3, 5)') + '酒店',
-      company: Mock.mock('@cword(5, 10)'),
+      company: Mock.mock('@cword(3, 5)') + '有限公司',
       contacts: Mock.mock('@cname()'),
       contact: Mock.mock('@integer(10000000000, 19000000000)'),
       frontPhone: Mock.mock('@integer(10000000000, 19000000000)'),
@@ -232,7 +232,7 @@ const getCompanyList = (options) => {
   for (let i = 1; i < next; i++) {
     result.push({
       id: Mock.mock('@id()'),
-      name: Mock.mock('@cword(3, 5)') + '酒店',
+      name: Mock.mock('@cword(3, 5)') + '有限公司',
       address: Mock.mock('@county(true)'),
       createAt: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),
@@ -256,6 +256,28 @@ const getCompanyList = (options) => {
   })
 }
 
+
+const getCompanyListAll = () => {
+  const result = []
+  for (let i = 1; i < Mock.mock('@integer(2, 6)'); i++) {
+    result.push({
+      id: Mock.mock('@id()'),
+      name: Mock.mock('@cword(3, 5)') + '有限公司',
+      address: Mock.mock('@county(true)'),
+      createAt: Mock.mock('@datetime'),
+      updatedAt: Mock.mock('@datetime'),
+    })
+  }
+
+  console.log('mock getCompanyListAll: ', builder({
+    records: result
+  }))
+
+  return builder({
+    records: result
+  })
+}
+
 Mock.mock(/\/common\/hotel\/list/, 'get', getHotelList)
 Mock.mock(/\/common\/hotel\/all/, 'get', getHotelListAll)
 
@@ -270,6 +292,7 @@ Mock.mock(/\/common\/unbindHotelUser/, 'post', unbindHotelUser)
 
 // 企业
 Mock.mock(/\/common\/company\/list/, 'get', getCompanyList)
+Mock.mock(/\/common\/company\/all/, 'get', getCompanyListAll)
 
 
 Mock.mock(/\/common\/room\/list/, 'get', getRoomList)

@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-20 11:23:04
+ * @Last Modified time: 2020-10-20 11:33:20
  */
 
 import { getAction, postFormAction, postAction } from '@/utils/ajax'
@@ -22,6 +22,7 @@ const editHotelSetting = (params) => postAction('/common/editHotelSetting', para
 
 // 企业
 const getCompanyList = (params) => getAction('/common/company/list', params)
+const getCompanyListAll = () => getAction('/common/company/all')
 const editCompany = (params) => postAction('/common/company/edit', params)
 const addCompany = (params) => postAction('/common/company/add', params)
 const delCompany = (params) => postAction('/common/company/del', params)
@@ -143,6 +144,7 @@ export {
 
   // 企业
   getCompanyList,
+  getCompanyListAll,
   editCompany,
   addCompany,
   delCompany,

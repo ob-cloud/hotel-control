@@ -27,7 +27,16 @@
         </a-form-item>
 
         <a-form-item label="所属公司" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input type="company" placeholder="请输入所属公司" v-decorator="[ 'company', validatorRules.normal]" />
+          <!-- <a-input type="company" placeholder="请输入所属公司" v-decorator="[ 'company', validatorRules.normal]" /> -->
+          <a-select
+            style="width: 100%"
+            placeholder="请选择所属公司"
+            v-decorator="[ 'company', { initialValue: undefined, rules: [{required: true, message: '请选择所属公司!'}]}]"
+          >
+            <a-select-option v-for="(company, companyIndex) in companyList" :key="companyIndex.toString()" :value="company.id">
+              {{ company.name }}
+            </a-select-option>
+          </a-select>
         </a-form-item>
 
         <a-form-item label="联系人" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -75,7 +84,7 @@
 
 <script>
   import pick from 'lodash.pick'
-  import { addHotel, editHotel } from '@/api/hotel'
+  import { addHotel, editHotel, getCompanyListAll } from '@/api/hotel'
   import { getUserListUnPage } from '@/api/system'
 
   export default {
@@ -104,6 +113,7 @@
         visible: false,
         model: {},
         userList: [],
+        companyList: [],
         selectedUser: undefined,
         labelCol: {
           xs: { span: 24 },
@@ -132,6 +142,15 @@
           }
         })
       },
+      initialCompanyList () {
+        getCompanyListAll().then((res) => {
+          if (this.$isAjaxSuccess(res.code)) {
+            this.companyList = res.result.records
+          } else {
+            console.log(res.message)
+          }
+        })
+      },
       refresh () {
         this.userId = ''
       },
@@ -142,6 +161,7 @@
       edit (record) {
         this.resetScreenSize() // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
         this.initialUserList()
+        this.initialCompanyList()
         this.form.resetFields()
         this.hotelId = record.id
         this.visible = true
