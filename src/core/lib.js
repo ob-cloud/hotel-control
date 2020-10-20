@@ -37,5 +37,4 @@ Vue.use(isPermitted)
 Vue.use(vueBus)
 
 Vue.prototype.$isAjaxSuccess = isAjaxSuccess
-
 Vue.prototype.$isPermitted = $isPermitted

@@ -152,6 +152,7 @@ const getRoomList = () => {
       roomName: Mock.mock('@integer(3,4)'),
       lightState: Mock.mock('@integer(0, 1)'),
       switchState: Mock.mock('@integer(0, 1)'),
+      temperature: Mock.mock('@integer(20, 36)'),
     })
   }
   console.log('mock getRoomList: ', builder({

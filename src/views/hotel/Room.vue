@@ -20,23 +20,25 @@
       </div>
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
         <a-spin :spinning="loading">
-          <div class="block-item" :class="{'active': item.lightState}" v-for="item in roomList" :key="item.id">
+          <div class="block-item" :class="{'active': item.lightState}" v-for="item in roomList" :key="item.id" @click="handleDetail(item)">
             <div class="toolbar left">
-              <span title="温度/湿度">{{ getHumidity(item.deviceState) }}</span>
+              <span title="温度">{{ item.temperature }}℃</span>
               <!-- <span><i class="obicon obicon-icon-temperature" style="color: #f66c32;"></i>35℃</span>
               <span><i class="obicon obicon-humidity" style="color: #73d1f0;"></i>40%</span> -->
             </div>
             <div class="toolbar">
-              <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-device" title="绑定OBOX" @click="handleDeviceModal(item)"></i>
-              <a-popconfirm :title="`${item.lightState ? '关' : '开'}灯?`" @confirm="() => handleLamp(item)">
-                <i v-isPermitted="'room:classroom:lamp'" class="icon obicon obicon-droplight" style="font-weight: 600;" :class="{active: item.lightState}" title="教室灯"></i>
+              <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
+              <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i>
+              <a-popconfirm :title="`${item.lightState ? '关' : '开'}灯?`" @confirm="(e) => handleLamp(item, e)">
+                <!-- obicon-room-card -->
+                <i class="icon obicon obicon-droplight" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" v-isPermitted="'room:classroom:lamp'" title="插卡取电"></i>
               </a-popconfirm>
-              <a-popconfirm :title="`${item.switchState ? '关闭' : '开启'}教室开关?`" @confirm="() => handlePower(item)">
+              <!-- <a-popconfirm :title="`${item.switchState ? '关闭' : '开启'}教室开关?`" @confirm="() => handlePower(item)">
                 <i v-isPermitted="'room:classroom:switch'" class="icon obicon obicon-power" :class="{active: item.switchState}" title="教室开关"></i>
-              </a-popconfirm>
-              <a-icon v-isPermitted="'room:classroom:edit'" class="icon" type="edit" title="编辑" @click="handleEdit(item)" />
+              </a-popconfirm> -->
+              <a-icon v-isPermitted="'room:classroom:edit'" class="icon" type="edit" title="编辑" @click="(e) => { e.stopPropagation(); handleEdit(item) }" />
               <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
-                <a-icon v-isPermitted="'room:classroom:delete'" class="icon" type="delete" />
+                <a-icon v-isPermitted="'room:classroom:delete'" class="icon" type="delete" @click="(e) => e.stopPropagation()" />
               </a-popconfirm>
             </div>
             <div class="content">
@@ -49,8 +51,8 @@
         </a-spin>
         <a-pagination simple style="position: fixed; right: 70px; bottom: 30px;" :current="queryParam.pageNo" :pageSize.sync="queryParam.pageSize" :total="total" :showSizeChanger="true" @change="handlePageChange" />
       </div>
-      <classroom-modal ref="modalForm" @ok="modalFormOk"></classroom-modal>
-      <room-device-modal ref="deviceModal1" @ok="deviceModalOk"></room-device-modal>
+      <room-modal ref="modalForm" @ok="modalFormOk"></room-modal>
+      <room-detail-modal ref="detailModal"></room-detail-modal>
       <room-obox-modal ref="deviceModal"></room-obox-modal>
     </a-card>
   </div>
@@ -61,12 +63,12 @@ import { getRoomList, delRoom, handleLampPower, handleSwitchPower, getPowerStatu
 // import { editSwitchStatus } from '@/api/device'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
-import ClassroomModal from './modules/ClassroomModal'
-import RoomDeviceModal from './modules/RoomDeviceModal'
+import RoomModal from './modules/RoomModal'
+import RoomDetailModal from './modules/RoomDetailModal'
 import RoomOboxModal from './modules/RoomOboxModal'
 import { HumidityEquip } from 'hardware-suit'
 export default {
-  components: { ClassroomModal, RoomDeviceModal, RoomOboxModal },
+  components: { RoomModal, RoomDetailModal, RoomOboxModal },
   mixins: [ProListMixin],
   data () {
     return {
@@ -114,11 +116,12 @@ export default {
         }
       }).finally(() => this.loading = false)
     },
-    handleDeviceModal (item) {
+    handleDeviceModal (item, e) {
+      e.stopPropagation()
       this.$refs.deviceModal.show(item)
     },
-    deviceModalOk () {
-
+    handleDetail (record) {
+      this.$refs.detailModal.show(record)
     },
     isLightActive (status) {
       if (!status) return false
@@ -131,7 +134,8 @@ export default {
     handleSearch () {
       this.loadData(1)
     },
-    handleLamp (item) {
+    handleLamp (item, e) {
+      e.stopPropagation()
       const params = {
         roomId: item.id,
         deviceType: item.lightState ? 2 : 1
