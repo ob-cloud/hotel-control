@@ -125,6 +125,6 @@ const getMineReportList = (options) => {
   })
 }
 
-Mock.mock(/\/common\/enterprise\/list/, 'get', getEnterpriseReportList)
-Mock.mock(/\/common\/hotel\/list/, 'get', getHotelReportList)
-Mock.mock(/\/common\/mine\/list/, 'get', getMineReportList)
+Mock.mock(/\/common\/reports\/enterprise/, 'get', getEnterpriseReportList)
+Mock.mock(/\/common\/reports\/hotel/, 'get', getHotelReportList)
+Mock.mock(/\/common\/reports\/mine/, 'get', getMineReportList)

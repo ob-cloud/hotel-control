@@ -171,7 +171,7 @@
           //   }
           // },
           {
-            title: '入驻时间',
+            title: '有效时间',
             align: 'center',
             dataIndex: 'createAt'
           },
