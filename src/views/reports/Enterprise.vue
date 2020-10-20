@@ -84,6 +84,8 @@ const columns = [{
 },{
   title: '租金',
   align:"center",
+  sorter: true,
+  sortOrder: 'descend',
   dataIndex: 'rent'
 }]
 export default {
