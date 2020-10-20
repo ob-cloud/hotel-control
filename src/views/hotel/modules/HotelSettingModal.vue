@@ -2,20 +2,25 @@
   <a-modal :title="title" :width="700" :visible="visible" :confirmLoading="confirmLoading" @ok="handleOk" @cancel="handleCancel" cancelText="关闭">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="入住时间">
-          <a-date-picker
-            placeholder="请选择入住时间"
-            v-decorator="['checkIn', {initialValue: !model.checkIn ? null : moment(model.checkIn, dateFormat), rules: [{ required: true, message: '请选择入住时间!' }]}]"
-          />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="退房时间">
-          <a-date-picker
-            placeholder="请选择退房时间"
-            v-decorator="['checkOut', {initialValue: !model.checkIn ? null : moment(model.checkIn, dateFormat), rules: [{ required: true, message: '请选择退房时间!' }]}]"
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="营业时间">
+          <a-range-picker
+            v-decorator="[ 'operTime', {rules: [{ required: true, message: '请选择营业时间!' }]} ]"
+            format="HH:mm"
+            :showTime="true"
+            :mode="['time', 'time']"
+            :placeholder="['开始时间', '结束时间']"
           />
         </a-form-item>
 
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="收费">
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="签约时间">
+          <a-range-picker
+            v-decorator="[ 'signTime', {rules: [{ required: true, message: '请选择签约时间!' }]} ]"
+            format="YYYY-MM-DD HH:mm"
+            :placeholder="['入驻时间', '失效时间']"
+          />
+        </a-form-item>
+
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="收费设置">
           超过 <a-input-number v-decorator="[ 'fee.charge', {rules: [{ required: true, message: '请填写收费时间!' }]}]" controls-position="right" :min="1"></a-input-number> 小时，收取租金
           <a-input-number v-decorator="[ 'rent', {rules: [{ required: true, message: '请填写租金!' }]} ]" controls-position="right" :min="1"></a-input-number> 元
         </a-form-item>
@@ -24,13 +29,7 @@
           <a-input-number v-decorator="[ 'rent', {rules: [{ required: true, message: '请填写租金!' }]} ]" controls-position="right" :min="1"></a-input-number>
         </a-form-item> -->
 
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="签约时间">
-          <a-range-picker
-            v-decorator="[ 'signTime', {rules: [{ required: true, message: '请选择签约时间!' }]} ]"
-            format="YYYY-MM-DD HH:mm"
-            :placeholder="['入住时间', '退房时间']"
-          />
-        </a-form-item>
+
       </a-form>
     </a-spin>
   </a-modal>
@@ -45,6 +44,7 @@ export default {
     return {
       title: '酒店设置',
       visible: false,
+      dateFormat: 'HH:mm',
       model: {},
       labelCol: {
         xs: { span: 24 },
@@ -79,7 +79,7 @@ export default {
         if(this.$isAjaxSuccess(res.code)) {
           this.model = Object.assign({}, res.result)
           this.$nextTick(() => {
-            this.form.setFieldsValue(pick(this.model, 'checkIn', 'checkOut', 'charge', 'rent', 'signTime'))
+            this.form.setFieldsValue(pick(this.model, 'operTime', 'charge', 'rent', 'signTime'))
           })
         }
       })
