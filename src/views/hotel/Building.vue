@@ -21,11 +21,11 @@
             <div class="toolbar">
               <a-popconfirm :title="`${item.lightState ? '关' : '开'}楼栋灯?`" @confirm="() => handleLamp(item)">
                 <!-- <i v-isPermitted="'room:classroom:lamp'" class="icon obicon obicon-lamp" title="楼栋灯"></i> -->
-                <i v-isPermitted="'room:building:lamp'" class="icon obicon obicon-droplight" style="font-weight: 600;" :class="{active: item.lightState}" title="楼栋灯"></i>
+                <i v-isPermitted="'room:building:lamp'" class="icon obicon obicon-droplight" style="font-weight: 600;" :class="{active: item.lightState}" title="楼栋插卡取电"></i>
               </a-popconfirm>
-              <a-popconfirm :title="`${item.switchState ? '关闭' : '开启'}楼栋开关?`" @confirm="() => handlePower(item)">
+              <!-- <a-popconfirm :title="`${item.switchState ? '关闭' : '开启'}楼栋开关?`" @confirm="() => handlePower(item)">
                 <i v-isPermitted="'room:building:switch'" class="icon obicon obicon-power" :class="{active: item.switchState}" title="楼层开关"></i>
-              </a-popconfirm>
+              </a-popconfirm> -->
               <a-icon v-isPermitted="'room:building:edit'" class="icon" type="edit" title="编辑" @click="handleEdit(item)" />
               <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
                 <a-icon v-isPermitted="'room:building:delete'" class="icon" type="delete" />

@@ -42,7 +42,7 @@
               </a-popconfirm>
             </div>
             <div class="content">
-              <i class="building-sign obicon obicon-classroom"></i>
+              <i class="building-sign obicon obicon-room-o"></i>
               <p class="text">
                 {{ item.buildingName }}栋{{ item.floorName }}层{{ item.roomName }}
               </p>
