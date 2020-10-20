@@ -55,12 +55,12 @@
           </a-select>
         </a-form-item>
 
-        <a-form-item label="是否连锁" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <!-- <a-form-item label="是否连锁" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-select v-decorator="[ 'isChain', {}]" placeholder="请选择连锁状态">
             <a-select-option :value="1">连锁酒店</a-select-option>
             <a-select-option :value="0">非连锁酒店</a-select-option>
           </a-select>
-        </a-form-item>
+        </a-form-item> -->
       </a-form>
     </a-spin>
 

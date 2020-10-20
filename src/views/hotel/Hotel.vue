@@ -162,14 +162,14 @@
             align: 'center',
             dataIndex: 'salesman',
           },
-          {
-            title: '是否连锁',
-            align: 'center',
-            dataIndex: 'isChain',
-            customRender (status) {
-              return status ? '是' : '否'
-            }
-          },
+          // {
+          //   title: '是否连锁',
+          //   align: 'center',
+          //   dataIndex: 'isChain',
+          //   customRender (status) {
+          //     return status ? '是' : '否'
+          //   }
+          // },
           {
             title: '入驻时间',
             align: 'center',
