@@ -12,22 +12,30 @@
             </a-form-item>
           </a-col>
 
-          <a-col :md="6" :sm="8">
+          <!-- <a-col :md="6" :sm="8">
             <a-form-item label="连锁">
               <a-select placeholder="请选择连锁状态" v-model="queryParam.isChain" allowClear>
                 <a-select-option :value="1">连锁</a-select-option>
                 <a-select-option :value="0">非连锁</a-select-option>
               </a-select>
             </a-form-item>
+          </a-col> -->
+          <a-col :md="6" :sm="8">
+            <a-form-item label="所属公司">
+              <!-- <a-input placeholder="请输入所属公司名称" v-model="queryParam.company"></a-input> -->
+              <a-select placeholder="请输入所属公司名称" v-model="queryParam.company" allowClear>
+                <a-select-option v-for="(company, index) in companyList" :key="index" :value="company.id">{{ company.name }}</a-select-option>
+              </a-select>
+            </a-form-item>
           </a-col>
 
 
           <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
+            <!-- <a-col :md="6" :sm="8">
               <a-form-item label="所属公司">
                 <a-input placeholder="请输入所属公司名称" v-model="queryParam.company"></a-input>
               </a-form-item>
-            </a-col>
+            </a-col> -->
             <a-col :md="6" :sm="8">
               <a-form-item label="业务员">
                 <a-input placeholder="请输入业务员" v-model="queryParam.salesman"></a-input>
@@ -112,7 +120,7 @@
   import HotelModal from './modules/HotelModal'
   import HotelUserModal from './modules/HotelUserModal'
   import HotelSettingModal from './modules/HotelSettingModal'
-  import { getHotelList, delHotel } from '@/api/hotel'
+  import { getHotelList, delHotel, getCompanyListAll } from '@/api/hotel'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { mapActions } from 'vuex'
 
@@ -127,6 +135,7 @@
     data() {
       return {
         description: '这是用户管理页面',
+        companyList: [],
         queryParam: {
           pageNo: 1,
           pageSize: 10
@@ -187,11 +196,19 @@
     },
     mounted () {
       // this.$bus.$on('obox-state', () => this.loadData())
+      this.getCompanyLis()
     },
     methods: {
       ...mapActions(['UpdateHotelId']),
       loadData (arg) {
         this.getDataList(arg)
+      },
+      getCompanyLis () {
+        getCompanyListAll().then(res => {
+          if (this.$isAjaxSuccess(res.code)) {
+            this.companyList = res.result.records
+          }
+        })
       },
       getDataList (arg) {
         if (arg === 1) {
