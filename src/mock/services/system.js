@@ -289,6 +289,17 @@ const getUserPermission = () => {
         "name": "hotel-list",
         "id": "1280342084147073026"
       }, {
+        "path": "/hotel/company",
+        "component": "hotel/Company",
+        "route": "1",
+        "meta": {
+          "keepAlive": false,
+          "internalOrExternal": false,
+          "title": "企业信息"
+        },
+        "name": "hotel-Company",
+        "id": "12803420841470711126"
+      }, {
         "path": "/hotel/building",
         "component": "hotel/Building",
         "route": "1",

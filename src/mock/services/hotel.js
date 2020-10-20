@@ -218,6 +218,44 @@ const getFloorList = () => {
   })
 }
 
+// 企业
+const getCompanyList = (options) => {
+  // console.log('mock getHotelList: ', options)
+  const parameters = getQueryParameters(options)
+
+  const result = []
+  const pageNo = parseInt(parameters.pageNo)
+  const pageSize = parseInt(parameters.pageSize)
+  const totalPage = Math.ceil(totalCount / pageSize)
+  const next = (pageNo >= totalPage ? (totalCount % pageSize) : pageSize) + 1
+
+  for (let i = 1; i < next; i++) {
+    result.push({
+      id: Mock.mock('@id()'),
+      name: Mock.mock('@cword(3, 5)') + '酒店',
+      address: Mock.mock('@county(true)'),
+      createAt: Mock.mock('@datetime'),
+      updatedAt: Mock.mock('@datetime'),
+    })
+  }
+
+  console.log('mock getCompanyList: ', builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  }))
+
+  return builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  })
+}
+
 Mock.mock(/\/common\/hotel\/list/, 'get', getHotelList)
 Mock.mock(/\/common\/hotel\/all/, 'get', getHotelListAll)
 
@@ -229,6 +267,9 @@ Mock.mock(/\/common\/delHotel/, 'post', delHotel)
 
 Mock.mock(/\/common\/bindHotelUser/, 'post', bindHotelUser)
 Mock.mock(/\/common\/unbindHotelUser/, 'post', unbindHotelUser)
+
+// 企业
+Mock.mock(/\/common\/company\/list/, 'get', getCompanyList)
 
 
 Mock.mock(/\/common\/room\/list/, 'get', getRoomList)

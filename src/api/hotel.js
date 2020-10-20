@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-16 15:58:41
+ * @Last Modified time: 2020-10-20 11:23:04
  */
 
 import { getAction, postFormAction, postAction } from '@/utils/ajax'
@@ -19,6 +19,12 @@ const unbindHotelUser = (hotelId, userId) => postAction('/common/unbindHotelUser
 const getHotelSetting = (id) => getAction('/common/getHotelSetting', {id})
 const addHotelSetting = (params) => postAction('/common/addHotelSetting', params)
 const editHotelSetting = (params) => postAction('/common/editHotelSetting', params)
+
+// 企业
+const getCompanyList = (params) => getAction('/common/company/list', params)
+const editCompany = (params) => postAction('/common/company/edit', params)
+const addCompany = (params) => postAction('/common/company/add', params)
+const delCompany = (params) => postAction('/common/company/del', params)
 
 // 房间
 const getRoomCascader = () => getAction('/common', {
@@ -134,6 +140,12 @@ export {
   getHotelSetting,
   addHotelSetting,
   editHotelSetting,
+
+  // 企业
+  getCompanyList,
+  editCompany,
+  addCompany,
+  delCompany,
 
   // 房
   getRoomCascader,
