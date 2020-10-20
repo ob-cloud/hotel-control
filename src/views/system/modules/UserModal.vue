@@ -54,7 +54,14 @@
           </a-select>
         </a-form-item>
 
-        <a-form-item label="头像" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <a-form-item label="用户类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-select v-decorator="[ 'type', { initialValue: 0 }]" placeholder="请选择用户类型">
+            <a-select-option :value="0">集团用户</a-select-option>
+            <a-select-option :value="1">酒店用户</a-select-option>
+          </a-select>
+        </a-form-item>
+
+        <!-- <a-form-item label="头像" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-upload
             listType="picture-card"
             class="avatar-uploader"
@@ -71,7 +78,7 @@
               <div class="ant-upload-text">上传</div>
             </div>
           </a-upload>
-        </a-form-item>
+        </a-form-item> -->
 
         <a-form-item label="生日" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-date-picker
@@ -255,7 +262,7 @@
         this.visible = true
         this.model = Object.assign({}, record)
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone', 'activitiSync'))
+          this.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone', 'activitiSync', 'type'))
         })
       },
       close () {
@@ -271,10 +278,10 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true
-            let avatar = that.model.avatar
+            // let avatar = that.model.avatar
             values.birthday = values.birthday ? values.birthday.format(this.dateFormat) : ''
             let formData = Object.assign(this.model, values)
-            formData.avatar = avatar
+            // formData.avatar = avatar
             formData.selectedroles = this.selectedRole.length > 0 ? this.selectedRole.join(',') : ''
 
             if (!this.model.id) {

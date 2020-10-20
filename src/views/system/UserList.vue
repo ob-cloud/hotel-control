@@ -108,11 +108,11 @@
         @change="handleTableChange"
       >
 
-        <template slot="avatarslot" slot-scope="text, record">
+        <!-- <template slot="avatarslot" slot-scope="text, record">
           <div class="anty-img-wrap">
             <a-avatar shape="square" :src="getAvatarView(record.avatar)" icon="user" />
           </div>
-        </template>
+        </template> -->
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
@@ -194,13 +194,13 @@
             width: 100,
             dataIndex: 'realname',
           },
-          {
-            title: '头像',
-            align: 'center',
-            width: 120,
-            dataIndex: 'avatar',
-            scopedSlots: { customRender: 'avatarslot' }
-          },
+          // {
+          //   title: '头像',
+          //   align: 'center',
+          //   width: 120,
+          //   dataIndex: 'avatar',
+          //   scopedSlots: { customRender: 'avatarslot' }
+          // },
 
           {
             title: '性别',
@@ -239,6 +239,15 @@
             customRender (t) {
               const statusMap = {1: '正常', 2: '冻结'}
               return statusMap[t] || ''
+            }
+          },
+          {
+            title: '用户类型',
+            align: 'center',
+            width: 120,
+            dataIndex: 'type',
+            customRender (t) {
+              return t ? '酒店用户' : '集团用户'
             }
           },
          /* {
