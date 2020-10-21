@@ -1,6 +1,6 @@
 <template>
   <div>
-    校园监控管理系统
+    酒店客控系统
   </div>
 </template>
 

@@ -30,7 +30,7 @@
             <div class="toolbar">
               <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
               <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i> -->
-              <a-popconfirm :title="`${item.lightState ? '停' : '启'}用?`" @confirm="(e) => handleLamp(item, e)">
+              <a-popconfirm :title="`${item.lightState ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleLamp(item, e)">
                 <!-- obicon-room-card -->
                 <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" v-isPermitted="'room:classroom:lamp'" title="插卡取电"></i>
               </a-popconfirm>
