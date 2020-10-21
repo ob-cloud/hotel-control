@@ -29,13 +29,17 @@
         <a-card size="small">
           <span slot="title">网关</span>
           <a slot="extra" href="#">
-            <a-button style="font-size: 12px;" size="small" type="link" @click="handleBind">
+            <a-button style="font-size: 12px;" size="small" type="link" @click="handleBind(1)">
               <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
             </a-button>
           </a>
           <a-list item-layout="horizontal" :data-source="oboxList">
             <a-list-item slot="renderItem" slot-scope="item">
-              <a slot="actions" @click="handleBind">解绑</a>
+              <a slot="actions">
+                <a-popconfirm title="解绑网关，请谨慎操作！" @confirm="() => handleUnbind(1, item)">
+                  <span>解绑</span>
+                </a-popconfirm>
+              </a>
               <a-list-item-meta :description="item.obox_serial_id">
                 <span slot="title">
                   {{ item.obox_name }}
@@ -51,13 +55,17 @@
         <a-card size="small">
           <span slot="title">红外</span>
           <a slot="extra" href="#">
-            <a-button style="font-size: 12px;" size="small" type="link">
+            <a-button style="font-size: 12px;" size="small" type="link" @click="handleBind(2)">
               <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
             </a-button>
           </a>
           <a-list item-layout="horizontal" :data-source="oboxList">
             <a-list-item slot="renderItem" slot-scope="item">
-              <a slot="actions">解绑</a>
+              <a slot="actions">
+                <a-popconfirm title="解绑红外，请谨慎操作！" @confirm="() => handleUnbind(2, item)">
+                  <span>解绑</span>
+                </a-popconfirm>
+              </a>
               <a-list-item-meta :description="item.obox_serial_id">
                 <span slot="title">
                   {{ item.obox_name }}
@@ -92,7 +100,9 @@
       </a-tab-pane>
     </a-tabs>
 
-    <bind-obox-modal ref="bindModal" @ok="bindModalOk"></bind-obox-modal>
+
+    <room-bind-obox-modal ref="bindModal" @ok="bindModalOk"></room-bind-obox-modal>
+    <room-bind-infrared-modal ref="bindInfraredModal" @ok="bindModalOk"></room-bind-infrared-modal>
 
     <humidity-action-modal placement="right" :drawerWidth="600" ref="humidityModal"></humidity-action-modal>
     <lamp-action-modal placement="right" :drawerWidth="600" ref="lampModal"></lamp-action-modal>
@@ -108,7 +118,10 @@ import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import { getRoomDeviceList } from '@/api/hotel'
 
 import { Descriptor, TypeHints } from 'hardware-suit'
-import BindOboxModal from './BindOboxModal'
+
+import RoomBindOboxModal from './RoomBindOboxModal'
+import RoomBindInfraredModal from './RoomBindInfraredModal'
+
 import LampActionModal from '@views/device/modules/LampActionModal'
 import KeypanelActionModal from '@views/device/modules/KeyPanelActionModal'
 import HumidityActionModal from '@views/device/modules/HumidityActionModal'
@@ -211,7 +224,7 @@ const infraredList = [{
 }]
 export default {
   mixins: [ProListMixin],
-  components: { BindOboxModal, LampActionModal, KeypanelActionModal, HumidityActionModal, PowerSwitchModal, InfraredAirConditionModal },
+  components: { RoomBindOboxModal, RoomBindInfraredModal, LampActionModal, KeypanelActionModal, HumidityActionModal, PowerSwitchModal, InfraredAirConditionModal },
   data() {
     return {
       title: '房间详情',
@@ -273,12 +286,14 @@ export default {
       this.model = { ...record }
       this.loadData(record.id)
     },
-    handleBind () {
-      this.$refs.bindModal.show({ roomId: this.roomId })
+    handleBind (type) {
+      type === 1 && this.$refs.bindModal.show({ roomId: this.roomId })
+      type === 2 && this.$refs.bindInfraredModal.show({ roomId: this.roomId })
     },
-    bindModalOk (selection) {
-      console.log(selection)
-      this.oboxList = selection
+    handleUnbind (type, record) {
+      console.log(type, record)
+    },
+    bindModalOk () {
     },
     handleOk () {
       this.$emit('ok')
