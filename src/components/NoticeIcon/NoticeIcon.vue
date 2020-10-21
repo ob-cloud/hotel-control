@@ -76,10 +76,10 @@ export default {
       visible: false,
       notice: [],
       noticeCount: '0',
-      noticeTitle: '通知',
+      noticeTitle: '设备离线',
       sysMsg: [],
       sysMsgCount: '0',
-      sysMsgTitle: '系统消息',
+      sysMsgTitle: '酒店欠费',
     }
   },
   computed: {
