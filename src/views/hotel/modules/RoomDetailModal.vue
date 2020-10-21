@@ -28,10 +28,10 @@
       <a-col :span="12">
         <a-card size="small">
           <span slot="title">网关</span>
-          <a slot="extra" href="#"><a-button style="font-size: 12px;" size="small" type="link" icon="plus">添加</a-button></a>
+          <a slot="extra" href="#"><a-button style="font-size: 12px;" size="small" type="link" icon="plus">绑定</a-button></a>
           <a-list item-layout="horizontal" :data-source="oboxList">
             <a-list-item slot="renderItem" slot-scope="item">
-              <a slot="actions">删除</a>
+              <a slot="actions">解绑</a>
               <a-list-item-meta :description="item.obox_serial_id">
                 <span slot="title">
                   {{ item.obox_name }}
@@ -46,10 +46,10 @@
       <a-col :span="12">
         <a-card size="small">
           <span slot="title">红外</span>
-          <a slot="extra" href="#"><a-button style="font-size: 12px;" size="small" type="link" icon="plus">添加</a-button></a>
+          <a slot="extra" href="#"><a-button style="font-size: 12px;" size="small" type="link" icon="plus">绑定</a-button></a>
           <a-list item-layout="horizontal" :data-source="oboxList">
             <a-list-item slot="renderItem" slot-scope="item">
-              <a slot="actions">删除</a>
+              <a slot="actions">解绑</a>
               <a-list-item-meta :description="item.obox_serial_id">
                 <span slot="title">
                   {{ item.obox_name }}
