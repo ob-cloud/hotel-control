@@ -145,11 +145,11 @@ const getRoomList = () => {
     result.push({
       id: Mock.mock('@id()'),
       buildingId: Mock.mock('@id()'),
-      buildingName: Mock.mock('@word(1,2)'),
+      buildingName: Mock.mock('@integer(1, 20)'),
       deviceState: "",
       floorId: Mock.mock('@id()'),
-      floorName: Mock.mock('@word(1,2)'),
-      roomName: Mock.mock('@integer(3,4)'),
+      floorName: Mock.mock('@integer(1, 20)'),
+      roomName: Mock.mock('@integer(3, 14)'),
       lightState: Mock.mock('@integer(0, 1)'),
       switchState: Mock.mock('@integer(0, 1)'),
       temperature: Mock.mock('@integer(20, 36)'),
@@ -174,7 +174,7 @@ const getBuildingList = () => {
     result.push({
       id: Mock.mock('@id()'),
       buildingId: Mock.mock('@id()'),
-      buildingName: Mock.mock('@word(1,2)'),
+      buildingName: Mock.mock('@integer(1, 20)'),
       deviceState: "",
       lightState: Mock.mock('@integer(0, 1)'),
       switchState: Mock.mock('@integer(0, 1)'),
@@ -200,9 +200,10 @@ const getFloorList = () => {
     result.push({
       id: Mock.mock('@id()'),
       buildingId: Mock.mock('@id()'),
-      buildingName: Mock.mock('@word(1,2)'),
+      buildingName: Mock.mock('@integer(1, 20)'),
       deviceState: "",
       floorId: Mock.mock('@id()'),
+      floorName: Mock.mock('@integer(1, 20)'),
       lightState: Mock.mock('@integer(0, 1)'),
       switchState: Mock.mock('@integer(0, 1)'),
       allType: 0

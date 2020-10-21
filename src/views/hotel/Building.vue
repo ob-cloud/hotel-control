@@ -12,7 +12,7 @@
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
           <a-button v-isPermitted="'room:building:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
-          <a-button v-isPermitted="'room:building:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button>
+          <!-- <a-button v-isPermitted="'room:building:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button> -->
         </a-button-group>
       </div>
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
@@ -33,7 +33,7 @@
             <div class="content">
               <i class="building-sign obicon obicon-building-o"></i>
               <p class="text">
-                {{ item.buildName }}栋
+                {{ item.buildingName }}栋
               </p>
             </div>
           </div>

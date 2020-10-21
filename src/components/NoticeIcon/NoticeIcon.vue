@@ -120,8 +120,8 @@ export default {
     },
     toMyAnnouncement () {
       this.$router.push({
-        path: '/isps/userAnnouncement',
-        name: 'isps-userAnnouncement'
+        path: '/isystem/annountcement',
+        name: 'isystem-annountcement'
       })
       this.visible = false
     },

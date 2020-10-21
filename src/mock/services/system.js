@@ -523,7 +523,7 @@ const getUserPermission = () => {
         "name": "isystem-role",
         "id": "1242640677855072258"
       }, {
-        "path": "/isystem/annountCement",
+        "path": "/isystem/annountcement",
         "component": "system/SysAnnouncementList",
         "route": "1",
         "hidden": false,
@@ -532,7 +532,7 @@ const getUserPermission = () => {
           "internalOrExternal": false,
           "title": "系统消息"
         },
-        "name": "isystem-annountCement",
+        "name": "isystem-annountcement",
         "id": "1243092567156932610"
       }, {
         "path": "/isystem/log",

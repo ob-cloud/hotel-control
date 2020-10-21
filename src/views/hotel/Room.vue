@@ -3,9 +3,10 @@
     <a-card>
       <div slot="title" class="search-bar">
         <div class="caption">
-          <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.buildName" placeholder="楼栋"></a-input>
+          <!-- <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.buildName" placeholder="楼栋"></a-input>
           <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.floorName" placeholder="楼层"></a-input>
-          <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.roomName" placeholder="教室"></a-input>
+          <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.roomName" placeholder="教室"></a-input> -->
+          <a-cascader placeholder="请选择楼栋/楼层/房" :options="buildingOptions" change-on-select @change="onChange" style="margin-right: 10px;" />
           <a-button type="primary" @click="handleSearch" icon="search">查询</a-button>
           <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
         </div>
@@ -14,7 +15,7 @@
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
           <a-button v-isPermitted="'room:classroom:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
-          <a-button v-isPermitted="'room:classroom:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button>
+          <!-- <a-button v-isPermitted="'room:classroom:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button> -->
 
         </a-button-group>
       </div>
@@ -44,7 +45,7 @@
             <div class="content">
               <i class="building-sign obicon obicon-room-o"></i>
               <p class="text" @click="handleDetail(item)">
-                {{ item.buildingName }}栋{{ item.floorName }}层{{ item.roomName }}
+                {{ item.buildingName }}栋{{ item.floorName }}层{{ item.roomName }}房
               </p>
             </div>
           </div>
@@ -67,6 +68,31 @@ import RoomModal from './modules/RoomModal'
 import RoomDetailModal from './modules/RoomDetailModal'
 import RoomOboxModal from './modules/RoomOboxModal'
 import { HumidityEquip } from 'hardware-suit'
+const options = [{
+  value: '1',
+  label: '1栋',
+  children: [{
+    value: '1',
+    label: '1层',
+    children: [{
+      value: '101',
+      label: '101房',
+    }]
+  }]
+},
+{
+  value: '2',
+  label: '2栋',
+  children: [{
+    value: '1',
+    label: '1层',
+    children: [{
+      value: '101',
+      label: '101房',
+    }]
+  }]
+}]
+
 export default {
   components: { RoomModal, RoomDetailModal, RoomOboxModal },
   mixins: [ProListMixin],
@@ -79,6 +105,7 @@ export default {
         pageNo: 1,
         pageSize: 10
       },
+      buildingOptions: options,
       total: 0
     }
   },
@@ -188,6 +215,9 @@ export default {
       this.queryParam.pageNo = pageNo
       this.queryParam.pageSize = pageSize
       this.loadData()
+    },
+    onChange (val) {
+      console.log('-=-=-=-= ', val)
     }
   },
 }

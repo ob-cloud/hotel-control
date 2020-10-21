@@ -13,7 +13,7 @@
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
           <a-button v-isPermitted="'room:floor:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
-          <a-button v-isPermitted="'room:floor:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button>
+          <!-- <a-button v-isPermitted="'room:floor:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button> -->
 
         </a-button-group>
       </div>
