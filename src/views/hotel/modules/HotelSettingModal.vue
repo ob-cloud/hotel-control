@@ -5,7 +5,7 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="营业时间">
           <a-range-picker
             v-decorator="[ 'operTime', {rules: [{ required: true, message: '请选择营业时间!' }]} ]"
-            format="HH:mm"
+            format="h:mm"
             :showTime="true"
             :mode="['time', 'time']"
             :placeholder="['开始时间', '结束时间']"
@@ -15,7 +15,7 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="签约时间">
           <a-range-picker
             v-decorator="[ 'signTime', {rules: [{ required: true, message: '请选择签约时间!' }]} ]"
-            format="YYYY-MM-DD HH:mm"
+            format="YYYY-MM-DD"
             :placeholder="['入驻时间', '失效时间']"
           />
         </a-form-item>
