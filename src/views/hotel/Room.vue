@@ -20,7 +20,7 @@
       </div>
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
         <a-spin :spinning="loading">
-          <div class="block-item" :class="{'active': item.lightState}" v-for="item in roomList" :key="item.id" @click="handleDetail(item)">
+          <div class="block-item" :class="{'active': item.lightState}" v-for="item in roomList" :key="item.id">
             <div class="toolbar left">
               <span title="温度">{{ item.temperature }}℃</span>
               <!-- <span><i class="obicon obicon-icon-temperature" style="color: #f66c32;"></i>35℃</span>
@@ -28,10 +28,10 @@
             </div>
             <div class="toolbar">
               <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
-              <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i>
+              <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i> -->
               <a-popconfirm :title="`${item.lightState ? '关' : '开'}灯?`" @confirm="(e) => handleLamp(item, e)">
                 <!-- obicon-room-card -->
-                <i class="icon obicon obicon-droplight" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" v-isPermitted="'room:classroom:lamp'" title="插卡取电"></i>
+                <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" v-isPermitted="'room:classroom:lamp'" title="插卡取电"></i>
               </a-popconfirm>
               <!-- <a-popconfirm :title="`${item.switchState ? '关闭' : '开启'}教室开关?`" @confirm="() => handlePower(item)">
                 <i v-isPermitted="'room:classroom:switch'" class="icon obicon obicon-power" :class="{active: item.switchState}" title="教室开关"></i>
@@ -43,7 +43,7 @@
             </div>
             <div class="content">
               <i class="building-sign obicon obicon-room-o"></i>
-              <p class="text">
+              <p class="text" @click="handleDetail(item)">
                 {{ item.buildingName }}栋{{ item.floorName }}层{{ item.roomName }}
               </p>
             </div>
@@ -307,6 +307,12 @@ export default {
     width: 100%;
     text-align: center;
     margin-top: 10px;
+
+    .text{
+      cursor: pointer;
+      // color: #0cadf8;
+      color: #1890ff;
+    }
   }
   .building-sign{
     display: inline-block;

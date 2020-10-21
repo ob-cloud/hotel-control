@@ -17,24 +17,58 @@
     <a-descriptions style="padding: 10px 24px;">
       <a-descriptions-item label="室内温度">{{ model.temperature }}℃</a-descriptions-item>
       <a-descriptions-item label="插卡取电">
-        <a-badge style="margin-left: 10px" :status="model.lightState ? 'processing' : 'default'" />
-        {{ `${model.lightState ? '取电中' : '未使用'}` }}
+        <a-badge style="margin-left: 10px" :status="model.lightState ? 'processing' : 'default'" :text="`${model.lightState ? '取电中' : '未使用'}`" />
       </a-descriptions-item>
       <a-descriptions-item label="在住状态">
-        <a-badge style="margin-left: 10px" :status="model.lightState ? 'success' : 'default'" />
-        {{ `${model.lightState ? '在住' : '空闲'}` }}
+        <a-badge style="margin-left: 10px" :status="model.lightState ? 'success' : 'default'" :text="`${model.lightState ? '在住' : '空闲'}`" />
       </a-descriptions-item>
     </a-descriptions>
 
+    <a-row :gutter="10" style="padding: 10px 24px;">
+      <a-col :span="12">
+        <a-card size="small">
+          <span slot="title">网关</span>
+          <a slot="extra" href="#"><a-button style="font-size: 12px;" size="small" type="link" icon="plus">添加</a-button></a>
+          <a-list item-layout="horizontal" :data-source="oboxList">
+            <a-list-item slot="renderItem" slot-scope="item">
+              <a slot="actions">删除</a>
+              <a-list-item-meta :description="item.obox_serial_id">
+                <span slot="title">
+                  {{ item.obox_name }}
+                </span>
+                <i slot="avatar" style="color: #5b94f0; font-size: 30px;" class="obicon obicon-equip"></i>
+              </a-list-item-meta>
+              <a-badge style="margin-left: 10px;" :status="item.obox_status ? 'success' : 'default'" :text="`${item.obox_status ? '在线' : '离线'}`" />
+            </a-list-item>
+          </a-list>
+        </a-card>
+      </a-col>
+      <a-col :span="12">
+        <a-card size="small">
+          <span slot="title">红外</span>
+          <a slot="extra" href="#"><a-button style="font-size: 12px;" size="small" type="link" icon="plus">添加</a-button></a>
+          <a-list item-layout="horizontal" :data-source="oboxList">
+            <a-list-item slot="renderItem" slot-scope="item">
+              <a slot="actions">删除</a>
+              <a-list-item-meta :description="item.obox_serial_id">
+                <span slot="title">
+                  {{ item.obox_name }}
+                </span>
+                <i slot="avatar" style="color: #5b94f0; font-size: 30px;" class="obicon obicon-infrared"></i>
+              </a-list-item-meta>
+              <a-badge style="margin-left: 10px;" :status="item.obox_status ? 'success' : 'default'" :text="`${item.obox_status ? '在线' : '离线'}`" />
+            </a-list-item>
+          </a-list>
+        </a-card>
+      </a-col>
+    </a-row>
+
     <a-tabs default-active-key="1" style="padding: 10px 24px;" :animated="{tabPane: false}">
-      <a-tab-pane key="1" tab="设备">
+      <a-tab-pane key="1" tab="网关设备">
         <a-table bordered size="small" rowKey="deviceSerialId" :columns="deviceColumns" :dataSource="deviceList" :loading="loading"></a-table>
       </a-tab-pane>
-      <a-tab-pane key="2" tab="红外" force-render>
+      <a-tab-pane key="2" tab="红外设备" force-render>
         <a-table bordered size="small" rowKey="deviceSerialId" :columns="infraredColumns" :dataSource="deviceList" :loading="loading"></a-table>
-      </a-tab-pane>
-      <a-tab-pane key="3" tab="网关">
-        <a-table bordered size="small" rowKey="deviceSerialId" :columns="oboxColumns" :dataSource="deviceList" :loading="loading"></a-table>
       </a-tab-pane>
     </a-tabs>
 
@@ -124,38 +158,13 @@ const infraredColumns = [
     width: 170
   }
 ]
-const oboxColumns = [
-  {
-    title: '序列号',
-    align: 'center',
-    dataIndex: 'deviceId',
-  },
-  {
-    title: '设备名称',
-    align: 'center',
-    dataIndex: 'name',
-  },
-  {
-    title: '设备状态',
-    align: 'center',
-    dataIndex: 'online',
-    customRender (status) {
-      return status === 0 ? '在线' : '离线'
-    }
-  },
-  {
-    title: '设备版本',
-    align: 'center',
-    dataIndex: 'version'
-  },
-  {
-    title: '操作',
-    dataIndex: 'action',
-    scopedSlots: { customRender: 'action' },
-    align: 'center',
-    width: 170
-  }
-]
+
+const oboxList = [{
+  obox_name: 'OBOXeca9',
+  obox_serial_id: 'a9ec1ea281',
+  obox_status: 1,
+  obox_version: "0200020002020202"
+}]
 export default {
   mixins: [ProListMixin],
   components: { BindOboxModal },
@@ -168,9 +177,9 @@ export default {
       roomId: '',
       model: {},
       deviceList: [],
+      oboxList: oboxList,
       deviceColumns: deviceColumns,
       infraredColumns: infraredColumns,
-      oboxColumns: oboxColumns,
     }
   },
   computed: {
