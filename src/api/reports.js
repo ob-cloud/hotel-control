@@ -4,10 +4,12 @@ const getEnterpriseReportList = (params) => getAction('/common/reports/enterpris
 const getHotelReportList = (params) => getAction('/common/reports/hotel', params)
 const getMineReportList = (params) => getAction('/common/reports/mine', params)
 const getEquipsReportList = (params) => getAction('/common/reports/equips', params)
+const getExceptionReportList = (params) => getAction('/common/reports/exception', params)
 
 export {
   getEnterpriseReportList,
   getHotelReportList,
   getMineReportList,
-  getEquipsReportList
+  getEquipsReportList,
+  getExceptionReportList
 }

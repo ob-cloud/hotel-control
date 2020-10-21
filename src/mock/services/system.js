@@ -441,6 +441,7 @@ const getUserPermission = () => {
         "path": "/reports/offline",
         "component": "reports/Offline",
         "route": "1",
+        "hidden": true,
         "meta": {
           "keepAlive": false,
           "internalOrExternal": false,

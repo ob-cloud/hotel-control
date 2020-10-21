@@ -168,7 +168,48 @@ const getEquipsReportList = (options) => {
   })
 }
 
+
+const getExceptionReportList = (options) => {
+  const parameters = getQueryParameters(options)
+
+  const result = []
+  const pageNo = parseInt(parameters.pageNo)
+  const pageSize = parseInt(parameters.pageSize)
+  const totalPage = Math.ceil(totalCount / pageSize)
+  const next = (pageNo >= totalPage ? (totalCount % pageSize) : pageSize) + 1
+
+  for (let i = 1; i < next; i++) {
+    result.push({
+      id: Mock.mock('@id()'),
+      businessDay: Mock.mock('@date'),
+      events: Mock.mock('@cword(3, 5)'),
+      eventType: Mock.mock('@integer(1, 3)'),
+      hasHandle: Mock.mock('@integer(0, 1)'),
+      operator: Mock.mock('@cname()'),
+      abnormalTime: Mock.mock('@datetime'),
+      updatedAt: Mock.mock('@datetime'),
+    })
+  }
+
+  console.log('mock getExceptionReportList: ', builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  }))
+
+  return builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  })
+}
+
 Mock.mock(/\/common\/reports\/enterprise/, 'get', getEnterpriseReportList)
 Mock.mock(/\/common\/reports\/hotel/, 'get', getHotelReportList)
 Mock.mock(/\/common\/reports\/mine/, 'get', getMineReportList)
 Mock.mock(/\/common\/reports\/equips/, 'get', getEquipsReportList)
+Mock.mock(/\/common\/reports\/exception/, 'get', getExceptionReportList)
