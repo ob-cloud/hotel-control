@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-20 11:33:20
+ * @Last Modified time: 2020-10-21 16:50:22
  */
 
 import { getAction, postFormAction, postAction } from '@/utils/ajax'
@@ -31,7 +31,7 @@ const delCompany = (params) => postAction('/common/company/del', params)
 const getRoomCascader = () => getAction('/common', {
   CMD: 'get_building_floor_room'
 })
-const getRoomDeviceList = (params) => getAction('/common', {
+const getRoomDeviceList = (params) => getAction('/common/room/devices', {
   CMD: 'get_room_device',
   device: JSON.stringify(params)
 })

@@ -2,8 +2,9 @@
   <a-drawer
     :title="title"
     :maskClosable="true"
-    :height="drawerWidth"
-    placement="bottom"
+    :height="drawerHeight"
+    :width="drawerWidth"
+    :placement="placement"
     :closable="true"
     :destroyOnClose="true"
     @close="handleCancel"
@@ -76,9 +77,19 @@ import { getGroupListByPanelId, getGrouplListPanelKey, setPanelKey } from '@/api
 import { Descriptor } from 'hardware-suit'
 export default {
   components: { KeyPanel },
+  props: {
+    placement: {
+      type: String,
+      default: 'bottom'
+    },
+    drawerWidth: {
+      type: [String, Number],
+      default: '100%'
+    }
+  },
   data () {
     return {
-      drawerWidth: 500,
+      drawerHeight: 500,
       title: "操作",
       visible: false,
       disableSubmit: false,

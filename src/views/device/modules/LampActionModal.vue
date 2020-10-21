@@ -2,8 +2,9 @@
   <a-drawer
     :title="title"
     :maskClosable="true"
-    :height="drawerWidth"
-    placement="bottom"
+    :height="drawerHeight"
+    :width="drawerWidth"
+    :placement="placement"
     :closable="true"
     @close="handleCancel"
     :visible="visible"
@@ -68,9 +69,19 @@ import { LedLampEquip, Descriptor } from 'hardware-suit'
 import BizzLamp from '@/components/Bizz/BizzLamp'
 export default {
   components: { BizzLamp },
+  props: {
+    placement: {
+      type: String,
+      default: 'bottom'
+    },
+    drawerWidth: {
+      type: [String, Number],
+      default: '100%'
+    }
+  },
   data () {
     return {
-      drawerWidth: 500,
+      drawerHeight: 500,
       title: "灯控",
       visible: false,
       disableSubmit: false,

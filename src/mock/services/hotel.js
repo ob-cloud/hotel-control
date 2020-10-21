@@ -280,6 +280,141 @@ const getCompanyListAll = () => {
   })
 }
 
+
+const deviceList = [{
+  "userName": "",
+  "device_child_type": "17",
+  "device_type": "04",
+  "addr": "01",
+  "name": "修改设备名称检查名称长度",
+  "oboxId": 3,
+  "id": 1,
+  "lastOpTime": 2020,
+  "obox_serial_id": "b3057fa180",
+  "online": 1,
+  "serialId": "0a3ebba201",
+  "state": "0000000000000000",
+  "version": "0000000000000000",
+  "userId": 0
+}, {
+  "userName": "",
+  "device_child_type": "01",
+  "device_type": "01",
+  "addr": "02",
+  "name": "这是个灯检查灯的长度",
+  "oboxId": 3,
+  "id": 2,
+  "lastOpTime": 2020,
+  "obox_serial_id": "b3057fa180",
+  "online": 1,
+  "serialId": "bef31aa601",
+  "state": "0000000000000000",
+  "version": "0000000000000000",
+  "userId": 0
+}, {
+  "userName": "",
+  "device_child_type": "01",
+  "device_type": "01",
+  "addr": "03",
+  "name": "Lamp3",
+  "oboxId": 3,
+  "id": 3,
+  "lastOpTime": 2020,
+  "obox_serial_id": "b3057fa180",
+  "online": 1,
+  "serialId": "c36c010000",
+  "state": "0000000000000000",
+  "version": "0000000000000000",
+  "userId": 0
+}, {
+  "userName": "",
+  "device_child_type": "7a",
+  "device_type": "04",
+  "addr": "04",
+  "name": "Socket4",
+  "oboxId": 3,
+  "id": 4,
+  "lastOpTime": 2020,
+  "obox_serial_id": "b3057fa180",
+  "online": 1,
+  "serialId": "c46a010000",
+  "state": "0400002100000000",
+  "version": "0000000000000000",
+  "userId": 0
+}, {
+  "userName": "",
+  "device_child_type": "02",
+  "device_type": "01",
+  "addr": "05",
+  "name": "Lamp1",
+  "oboxId": 3,
+  "id": 5,
+  "lastOpTime": 2020,
+  "obox_serial_id": "b3057fa180",
+  "online": 1,
+  "serialId": "3168010000",
+  "state": "00fe000000020000",
+  "version": "0000000000000000",
+  "userId": 0
+}, {
+  "userName": "",
+  "device_child_type": "17",
+  "device_type": "04",
+  "addr": "38",
+  "name": "Socket1",
+  "oboxId": 6,
+  "id": 6,
+  "lastOpTime": 2020,
+  "obox_serial_id": "2695000000",
+  "online": 1,
+  "serialId": "023ebba201",
+  "state": "0000000000000000",
+  "version": "0000000000000000",
+  "userId": 0
+}, {
+  "userName": "",
+  "device_child_type": "17",
+  "device_type": "04",
+  "addr": "01",
+  "name": "Socket1",
+  "oboxId": 14,
+  "id": 9,
+  "lastOpTime": 2020,
+  "obox_serial_id": "15ed1ea281",
+  "online": 1,
+  "serialId": "083ebba201",
+  "state": "0000000000000000",
+  "version": "ffffffffffffffff",
+  "userId": 0
+}, {
+  "userName": "",
+  "device_child_type": "0f",
+  "device_type": "0b",
+  "addr": "01",
+  "name": "插卡取电",
+  "oboxId": 14,
+  "id": 19,
+  "lastOpTime": 2020,
+  "obox_serial_id": "15ed1ea281",
+  "online": 1,
+  "serialId": "083ebca201",
+  "state": "0000000000000000",
+  "version": "ffffffffffffffff",
+  "userId": 0
+}]
+// 设备
+const getRoomDeviceList = () => {
+  console.log('mock getRoomDeviceList: ', builder({
+    total: totalCount,
+    records: deviceList
+  }))
+
+  return builder({
+    total: totalCount,
+    records: deviceList
+  })
+}
+
 Mock.mock(/\/common\/hotel\/list/, 'get', getHotelList)
 Mock.mock(/\/common\/hotel\/all/, 'get', getHotelListAll)
 
@@ -300,3 +435,5 @@ Mock.mock(/\/common\/company\/all/, 'get', getCompanyListAll)
 Mock.mock(/\/common\/room\/list/, 'get', getRoomList)
 Mock.mock(/\/common\/building\/list/, 'get', getBuildingList)
 Mock.mock(/\/common\/floor\/list/, 'get', getFloorList)
+
+Mock.mock(/\/common\/room\/devices/, 'get', getRoomDeviceList)

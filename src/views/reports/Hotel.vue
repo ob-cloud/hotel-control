@@ -41,12 +41,12 @@
               <a-col :span="8">
                 <a-statistic title="使用率" :value="93"><template #suffix>%</template></a-statistic>
               </a-col>
-              <!-- <a-col :span="6">
-                <a-statistic title="平均租金" :value="1128" style="margin-right: 50px"><template #suffix>RMB</template></a-statistic>
-              </a-col> -->
-              <a-col :span="8">
-                <a-statistic title="欠费总额" :value="93"><template #suffix>RMB</template></a-statistic>
+              <a-col :span="6">
+                <a-statistic title="租金" :value="1128" style="margin-right: 50px"><template #suffix>RMB</template></a-statistic>
               </a-col>
+              <!-- <a-col :span="8">
+                <a-statistic title="欠费总额" :value="93"><template #suffix>RMB</template></a-statistic>
+              </a-col> -->
             </a-row>
           </div>
           <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="id" :columns="columns" :pagination="ipagination" @change="handleTableChange">

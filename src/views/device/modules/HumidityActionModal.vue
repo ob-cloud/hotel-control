@@ -2,8 +2,9 @@
   <a-drawer
     :title="title"
     :maskClosable="true"
-    :height="drawerWidth"
-    placement="bottom"
+    :height="drawerHeight"
+    :width="drawerWidth"
+    :placement="placement"
     :closable="true"
     @close="handleCancel"
     :visible="visible"
@@ -58,9 +59,19 @@ import { parseTime } from '@/utils/util'
 import { Descriptor } from 'hardware-suit'
 export default {
   components: { Chart },
+  props: {
+    placement: {
+      type: String,
+      default: 'bottom'
+    },
+    drawerWidth: {
+      type: [String, Number],
+      default: '100%'
+    }
+  },
   data () {
     return {
-      drawerWidth: 500,
+      drawerHeight: 500,
       title: "操作",
       visible: false,
       disableSubmit: false,

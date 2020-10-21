@@ -2,8 +2,9 @@
   <a-drawer
     :title="title"
     :maskClosable="true"
-    :height="drawerWidth"
-    placement="bottom"
+    :height="drawerHeight"
+    :width="drawerWidth"
+    :placement="placement"
     :closable="true"
     @close="handleCancel"
     :visible="visible"
@@ -20,10 +21,20 @@ import { editSwitchStatus } from '@/api/device'
 import { Descriptor } from 'hardware-suit'
 export default {
   components: { IotSwitch },
+  props: {
+    placement: {
+      type: String,
+      default: 'bottom'
+    },
+    drawerWidth: {
+      type: [String, Number],
+      default: '100%'
+    }
+  },
   mixins: [ ActionMixin ],
   data () {
     return {
-      drawerWidth: 500,
+      drawerHeight: 500,
       title: "总开关",
       visible: false,
       disableSubmit: false,

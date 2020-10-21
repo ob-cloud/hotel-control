@@ -28,10 +28,14 @@
       <a-col :span="12">
         <a-card size="small">
           <span slot="title">网关</span>
-          <a slot="extra" href="#"><a-button style="font-size: 12px;" size="small" type="link" icon="plus">绑定</a-button></a>
+          <a slot="extra" href="#">
+            <a-button style="font-size: 12px;" size="small" type="link" @click="handleBind">
+              <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
+            </a-button>
+          </a>
           <a-list item-layout="horizontal" :data-source="oboxList">
             <a-list-item slot="renderItem" slot-scope="item">
-              <a slot="actions">解绑</a>
+              <a slot="actions" @click="handleBind">解绑</a>
               <a-list-item-meta :description="item.obox_serial_id">
                 <span slot="title">
                   {{ item.obox_name }}
@@ -46,7 +50,11 @@
       <a-col :span="12">
         <a-card size="small">
           <span slot="title">红外</span>
-          <a slot="extra" href="#"><a-button style="font-size: 12px;" size="small" type="link" icon="plus">绑定</a-button></a>
+          <a slot="extra" href="#">
+            <a-button style="font-size: 12px;" size="small" type="link">
+              <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
+            </a-button>
+          </a>
           <a-list item-layout="horizontal" :data-source="oboxList">
             <a-list-item slot="renderItem" slot-scope="item">
               <a slot="actions">解绑</a>
@@ -65,14 +73,33 @@
 
     <a-tabs default-active-key="1" style="padding: 10px 24px;" :animated="{tabPane: false}">
       <a-tab-pane key="1" tab="网关设备">
-        <a-table bordered size="small" rowKey="deviceSerialId" :columns="deviceColumns" :dataSource="deviceList" :loading="loading"></a-table>
+        <a-table bordered size="small" rowKey="serialId" :columns="deviceColumns" :dataSource="deviceList" :loading="loading" :pagination="ipagination" @change="handleTableChange">
+          <span slot="action" slot-scope="text, record">
+            <a v-if="TypeHints.isXkeySocketSwitch(record.device_child_type)" @click="handleAction(0, record)">开关</a>
+            <a v-if="TypeHints.isSettableSceneSocketSwitch(record.device_child_type)" @click="handleAction(2, record)">设置</a>
+            <a v-if="TypeHints.isHumidifierSensors(record.device_child_type)" @click="handleAction(1, record)">温湿度</a>
+            <a v-if="TypeHints.isSimpleLed(record.device_child_type)" @click="handleAction(3, record)">灯控</a>
+            <a v-if="TypeHints.isPluginPowerSensors(record.device_child_type)" @click="handleAction(3, record)">停用</a>
+          </span>
+        </a-table>
       </a-tab-pane>
       <a-tab-pane key="2" tab="红外设备" force-render>
-        <a-table bordered size="small" rowKey="deviceSerialId" :columns="infraredColumns" :dataSource="deviceList" :loading="loading"></a-table>
+        <a-table bordered size="small" rowKey="deviceId" :columns="infraredColumns" :dataSource="infraredList" :loading="loading">
+          <span slot="action" slot-scope="text, record">
+            <a v-if="TypeHints.isInfrared(record.type)" @click="handleAction(5, record)">控制</a>
+          </span>
+        </a-table>
       </a-tab-pane>
     </a-tabs>
 
     <bind-obox-modal ref="bindModal" @ok="bindModalOk"></bind-obox-modal>
+
+    <humidity-action-modal placement="right" :drawerWidth="600" ref="humidityModal"></humidity-action-modal>
+    <lamp-action-modal placement="right" :drawerWidth="600" ref="lampModal"></lamp-action-modal>
+    <keypanel-action-modal placement="right" drawerWidth="60%" ref="keypanelModal"></keypanel-action-modal>
+    <power-switch-modal placement="right" :drawerWidth="600" ref="powerModal"></power-switch-modal>
+
+    <infrared-air-condition-modal placement="right" :drawerWidth="600" ref="airModal"></infrared-air-condition-modal>
   </a-drawer>
 </template>
 
@@ -80,32 +107,38 @@
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import { getRoomDeviceList } from '@/api/hotel'
 
-import { Descriptor } from 'hardware-suit'
+import { Descriptor, TypeHints } from 'hardware-suit'
 import BindOboxModal from './BindOboxModal'
+import LampActionModal from '@views/device/modules/LampActionModal'
+import KeypanelActionModal from '@views/device/modules/KeyPanelActionModal'
+import HumidityActionModal from '@views/device/modules/HumidityActionModal'
+import PowerSwitchModal from '@views/device/modules/PowerSwitchModal'
+
+import InfraredAirConditionModal from '@views/device/modules/InfraredAirConditionModal'
 
 const deviceColumns = [
   {
     title: '序列号',
     align: 'center',
-    dataIndex: 'deviceSerialId'
+    dataIndex: 'serialId'
   },
   {
     title: '设备名称',
     align: 'center',
-    dataIndex: 'deviceName'
+    dataIndex: 'name'
   },
   {
     title: '设备状态',
     align: 'center',
-    dataIndex: 'deviceState',
+    dataIndex: 'state',
     customRender (status, row) {
-      return Descriptor.getStatusDescriptor(status, row.deviceType, row.deviceChildType)
+      return Descriptor.getStatusDescriptor(status, row.device_type, row.device_child_type)
     }
   },
   {
     title: '设备类型',
     align: 'center',
-    dataIndex: 'deviceType',
+    dataIndex: 'device_type',
     customRender (t) {
       return Descriptor.getTypeDescriptor(t)
     }
@@ -130,7 +163,7 @@ const infraredColumns = [
   {
     title: '序列号',
     align: 'center',
-    dataIndex: 'deviceId',
+    dataIndex: 'serialId',
   },
   {
     title: '设备名称',
@@ -140,7 +173,7 @@ const infraredColumns = [
   {
     title: '设备状态',
     align: 'center',
-    dataIndex: 'online',
+    dataIndex: 'state',
     customRender (status) {
       return status === 0 ? '在线' : '离线'
     }
@@ -165,9 +198,20 @@ const oboxList = [{
   obox_status: 1,
   obox_version: "0200020002020202"
 }]
+const infraredList = [{
+  "userName": "",
+  "name": "IR Transponder",
+  "deviceId": "11e25c3a7d",
+  "online": 0,
+  "state": "[]",
+  "type": "51",
+  "version": '12900000000',
+  "action": "[{\"functionId\":1,\"data\":[\"\"],\"functionName\":\"send\",\"function\":\"send\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"download\"]},{\"functionId\":2,\"data\":[\"\"],\"functionName\":\"receive learning\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":3,\"data\":[\"\"],\"functionName\":\"receive pairing\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":4,\"data\":[0],\"functionName\":\"learning\",\"function\":\"learning\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]},{\"functionId\":5,\"data\":[0],\"functionName\":\"pairing\",\"function\":\"pairing\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]}]",
+  "userId": 0
+}]
 export default {
   mixins: [ProListMixin],
-  components: { BindOboxModal },
+  components: { BindOboxModal, LampActionModal, KeypanelActionModal, HumidityActionModal, PowerSwitchModal, InfraredAirConditionModal },
   data() {
     return {
       title: '房间详情',
@@ -180,6 +224,8 @@ export default {
       oboxList: oboxList,
       deviceColumns: deviceColumns,
       infraredColumns: infraredColumns,
+      infraredList: infraredList,
+      TypeHints
     }
   },
   computed: {
@@ -202,11 +248,19 @@ export default {
     }
   },
   methods: {
-    loadData () {
+    loadData (arg) {
+      this.roomId && this.getDeviceList(arg)
     },
-    getDeviceList () {
+    getDeviceList (arg) {
+      if (arg === 1) {
+        this.ipagination.current = 1
+      }
       this.loading = true
-      getRoomDeviceList({ roomId: this.roomId }).then(res => {
+      const params = {...this.queryParam}
+      params.pageNo = this.ipagination.current
+      params.pageSize = this.ipagination.pageSize
+      params.roomId = this.roomId
+      getRoomDeviceList(params).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.deviceList = res.result.records
         }
@@ -241,6 +295,13 @@ export default {
     handleTabChange (key) {
       console.log('')
       this.tabActiveKey = key
+    },
+    handleAction (type, record) {
+      type === 0 && this.$refs.powerModal.show(record)
+      type === 1 && this.$refs.humidityModal.show(record)
+      type === 2 && this.$refs.keypanelModal.show(record)
+      type === 3 && this.$refs.lampModal.show(record)
+      type === 5 && this.$refs.airModal.show(record)
     }
   },
 }

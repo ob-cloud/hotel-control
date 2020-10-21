@@ -2,8 +2,9 @@
   <a-drawer
     :title="title"
     :maskClosable="true"
-    :height="drawerWidth"
-    placement="bottom"
+    :height="drawerHeight"
+    :width="drawerWidth"
+    :placement="placement"
     :closable="true"
     @close="handleCancel"
     :visible="visible"
@@ -19,9 +20,19 @@ import { Descriptor } from 'hardware-suit'
 import AirCondition from '@/components/IoT/AirCondition'
 export default {
   components: { AirCondition },
+  props: {
+    placement: {
+      type: String,
+      default: 'bottom'
+    },
+    drawerWidth: {
+      type: [String, Number],
+      default: '100%'
+    }
+  },
   data () {
     return {
-      drawerWidth: 600,
+      drawerHeight: 600,
       title: "操作",
       visible: false,
       model: {},
