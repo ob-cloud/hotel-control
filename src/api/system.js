@@ -66,6 +66,7 @@ const queryPermissionTreeList = (params) => getAction('/sys/role/queryTreeList',
 
 
 ///// Annoucement
+const getAnnouncementList = (params) => getAction('/sys/announcement/list', params)
 // 发布
 const doReleaseData = (params) => getAction('/sys/annountCement/doReleaseData', params)
 // 撤销
@@ -140,6 +141,7 @@ export {
   duplicateCheck,
 
   // Annoucement
+  getAnnouncementList,
   doReleaseData,
   doReovkeData,
   getAnnouncementListByUser,

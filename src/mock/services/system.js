@@ -1,5 +1,5 @@
 import Mock from 'mockjs2'
-import { builder } from '../util'
+import { builder, getQueryParameters } from '../util'
 
 const getUserPermission = () => {
   return builder({
@@ -476,15 +476,30 @@ const getUserPermission = () => {
       "route": "1",
       "children": [{
         "path": "/isystem/setting",
-        "component": "system/UserList",
+        "component": "system/SysSetting",
         "route": "1",
+        hideChildrenInMenu: true,
         "meta": {
           "keepAlive": false,
           "internalOrExternal": false,
           "title": "系统配置"
         },
+        redirect: '/isystem/setting/base',
         "name": "isystem-setting",
-        "id": "1242639108812083202"
+        "id": "1242639108812083202",
+        children: [{
+          "path": "/isystem/setting/base",
+          "component": "system/SysSettingBase",
+          "route": "1",
+          "hidden": true,
+          "meta": {
+            "keepAlive": false,
+            "internalOrExternal": false,
+            "title": "基础配置"
+          },
+          "name": "isystem-base-setting",
+          "id": "1242639108812083202"
+        }]
       }, {
         "path": "/isystem/user",
         "component": "system/UserList",
@@ -554,4 +569,44 @@ const getUserPermission = () => {
   })
 }
 
+const totalCount = 60
+const getAnnouncementList = (options) => {
+  const parameters = getQueryParameters(options)
+
+  const result = []
+  const pageNo = parseInt(parameters.pageNo)
+  const pageSize = parseInt(parameters.pageSize)
+  const totalPage = Math.ceil(totalCount / pageSize)
+  const next = (pageNo >= totalPage ? (totalCount % pageSize) : pageSize) + 1
+
+  for (let i = 1; i < next; i++) {
+    result.push({
+      id: Mock.mock('@id()'),
+      title: Mock.mock('@cword(3, 5)'),
+      target: Mock.mock('@cword(3, 5)'),
+      type: Mock.mock('@integer(1, 2)'),
+      status: Mock.mock('@integer(0, 1)'),
+      createAt: Mock.mock('@datetime'),
+      updatedAt: Mock.mock('@datetime'),
+    })
+  }
+
+  console.log('mock getAnnouncementList: ', builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  }))
+
+  return builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    total: totalCount,
+    totalPage: totalPage,
+    records: result
+  })
+}
+
 Mock.mock(/\/sys\/permission\/getUserPermission/, 'get', getUserPermission)
+Mock.mock(/\/sys\/announcement\/list/, 'get', getAnnouncementList)
