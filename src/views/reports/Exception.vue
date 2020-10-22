@@ -45,7 +45,9 @@
           <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="id" :columns="columns" :pagination="ipagination" @change="handleTableChange">
             <span slot="action" slot-scope="text, record">
               <!-- <a @click="handleEdit(record)">操作</a> -->
-              <a style="font-size: 12px;" @click="handleEdit(record)">{{ record.status ? '标记为已处理' : '标记为未处理' }}</a>
+              <a style="font-size: 12px;" :style="`color: ${record.status ? '#1890ff' : '#f5222d'}`" @click="handleAction(record)">
+                {{ record.status ? '标记为已处理' : '标记为未处理' }}
+              </a>
             </span>
           </a-table>
         </div>
@@ -58,7 +60,7 @@
 <script>
 // import ExceptionModal from './modules/ExceptionModal'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
-import { getExceptionReportList } from '@/api/reports'
+import { getExceptionReportList, handleException } from '@/api/reports'
 const columns = [{
   title: '营业日',
   align:"center",
@@ -141,6 +143,15 @@ export default {
         this.loading = false
       })
     },
+    handleAction (record) {
+      this.loading = true
+      handleException(record).then(res => {
+        if (this.$isAjaxSuccess(res.code)) {
+          this.$message.success('操作成功')
+          this.loadData()
+        } else this.$message.error(res.message)
+      }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
+    }
   },
 }
 </script>

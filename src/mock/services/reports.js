@@ -1,5 +1,5 @@
 import Mock from 'mockjs2'
-import { builder, getQueryParameters } from '../util'
+import { builder, getQueryParameters, getBody } from '../util'
 
 
 const totalCount = 60
@@ -208,8 +208,17 @@ const getExceptionReportList = (options) => {
   })
 }
 
+const handleException = (options) => {
+  const body = getBody(options)
+  if (!body.id) {
+    return builder({ code: false }, 'Id错误', 401)
+  }
+  return builder({}, '成功')
+}
+
 Mock.mock(/\/common\/reports\/enterprise/, 'get', getEnterpriseReportList)
 Mock.mock(/\/common\/reports\/hotel/, 'get', getHotelReportList)
 Mock.mock(/\/common\/reports\/mine/, 'get', getMineReportList)
 Mock.mock(/\/common\/reports\/equips/, 'get', getEquipsReportList)
 Mock.mock(/\/common\/reports\/exception/, 'get', getExceptionReportList)
+Mock.mock(/\/common\/reports\/handleException/, 'post', handleException)
