@@ -17,14 +17,15 @@ const getHotelList = (options) => {
   for (let i = 1; i < next; i++) {
     result.push({
       id: Mock.mock('@id()'),
-      name: Mock.mock('@cword(3, 5)') + '酒店',
-      company: Mock.mock('@cword(3, 5)') + '有限公司',
-      contacts: Mock.mock('@cname()'),
-      contact: Mock.mock('@integer(10000000000, 19000000000)'),
-      frontPhone: Mock.mock('@integer(10000000000, 19000000000)'),
-      isChain: Mock.mock('@integer(0,1)'),
-      salesmanId: Mock.mock('@id()'),
-      salesman: Mock.mock('@cname()'),
+      hotelName: Mock.mock('@cword(3, 5)') + '酒店',
+      companyName: Mock.mock('@cword(3, 5)') + '有限公司',
+      companyId: Mock.mock('@id()'),
+      contact: Mock.mock('@cname()'),
+      contactPhone: Mock.mock('@integer(10000000000, 19000000000)'),
+      telephone: Mock.mock('@integer(10000000000, 19000000000)'),
+      salesManId: Mock.mock('@id()'),
+      salesManName: Mock.mock('@cname()'),
+      address: Mock.mock('@country(true)'),
       createAt: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),
     })
@@ -144,12 +145,16 @@ const getRoomList = () => {
   for (let i = 1; i < Mock.mock('@integer(5, 20)'); i++) {
     result.push({
       id: Mock.mock('@id()'),
+      root: Mock.mock('@id()'),
       buildingId: Mock.mock('@id()'),
       buildingName: Mock.mock('@integer(1, 20)'),
+      towerName: Mock.mock('@integer(1, 20)'),
       deviceState: "",
       floorId: Mock.mock('@id()'),
+      pid: Mock.mock('@id()'),
       floorName: Mock.mock('@integer(1, 20)'),
       roomName: Mock.mock('@integer(3, 14)'),
+      name: Mock.mock('@integer(3, 14)'),
       lightState: Mock.mock('@integer(0, 1)'),
       switchState: Mock.mock('@integer(0, 1)'),
       temperature: Mock.mock('@integer(20, 36)'),
@@ -175,6 +180,7 @@ const getBuildingList = () => {
       id: Mock.mock('@id()'),
       buildingId: Mock.mock('@id()'),
       buildingName: Mock.mock('@integer(1, 20)'),
+      name: Mock.mock('@integer(1, 20)'),
       deviceState: "",
       lightState: Mock.mock('@integer(0, 1)'),
       switchState: Mock.mock('@integer(0, 1)'),
@@ -201,9 +207,12 @@ const getFloorList = () => {
       id: Mock.mock('@id()'),
       buildingId: Mock.mock('@id()'),
       buildingName: Mock.mock('@integer(1, 20)'),
+      towerName: Mock.mock('@integer(1, 20)'),
+      pid: Mock.mock('@id()'),
       deviceState: "",
       floorId: Mock.mock('@id()'),
       floorName: Mock.mock('@integer(1, 20)'),
+      name: Mock.mock('@integer(1, 20)'),
       lightState: Mock.mock('@integer(0, 1)'),
       switchState: Mock.mock('@integer(0, 1)'),
       allType: 0
@@ -234,9 +243,10 @@ const getCompanyList = (options) => {
   for (let i = 1; i < next; i++) {
     result.push({
       id: Mock.mock('@id()'),
-      name: Mock.mock('@cword(3, 5)') + '有限公司',
-      address: Mock.mock('@county(true)'),
-      createAt: Mock.mock('@datetime'),
+      companyName: Mock.mock('@cword(3, 5)') + '有限公司',
+      description: Mock.mock('@county(true)'),
+      createBy: Mock.mock('@cname()'),
+      createTime: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),
     })
   }
@@ -415,25 +425,25 @@ const getRoomDeviceList = () => {
   })
 }
 
-Mock.mock(/\/common\/hotel\/list/, 'get', getHotelList)
-Mock.mock(/\/common\/hotel\/all/, 'get', getHotelListAll)
+Mock.mock(/\/sys\/hotel\/listHotel/, 'get', getHotelList)
+Mock.mock(/\/sys\/hotel\/listAllHotel/, 'get', getHotelListAll)
 
 Mock.mock(/\/common\/getHotelUserList/, 'get', getUserListByHotel)
 
-Mock.mock(/\/common\/editHotel/, 'post', editHotel)
-Mock.mock(/\/common\/addHotel/, 'post', editHotel)
-Mock.mock(/\/common\/delHotel/, 'post', delHotel)
+Mock.mock(/\/sys\/hotel\/editHotel/, 'post', editHotel)
+Mock.mock(/\/sys\/hotel\/addHotel/, 'post', editHotel)
+Mock.mock(/\/sys\/hotel\/deleteBatchHotel/, 'post', delHotel)
 
 Mock.mock(/\/common\/bindHotelUser/, 'post', bindHotelUser)
 Mock.mock(/\/common\/unbindHotelUser/, 'post', unbindHotelUser)
 
 // 企业
-Mock.mock(/\/common\/company\/list/, 'get', getCompanyList)
-Mock.mock(/\/common\/company\/all/, 'get', getCompanyListAll)
+Mock.mock(/\/sys\/hotel\/listCompany/, 'get', getCompanyList)
+Mock.mock(/\/sys\/hotel\/listAllCompany/, 'get', getCompanyListAll)
 
 
-Mock.mock(/\/common\/room\/list/, 'get', getRoomList)
-Mock.mock(/\/common\/building\/list/, 'get', getBuildingList)
-Mock.mock(/\/common\/floor\/list/, 'get', getFloorList)
+Mock.mock(/\/sys\/hotel\/listRoom/, 'get', getRoomList)
+Mock.mock(/\/sys\/hotel\/listTower/, 'get', getBuildingList)
+Mock.mock(/\/sys\/hotel\/listFloor/, 'get', getFloorList)
 
 Mock.mock(/\/common\/room\/devices/, 'get', getRoomDeviceList)

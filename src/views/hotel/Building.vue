@@ -3,7 +3,7 @@
     <a-card>
       <div slot="title" class="search-bar">
         <div class="caption">
-          <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.buildName" placeholder="楼栋"></a-input>
+          <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.name" placeholder="请输入楼栋名称"></a-input>
           <a-button type="primary" @click="handleSearch" icon="search">查询</a-button>
           <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
         </div>
@@ -12,19 +12,12 @@
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
           <a-button v-isPermitted="'room:building:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
-          <!-- <a-button v-isPermitted="'room:building:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button> -->
         </a-button-group>
       </div>
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
         <a-spin :spinning="loading">
           <div class="block-item" v-for="item in dataList" :key="item.id">
             <div class="toolbar">
-              <!-- <a-popconfirm :title="`${item.lightState ? '关' : '开'}楼栋灯?`" @confirm="() => handleLamp(item)">
-                <i v-isPermitted="'room:building:lamp'" class="icon obicon obicon-droplight" style="font-weight: 600;" :class="{active: item.lightState}" title="楼栋插卡取电"></i>
-              </a-popconfirm> -->
-              <!-- <a-popconfirm :title="`${item.switchState ? '关闭' : '开启'}楼栋开关?`" @confirm="() => handlePower(item)">
-                <i v-isPermitted="'room:building:switch'" class="icon obicon obicon-power" :class="{active: item.switchState}" title="楼层开关"></i>
-              </a-popconfirm> -->
               <a-icon v-isPermitted="'room:building:edit'" class="icon" type="edit" title="编辑" @click="handleEdit(item)" />
               <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
                 <a-icon v-isPermitted="'room:building:delete'" class="icon" type="delete" />
@@ -33,7 +26,7 @@
             <div class="content">
               <i class="building-sign obicon obicon-building-o"></i>
               <p class="text">
-                {{ item.buildingName }}栋
+                {{ item.name }}栋
               </p>
             </div>
           </div>
@@ -46,7 +39,7 @@
 </template>
 
 <script>
-import { getBuildingList, delBuilding, handleLampPower, handleSwitchPower, getPowerStatus, triggerAllPower } from '@/api/hotel'
+import { getBuildingList, delBuilding } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
 import BuildingModal from './modules/BuildingModal'
@@ -67,8 +60,6 @@ export default {
   },
   mounted () {
     this.calculateContentHeight()
-    // Helper.windowOnResize(this, this.fixLayout)
-    this.$bus.$on('state', () => this.loadData())
   },
   methods: {
     searchReset () {
@@ -77,9 +68,6 @@ export default {
     },
     loadData (arg) {
       this.getDataList(arg)
-    },
-    fixLayout () {
-      // this.containerHeight = Helper.calculateTableHeight() - 20
     },
     getDataList (arg) {
       if (arg === 1) {
@@ -93,81 +81,11 @@ export default {
         }
       }).finally(() => this.loading = false)
     },
-    handleDeviceModal (item) {
-      this.$refs.deviceModal.show(item)
-    },
-    isLightActive (status) {
-      if (!status) return false
-      const state = status.slice(0, 2)
-      return state !== '00'
-    },
     handleRefresh () {
       this.loadData()
     },
     handleSearch () {
       this.loadData(1)
-    },
-    handleLamp (item) {
-      // console.log(state)
-      // const val = state ? 100 : 0
-      // const ledLampEquip = new LedLampEquip('')
-      // ledLampEquip.setBrightness(val).setColdColor(0).setWarmColor().getBytes()
-      // // editSwitchStatus(this.model.serialId, status).then(res => {
-      // //   if (this.$isAjaxSuccess(res.code)) {
-      // //     this.$message.success('成功')
-      // //   } else {
-      // //     this.$message.error('失败')
-      // //   }
-      // // })
-      const params = {
-        buildingId: item.id,
-        deviceType: item.lightState ? 2 : 1
-      }
-      handleLampPower(params).then(res => {
-        if (this.$isAjaxSuccess(res.code)) {
-          this.$message.success('操作成功')
-        } else this.$message.error(res.message)
-      })
-    },
-    handlePower (item) {
-      // const isPowerOn = this.isLightActive(item.deviceState)
-      // const params = {
-      //   buildingId: item.id,
-      //   deviceType: item.allType === 1 ? 2 : 1
-      // }
-      // handleLampPower(params).then(res => {
-      //   if (this.$isAjaxSuccess(res.code)) {
-      //     this.$message.success('操作成功')
-      //     // this.loadData()
-      //   } else this.$message.error(res.message)
-      // })
-      const params = {
-        buildingId: item.id,
-        deviceType: item.switchState ? 2 : 1
-      }
-      handleSwitchPower(params).then(res => {
-        if (this.$isAjaxSuccess(res.code)) {
-          this.$message.success('操作成功')
-          // this.loadData()
-        } else this.$message.error(res.message)
-      })
-    },
-    async handleAllPower () {
-      const that = this
-      const res = await getPowerStatus()
-      if (!this.$isAjaxSuccess(res.code)) return this.$message.warning('获取开关状态失败')
-      this.$confirm({
-        title: '确认操作',
-        content: '是否' + (res.result ? '关闭' : '开启') + '电源?',
-        onOk: function () {
-          triggerAllPower(+!res.result ? 1 : 2).then(response => {
-            if (that.$isAjaxSuccess(response.code)) {
-              that.$message.success('操作成功')
-              // that.loadData()
-            } else that.$message.error(response.message)
-          })
-        }
-      })
     },
     handleRemove (id) {
       delBuilding(id).then(res => {

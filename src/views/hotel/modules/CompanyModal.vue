@@ -3,10 +3,10 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="企业名称">
-          <a-input placeholder="请输入企业名称" v-decorator="[ 'name', {rules: [{ required: true, message: '请输入企业名称!' }]} ]" />
+          <a-input placeholder="请输入企业名称" v-decorator="[ 'companyName', {rules: [{ required: true, message: '请输入企业名称!' }]} ]" />
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="企业地址">
-          <a-input placeholder="请输入楼层" v-decorator="[ 'address', {rules: [{ required: true, message: '请输入企业地址!' }]} ]" />
+          <a-input placeholder="请输入楼层" v-decorator="[ 'description', {rules: [{ required: true, message: '请输入企业地址!' }]} ]" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -43,7 +43,7 @@ export default {
       this.model = Object.assign({}, record)
       this.visible = true
       this.$nextTick(() => {
-        this.form.setFieldsValue(pick(this.model, 'name', 'address'))
+        this.form.setFieldsValue(pick(this.model, 'companyName', 'description'))
       })
     },
     // 确定

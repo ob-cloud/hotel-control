@@ -144,32 +144,32 @@
           {
             title: '酒店名称',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'hotelName',
           },
           {
             title: '所属公司',
             align: 'center',
-            dataIndex: 'company',
+            dataIndex: 'companyName',
           },
           {
             title: '联系人',
             align: 'center',
-            dataIndex: 'contacts',
+            dataIndex: 'contact',
           },
           {
             title: '联系方式',
             align: 'center',
-            dataIndex: 'contact',
+            dataIndex: 'contactPhone',
           },
           {
             title: '前台电话',
             align: 'center',
-            dataIndex: 'frontPhone',
+            dataIndex: 'telephone',
           },
           {
             title: '业务员',
             align: 'center',
-            dataIndex: 'salesman',
+            dataIndex: 'salesManName',
           },
           // {
           //   title: '是否连锁',

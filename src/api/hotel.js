@@ -2,30 +2,30 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-21 17:55:19
+ * @Last Modified time: 2020-10-22 11:45:49
  */
 
-import { getAction, postFormAction, postAction } from '@/utils/ajax'
+import { getAction, postFormAction, postAction, deleteAction } from '@/utils/ajax'
 
 // 酒店
-const getHotelList = (params) => getAction('/common/hotel/list', { ...params })
-const getHotelListAll = () => getAction('/common/hotel/all')
-const editHotel = () => postFormAction('/common/editHotel', {})
-const addHotel = () => postFormAction('/common/addHotel', {})
-const delHotel = (id) => postAction('/common/delHotel', {id})
+const getHotelList = (params) => getAction('/sys/hotel/listHotel', { ...params })
+const getHotelListAll = () => getAction('/sys/hotel/listAllHotel')
+const editHotel = () => postAction('/sys/hotel/editHotel', {})
+const addHotel = () => postAction('/sys/hotel/addHotel', {})
+const delHotel = (ids) => deleteAction('/sys/hotel/deleteBatchHotel', {ids})
 const getUserListByHotel = (params) => getAction('/common/getHotelUserList', params)
 const bindHotelUser = (hotelId, userId) => postAction('/common/bindHotelUser', { hotelId, userId })
 const unbindHotelUser = (hotelId, userId) => postAction('/common/unbindHotelUser', { hotelId, userId })
-const getHotelSetting = (id) => getAction('/common/getHotelSetting', {id})
-const addHotelSetting = (params) => postAction('/common/addHotelSetting', params)
-const editHotelSetting = (params) => postAction('/common/editHotelSetting', params)
+const getHotelSetting = (hotelId) => getAction('/sys/hotel/listHotelSetting', {hotelId})
+const addHotelSetting = (params) => postAction('/sys/hotel/addOrUpdateHotelSetting', params)
+const editHotelSetting = (params) => postAction('/sys/hotel/addOrUpdateHotelSetting', params)
 
 // 企业
-const getCompanyList = (params) => getAction('/common/company/list', params)
-const getCompanyListAll = () => getAction('/common/company/all')
-const editCompany = (params) => postAction('/common/company/edit', params)
-const addCompany = (params) => postAction('/common/company/add', params)
-const delCompany = (params) => postAction('/common/company/del', params)
+const getCompanyList = (params) => getAction('/sys/hotel/listCompany', params)
+const getCompanyListAll = () => getAction('/sys/hotel/listAllCompany')
+const editCompany = (params) => postAction('/sys/hotel/editCompany', params)
+const addCompany = (params) => postAction('/sys/hotel/addCompany', params)
+const delCompany = (params) => postAction('/sys/hotel/deleteBatchCompany', params)
 
 // 房间
 const getRoomCascader = () => getAction('/common', {
@@ -35,18 +35,9 @@ const getRoomDeviceList = (params) => getAction('/common/room/devices', {
   CMD: 'get_room_device',
   device: JSON.stringify(params)
 })
-const getRoomList = (params) => getAction('/common/room/list', {
-  CMD: 'get_room',
-  room: JSON.stringify(params)
-})
-const addRoom = (params) => postFormAction('/common', {
-  CMD: 'add_room',
-  room: JSON.stringify(params)
-})
-const editRoom = (params) => getAction('/common', {
-  CMD: 'update_room',
-  room: JSON.stringify(params)
-})
+const getRoomList = ({hotelId, name, floorName, roomName, current, size}) => getAction('/sys/hotel/listRoom', {hotelId, name, floorName, roomName, current, size})
+const addRoom = ({hotelId, name, pid}) => postFormAction('/sys/hotel/addOrUpdateRoom', {hotelId, name, pid})
+const editRoom = ({hotelId, name, pid, id}) => getAction('/sys/hotel/addOrUpdateRoom', {hotelId, name, pid, id})
 const delRoom = (id) => getAction('/common', {
   CMD: 'delete_room',
   room: JSON.stringify({
@@ -84,46 +75,25 @@ const triggerAllPower = (deviceType) => getAction('/common', {
 })
 
 // 楼栋
-const getBuildingList = (params = {}) => getAction('/common/building/list', {
-  CMD: 'get_building',
-  building: JSON.stringify(params)
-})
+const getBuildingList = ({hotelId, name, current, size}) => getAction('/sys/hotel/listTower', {hotelId, name, current, size})
 const getSelectBuildingList = () => getAction('/common', {
   CMD: 'get_select_building'
 })
 
-const addBuilding = (params = {}) => postFormAction('/common', {
-  CMD: 'add_building',
-  building: JSON.stringify(params)
-})
-const editBuilding = (params = {}) => postFormAction('/common', {
-  CMD: 'update_building',
-  building: JSON.stringify(params)
-})
-const delBuilding = (id) => postFormAction('/common', {
-  CMD: 'delete_building',
-  building: JSON.stringify({id})
-})
+const addBuilding = ({hotelId, name}) => postAction('/sys/hotel/addOrUpdateTower', {hotelId, name})
+const editBuilding = ({hotelId, name, id}) => postAction('/sys/hotel/addOrUpdateTower', {hotelId, name, id})
+const delBuilding = (id) => deleteAction('/common', {id})
 
 // floor
-const getFloorList = (params = {}) => getAction('/common/floor/list', {
-  CMD: 'get_floor',
-  floor: JSON.stringify(params)
-})
+const getFloorList = ({hotelId, name, floorName, current, size}) => getAction('/sys/hotel/listFloor', {hotelId, name, floorName, current, size})
 const getFloorByBuildingId = (buildingId) => getAction('/common', {
   CMD: 'get_building_floor',
   floor: JSON.stringify({
     buildingId
   })
 })
-const addFloor = (params = {}) => postFormAction('/common', {
-  CMD: 'add_floor',
-  floor: JSON.stringify(params)
-})
-const editFloor = (params = {}) => postFormAction('/common', {
-  CMD: 'update_floor',
-  floor: JSON.stringify(params)
-})
+const addFloor = ({hotelId, name, pid}) => postFormAction('/sys/hotel/addOrUpdateFloor', {hotelId, name, pid})
+const editFloor = ({hotelId, name, pid, id}) => postFormAction('/sys/hotel/addOrUpdateFloor', {hotelId, name, pid, id})
 const delFloor = (id) => postFormAction('/common', {
   CMD: 'delete_floor',
   floor: JSON.stringify({id})

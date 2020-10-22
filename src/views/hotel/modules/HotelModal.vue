@@ -64,6 +64,10 @@
           </a-select>
         </a-form-item>
 
+        <a-form-item label="公司地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入公司地址" v-decorator="[ 'address', {} ]" />
+        </a-form-item>
+
         <!-- <a-form-item label="是否连锁" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-select v-decorator="[ 'isChain', {}]" placeholder="请选择连锁状态">
             <a-select-option :value="1">连锁酒店</a-select-option>
@@ -167,7 +171,7 @@
         this.visible = true
         this.model = Object.assign({}, record)
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'name', 'company', 'contacts', 'contact', 'frontPhone', 'salemanId', 'isChain'))
+          this.form.setFieldsValue(pick(this.model, 'name', 'company', 'contacts', 'contact', 'frontPhone', 'salemanId', 'address'))
         })
       },
       close () {

@@ -7,7 +7,7 @@
 
           <a-col :md="6" :sm="12">
             <a-form-item label="名称">
-              <a-input placeholder="请输入企业名称" v-model="queryParam.name"></a-input>
+              <a-input placeholder="请输入企业名称" v-model="queryParam.companyName"></a-input>
             </a-form-item>
           </a-col>
 
@@ -39,7 +39,6 @@
         :loading="loading"
         @change="handleTableChange"
       >
-
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
           <a-divider v-isPermitted="'device:gateway:edit'" type="vertical" />
@@ -76,17 +75,17 @@
           {
             title: '企业名称',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'companyName',
           },
           {
             title: '地址',
             align: 'center',
-            dataIndex: 'address',
+            dataIndex: 'description',
           },
           {
             title: '添加时间',
             align: 'center',
-            dataIndex: 'createAt'
+            dataIndex: 'createTime'
           },
           {
             title: '操作',
