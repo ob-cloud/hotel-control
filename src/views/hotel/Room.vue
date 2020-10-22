@@ -244,6 +244,10 @@ export default {
     .text{
       cursor: pointer;
       color: #1890ff;
+      transition: all .3s;
+      &:hover{
+        text-decoration: underline;
+      }
     }
   }
   .building-sign{

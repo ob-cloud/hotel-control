@@ -170,7 +170,108 @@ const getRoomList = () => {
     records: result
   })
 }
+const getHotelRoomGatewayList = () => {
+  const result = []
+  result.push({
+    "userName": "",
+    "obox_name": "OBOXeca9",
+    "obox_serial_id": "b3057fa180",
+    "obox_version": "0300020004020302",
+    "id": 3,
+    "obox_status": 1,
+    "userId": 0,
+    "oboxId": 3,
+    "isBind": 1
+  })
+  console.log('mock getHotelRoomGatewayList: ', builder({
+    records: result
+  }))
 
+  return builder({
+    records: result
+  })
+}
+const getHotelRoomInfraredList = () => {
+  const result = []
+  result.push({
+    "userName": "",
+    "name": "IR Transponder",
+    "deviceId": "11e25c3a7d",
+    "online": 0,
+    "state": "[]",
+    "type": "51",
+    "version": Mock.mock('@integer(100000000, 12900000000)'),
+    "action": "[{\"functionId\":1,\"data\":[\"\"],\"functionName\":\"send\",\"function\":\"send\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"download\"]},{\"functionId\":2,\"data\":[\"\"],\"functionName\":\"receive learning\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":3,\"data\":[\"\"],\"functionName\":\"receive pairing\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":4,\"data\":[0],\"functionName\":\"learning\",\"function\":\"learning\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]},{\"functionId\":5,\"data\":[0],\"functionName\":\"pairing\",\"function\":\"pairing\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]}]",
+    "userId": 0
+  })
+  console.log('mock getHotelRoomInfraredDeviceList: ', builder({
+    records: result
+  }))
+
+  return builder({
+    records: result
+  })
+}
+const getHotelRoomGatewayDeviceList = () => {
+  const result = deviceList
+  console.log('mock getHotelRoomGatewayDeviceList: ', builder({
+    records: result
+  }))
+
+  return builder({
+    records: result
+  })
+}
+const getHotelRoomInfraredDeviceList = () => {
+  const result = []
+  result.push({
+    "userName": "",
+    "name": "IR Transponder",
+    "deviceId": "11e25c3a7d",
+    "online": 0,
+    "state": "[]",
+    "type": "51",
+    "version": Mock.mock('@integer(100000000, 12900000000)'),
+    "action": "[{\"functionId\":1,\"data\":[\"\"],\"functionName\":\"send\",\"function\":\"send\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"download\"]},{\"functionId\":2,\"data\":[\"\"],\"functionName\":\"receive learning\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":3,\"data\":[\"\"],\"functionName\":\"receive pairing\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":4,\"data\":[0],\"functionName\":\"learning\",\"function\":\"learning\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]},{\"functionId\":5,\"data\":[0],\"functionName\":\"pairing\",\"function\":\"pairing\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]}]",
+    "userId": 0
+  })
+  console.log('mock getHotelRoomInfraredDeviceList: ', builder({
+    records: result
+  }))
+
+  return builder({
+    records: result
+  })
+}
+
+const bindRoomGateway = (options) => {
+  const body = getBody(options)
+  if (!body.id) {
+    return builder({ code: false }, 'Id错误', 401)
+  }
+  return builder({}, '成功')
+}
+const unbindRoomGateway = (options) => {
+  const body = getBody(options)
+  if (!body.serialId) {
+    return builder({ code: false }, 'Id错误', 401)
+  }
+  return builder({}, '成功')
+}
+const bindRoomInfrared = (options) => {
+  const body = getBody(options)
+  if (!body.id) {
+    return builder({ code: false }, 'Id错误', 401)
+  }
+  return builder({}, '成功')
+}
+const unbindRoomInfrared = (options) => {
+  const body = getBody(options)
+  if (!body.serialId) {
+    return builder({ code: false }, 'Id错误', 401)
+  }
+  return builder({}, '成功')
+}
 
 // 栋
 const getBuildingList = () => {
@@ -291,7 +392,7 @@ const getCompanyListAll = () => {
 }
 
 
-const deviceList = [{
+var deviceList = [{
   "userName": "",
   "device_child_type": "17",
   "device_type": "04",
@@ -447,3 +548,12 @@ Mock.mock(/\/sys\/hotel\/listTower/, 'get', getBuildingList)
 Mock.mock(/\/sys\/hotel\/listFloor/, 'get', getFloorList)
 
 Mock.mock(/\/common\/room\/devices/, 'get', getRoomDeviceList)
+
+Mock.mock(/\/sys\/hotel\/listGatewayList/, 'get', getHotelRoomGatewayList)
+Mock.mock(/\/sys\/hotel\/listInfraredList/, 'get', getHotelRoomInfraredList)
+Mock.mock(/\/sys\/hotel\/listHotelGatewayDeviceList/, 'get', getHotelRoomGatewayDeviceList)
+Mock.mock(/\/sys\/hotel\/listHotelInfraredDeviceList/, 'get', getHotelRoomInfraredDeviceList)
+Mock.mock(/\/sys\/hotel\/bindRoomGateway/, 'post', bindRoomGateway)
+Mock.mock(/\/sys\/hotel\/unbindRoomGateway/, 'post', unbindRoomGateway)
+Mock.mock(/\/sys\/hotel\/bindRoomInfrared/, 'post', bindRoomInfrared)
+Mock.mock(/\/sys\/hotel\/unbindRoomInfrared/, 'post', unbindRoomInfrared)

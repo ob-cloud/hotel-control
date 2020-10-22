@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-22 16:39:02
+ * @Last Modified time: 2020-10-22 17:53:06
  */
 
 import { getAction, postFormAction, postAction, deleteAction } from '@/utils/ajax'
@@ -38,8 +38,10 @@ const addRoom = ({hotelId, name, pid}) => postFormAction('/sys/hotel/addOrUpdate
 const editRoom = ({hotelId, name, pid, id}) => getAction('/sys/hotel/addOrUpdateRoom', {hotelId, name, pid, id})
 const delRoom = (id) => getAction('/sys/hotel/deleteRoom', {id})
 
-const getHotelRoomGatewayDeviceList = ({id, serialId, pageNo, pageSize}) => getAction('/sys/hotel/listRoomGatewayDeviceList', {id, serialId, pageNo, pageSize})
-const getHotelRoomInfraredDeviceList = ({id, serialId, pageNo, pageSize}) => getAction('/sys/hotel/listRoomGatewayDeviceList', {id, serialId, pageNo, pageSize})
+const getRoomGatewayList = ({id}) => getAction('/sys/hotel/listGatewayList', {id})
+const getRoomInfraredList = ({id}) => getAction('/sys/hotel/listInfraredList', {id})
+const getRoomGatewayDeviceList = ({id, serialId, pageNo, pageSize}) => getAction('/sys/hotel/listHotelGatewayDeviceList', {id, serialId, pageNo, pageSize})
+const getRoomInfraredDeviceList = ({id, serialId, pageNo, pageSize}) => getAction('/sys/hotel/listHotelInfraredDeviceList', {id, serialId, pageNo, pageSize})
 const bindRoomGateway = ({id, serialId}) => postAction('/sys/hotel/bindRoomGateway', {id, serialId})
 const unbindRoomGateway = ({serialId}) => postAction('/sys/hotel/unbindRoomGateway', {serialId})
 const bindRoomInfrared = ({id, serialId}) => postAction('/sys/hotel/bindRoomInfrared', {id, serialId})
@@ -118,8 +120,10 @@ export {
   editRoom,
   delRoom,
 
-  getHotelRoomGatewayDeviceList,
-  getHotelRoomInfraredDeviceList,
+  getRoomGatewayList,
+  getRoomInfraredList,
+  getRoomGatewayDeviceList,
+  getRoomInfraredDeviceList,
   bindRoomGateway,
   unbindRoomGateway,
   bindRoomInfrared,

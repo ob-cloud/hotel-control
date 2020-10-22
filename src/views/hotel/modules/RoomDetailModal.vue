@@ -32,7 +32,7 @@
               <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
             </a-button>
           </a>
-          <a-list item-layout="horizontal" :data-source="oboxList">
+          <a-list item-layout="horizontal" :data-source="oboxList" :loading="loadingGateway">
             <a-list-item slot="renderItem" slot-scope="item">
               <a slot="actions">
                 <a-popconfirm title="解绑网关，请谨慎操作！" @confirm="() => handleUnbind(1, item)">
@@ -58,7 +58,7 @@
               <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
             </a-button>
           </a>
-          <a-list item-layout="horizontal" :data-source="oboxList">
+          <a-list item-layout="horizontal" :data-source="infraredList" :loading="loadingInfrared">
             <a-list-item slot="renderItem" slot-scope="item">
               <a slot="actions">
                 <a-popconfirm title="解绑红外，请谨慎操作！" @confirm="() => handleUnbind(2, item)">
@@ -115,7 +115,13 @@
 
 <script>
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
-import { getRoomDeviceList } from '@/api/hotel'
+import {
+  getRoomDeviceList,
+  getRoomGatewayList,
+  getRoomInfraredList,
+  unbindRoomGateway,
+  unbindRoomInfrared
+} from '@/api/hotel'
 import RoomBindOboxModal from './RoomBindOboxModal'
 import RoomBindInfraredModal from './RoomBindInfraredModal'
 import LampActionModal from '@views/device/modules/LampActionModal'
@@ -202,23 +208,6 @@ const infraredColumns = [
   }
 ]
 
-const oboxList = [{
-  obox_name: 'OBOXeca9',
-  obox_serial_id: 'a9ec1ea281',
-  obox_status: 1,
-  obox_version: "0200020002020202"
-}]
-const infraredList = [{
-  "userName": "",
-  "name": "IR Transponder",
-  "deviceId": "11e25c3a7d",
-  "online": 0,
-  "state": "[]",
-  "type": "51",
-  "version": '12900000000',
-  "action": "[{\"functionId\":1,\"data\":[\"\"],\"functionName\":\"send\",\"function\":\"send\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"download\"]},{\"functionId\":2,\"data\":[\"\"],\"functionName\":\"receive learning\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":3,\"data\":[\"\"],\"functionName\":\"receive pairing\",\"function\":\"receive\",\"dataType\":\"raw\",\"functionTag\":\"control\",\"dataTranType\":[\"upload\"]},{\"functionId\":4,\"data\":[0],\"functionName\":\"learning\",\"function\":\"learning\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]},{\"functionId\":5,\"data\":[0],\"functionName\":\"pairing\",\"function\":\"pairing\",\"dataType\":\"int\",\"functionTag\":\"config\",\"dataTranType\":[\"upload\",\"download\"]}]",
-  "userId": 0
-}]
 export default {
   mixins: [ProListMixin],
   components: {
@@ -236,13 +225,15 @@ export default {
       drawerWidth: '60%',
       visible: false,
       loading: false,
+      loadingGateway: false,
+      loadingInfrared: false,
       roomId: '',
       model: {},
       deviceList: [],
-      oboxList: oboxList,
+      oboxList: [],
       deviceColumns: deviceColumns,
       infraredColumns: infraredColumns,
-      infraredList: infraredList,
+      infraredList: [],
       TypeHints
     }
   },
@@ -266,8 +257,20 @@ export default {
     }
   },
   methods: {
-    loadData (arg) {
-      this.roomId && this.getDeviceList(arg)
+    getGatewayList () {
+      this.loadingGateway = true
+      getRoomGatewayList({id: 1}).then(res => {
+        if (this.$isAjaxSuccess(res.code)) this.oboxList = res.result.records
+      }).finally(() => this.loadingGateway = false)
+    },
+    getInfraredList () {
+      this.loadingInfrared = true
+      getRoomInfraredList({id: 1}).then(res => {
+        if (this.$isAjaxSuccess(res.code)) this.infraredList = res.result.records
+      }).finally(() => this.loadingInfrared = false)
+    },
+    loadData () {
+      // this.roomId && this.getDeviceList(arg)
     },
     getDeviceList (arg) {
       if (arg === 1) {
@@ -289,7 +292,9 @@ export default {
       console.log('---- ', record)
       this.roomId = record.id
       this.model = { ...record }
-      this.loadData(record.id)
+      this.getGatewayList()
+      this.getInfraredList()
+      // this.loadData(record.id)
     },
     handleBind (type) {
       type === 1 && this.$refs.bindModal.show({ roomId: this.roomId })
@@ -297,6 +302,13 @@ export default {
     },
     handleUnbind (type, record) {
       console.log(type, record)
+      const obj = type === 1 ? unbindRoomGateway(record) : unbindRoomInfrared(record)
+      obj.then(res => {
+        if (this.$isAjaxSuccess(res.code)) {
+          this.$message.success('解绑成功')
+          this.getRoomGatewayList()
+        } else this.$message.error(res.message)
+      }).catch(() => this.$message.error('服务异常'))
     },
     bindModalOk () {
     },
