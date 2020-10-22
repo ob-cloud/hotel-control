@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="异常报表" :class="{ 'anty-list-cust':true }" :bordered="false" :style="{ marginTop: '24px' }">
+    <a-card title="异常记录" :class="{ 'anty-list-cust':true }" :bordered="false" :style="{ marginTop: '24px' }">
       <div class="extra-wrapper" slot="extra">
         <div class="extra-item">
           <a>今日</a>
@@ -43,43 +43,49 @@
             </a-row>
           </a-form>
           <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="id" :columns="columns" :pagination="ipagination" @change="handleTableChange">
+            <span slot="action" slot-scope="text, record">
+              <!-- <a @click="handleEdit(record)">操作</a> -->
+              <a style="font-size: 12px;" @click="handleEdit(record)">{{ record.status ? '标记为已处理' : '标记为未处理' }}</a>
+            </span>
           </a-table>
         </div>
       </div>
     </a-card>
+    <!-- <exception-modal ref="modalForm" @ok="modalFormOk"></exception-modal> -->
   </div>
 </template>
 
 <script>
+// import ExceptionModal from './modules/ExceptionModal'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import { getExceptionReportList } from '@/api/reports'
 const columns = [{
   title: '营业日',
   align:"center",
   dataIndex: 'businessDay'
-},{
+}, {
   title: '异常事件',
   align:"center",
   dataIndex: 'events'
-},{
+}, {
   title: '事件类型',
   align:"center",
   dataIndex: 'eventType',
   customRender (type) {
     return type === 1 ? '酒店欠费' :  type === 2 ? '掉线' : '异常'
   }
-},{
+}, {
   title: '异常时间',
   align:"center",
   sorter: true,
   sortOrder: 'descend',
   dataIndex: 'abnormalTime'
-},{
+}, {
   title: '是否已处理',
   align:"center",
-  dataIndex: 'hasHandle',
-  customRender (hasHandle) {
-    return hasHandle ? '是' : '否'
+  dataIndex: 'status',
+  customRender (status) {
+    return status ? '是' : '否'
   },
   filters: [{
     text: '是',
@@ -88,14 +94,21 @@ const columns = [{
     text: '否',
     value: 0,
   }],
-  onFilter: (value, record) => record.hasHandle === value
-},{
+  onFilter: (value, record) => record.status === value
+}, {
   title: '操作人',
   align:"center",
   dataIndex: 'operator'
-}]
+}, {
+    title: '操作',
+    dataIndex: 'action',
+    scopedSlots: { customRender: 'action' },
+    align: 'center',
+    width: 170
+  }]
 export default {
   mixins: [ ProListMixin ],
+  // components: { ExceptionModal },
   data () {
     return {
       queryParam: {

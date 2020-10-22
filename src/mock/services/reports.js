@@ -184,7 +184,7 @@ const getExceptionReportList = (options) => {
       businessDay: Mock.mock('@date'),
       events: Mock.mock('@cword(3, 5)'),
       eventType: Mock.mock('@integer(1, 3)'),
-      hasHandle: Mock.mock('@integer(0, 1)'),
+      status: Mock.mock('@integer(0, 1)'),
       operator: Mock.mock('@cname()'),
       abnormalTime: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),

@@ -27,7 +27,7 @@
                   <a-select-option :value="1">设备管理</a-select-option>
                   <a-select-option :value="2">场景管理</a-select-option>
                   <a-select-option :value="3">用户管理</a-select-option>
-                  <a-select-option :value="4">教室管理</a-select-option>
+                  <a-select-option :value="4">房间管理</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>

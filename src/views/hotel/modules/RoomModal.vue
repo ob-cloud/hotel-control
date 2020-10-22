@@ -17,8 +17,8 @@
           </a-select>
         </a-form-item>
 
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="教室">
-          <a-input placeholder="请输入教室" v-decorator="[ 'roomName', validatorRules.roomName]" />
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="房间">
+          <a-input placeholder="请输入房间" v-decorator="[ 'roomName', validatorRules.roomName]" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -49,7 +49,7 @@ export default {
       validatorRules: {
         buildingId: { rules: [{ required: true, message: '请选择楼栋!' }] },
         floorId: { rules: [{ required: true, message: '请选择楼层!' }] },
-        roomName: { rules: [{ required: true, message: '请输入教室!' }] },
+        roomName: { rules: [{ required: true, message: '请输入房间!' }] },
       }
     }
   },

@@ -6,7 +6,6 @@
           <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.name" placeholder="请输入楼栋名称"></a-input>
           <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.floorName" placeholder="请输入楼层名称"></a-input>
           <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.roomName" placeholder="请输入房间名称"></a-input>
-          <!-- <a-cascader placeholder="请选择楼栋/楼层/房" :options="buildingOptions" change-on-select @change="onChange" style="margin-right: 10px;" /> -->
           <a-button type="primary" @click="handleSearch" icon="search">查询</a-button>
           <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
         </div>
@@ -15,28 +14,20 @@
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
           <a-button v-isPermitted="'room:classroom:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
-          <!-- <a-button v-isPermitted="'room:classroom:power'" type="primary" icon="poweroff" title="电源" @click="handleAllPower"></a-button> -->
-
         </a-button-group>
       </div>
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
         <a-spin :spinning="loading">
           <div class="block-item" :class="{'active': item.lightState}" v-for="item in roomList" :key="item.id">
             <div class="toolbar left">
-              <span title="温度">{{ item.temperature }}℃</span>
-              <!-- <span><i class="obicon obicon-icon-temperature" style="color: #f66c32;"></i>35℃</span>
-              <span><i class="obicon obicon-humidity" style="color: #73d1f0;"></i>40%</span> -->
+              <span title="温度"><i class="obicon obicon-temperature" style="color: #f66c32;"></i>{{ item.temperature }}℃</span>
             </div>
             <div class="toolbar">
               <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
               <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i> -->
               <a-popconfirm :title="`${item.lightState ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleLamp(item, e)">
-                <!-- obicon-room-card -->
                 <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" v-isPermitted="'room:classroom:lamp'" title="插卡取电"></i>
               </a-popconfirm>
-              <!-- <a-popconfirm :title="`${item.switchState ? '关闭' : '开启'}教室开关?`" @confirm="() => handlePower(item)">
-                <i v-isPermitted="'room:classroom:switch'" class="icon obicon obicon-power" :class="{active: item.switchState}" title="教室开关"></i>
-              </a-popconfirm> -->
               <a-icon v-isPermitted="'room:classroom:edit'" class="icon" type="edit" title="编辑" @click="(e) => { e.stopPropagation(); handleEdit(item) }" />
               <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
                 <a-icon v-isPermitted="'room:classroom:delete'" class="icon" type="delete" @click="(e) => e.stopPropagation()" />
@@ -60,38 +51,12 @@
 </template>
 
 <script>
-import { getRoomList, delRoom, handleLampPower, handleSwitchPower, getPowerStatus, triggerAllPower } from '@/api/hotel'
-// import { editSwitchStatus } from '@/api/device'
+import { getRoomList, delRoom, handleLampPower } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
 import RoomModal from './modules/RoomModal'
 import RoomDetailModal from './modules/RoomDetailModal'
 import RoomOboxModal from './modules/RoomOboxModal'
-import { HumidityEquip } from 'hardware-suit'
-const options = [{
-  value: '1',
-  label: '1栋',
-  children: [{
-    value: '1',
-    label: '1层',
-    children: [{
-      value: '101',
-      label: '101房',
-    }]
-  }]
-},
-{
-  value: '2',
-  label: '2栋',
-  children: [{
-    value: '1',
-    label: '1层',
-    children: [{
-      value: '101',
-      label: '101房',
-    }]
-  }]
-}]
 
 export default {
   components: { RoomModal, RoomDetailModal, RoomOboxModal },
@@ -105,31 +70,20 @@ export default {
         pageNo: 1,
         pageSize: 10
       },
-      buildingOptions: options,
       total: 0
     }
   },
   mounted () {
     this.calculateContentHeight()
-    // Helper.windowOnResize(this, this.fixLayout)
     this.$bus.$on('state', () => this.loadData())
   },
   methods: {
-    getHumidity (state) {
-      if (!state) return ''
-      const humidity = new HumidityEquip(state)
-      return `${humidity.getTemperature()}℃/${humidity.getHumidity()}%`
-    },
     searchReset () {
       this.queryParam = { pageNo: 1, pageSize: 10 }
       this.loadData(1)
     },
     loadData (arg) {
       this.getDataList(arg)
-    },
-    fixLayout () {
-      // document.body.clientHeight - 64 - 40 - 85
-      // this.containerHeight = Helper.calculateTableHeight() - 20
     },
     getDataList (arg) {
       if (arg === 1) {
@@ -150,11 +104,6 @@ export default {
     handleDetail (record) {
       this.$refs.detailModal.show(record)
     },
-    isLightActive (status) {
-      if (!status) return false
-      const state = status.slice(0, 2)
-      return state !== '00'
-    },
     handleRefresh () {
       this.loadData()
     },
@@ -173,36 +122,6 @@ export default {
         } else this.$message.error(res.message)
       })
     },
-    handlePower (item) {
-      // const isPowerOn = this.isLightActive(item.deviceState)
-      const params = {
-        roomId: item.id,
-        deviceType: item.switchState ? 2 : 1
-      }
-      handleSwitchPower(params).then(res => {
-        if (this.$isAjaxSuccess(res.code)) {
-          this.$message.success('操作成功')
-          // this.loadData()
-        } else this.$message.error(res.message)
-      })
-    },
-    async handleAllPower () {
-      const that = this
-      const res = await getPowerStatus()
-      if (!this.$isAjaxSuccess(res.code)) return this.$message.warning('获取开关状态失败')
-      this.$confirm({
-        title: '确认操作',
-        content: '是否' + (res.result ? '关闭' : '开启') + '电源?',
-        onOk: function () {
-          triggerAllPower(+!res.result ? 1 : 2).then(response => {
-            if (that.$isAjaxSuccess(response.code)) {
-              that.$message.success('操作成功')
-              // that.loadData()
-            } else that.$message.error(response.message)
-          })
-        }
-      })
-    },
     handleRemove (id) {
       delRoom(id).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
@@ -216,9 +135,6 @@ export default {
       this.queryParam.pageSize = pageSize
       this.loadData()
     },
-    onChange (val) {
-      console.log('-=-=-=-= ', val)
-    }
   },
 }
 </script>
@@ -240,15 +156,13 @@ export default {
   .caption .el-button-group .el-button{
     padding: 3px 8px;
   }
-
   .caption-item{
-    width: 130px;
+    width: 150px;
     margin-right: 12px;
   }
 }
 .block-list{
   position: relative;
-  // padding-right: 70px;
   overflow: auto;
   .pagination{
     display: inline-block;
@@ -269,26 +183,19 @@ export default {
   padding: 20px;
   background: #fff;
   margin: 10px;
-  // width: 218px;
-  // height: 156px;
   width: 230px;
   height: 164px;
   border-radius: 4px;
   overflow: hidden;
-  // box-shadow: 0px 0px 3px 1px #c0c4cc;
   box-shadow: 0px 0px 4px 0px #c0c4cc;
-
   &.active{
     background: #fff4d3;
-    // box-shadow: 0px 0px 3px 1px #ebdbac;
     box-shadow: 0px 0px 4px 1px #ebdbac;
-
     .building-sign{
       color: #353535;
       text-shadow: 0 0 3px #626262;
     }
   }
-
   .toolbar{
     position: absolute;
     right: 5px;
@@ -299,7 +206,6 @@ export default {
       cursor: pointer;
       color: #999;
       transition: all .3s;
-
       &:hover{
         color: #000;
         font-weight: 700;
@@ -307,7 +213,6 @@ export default {
       & + .icon{
         right: 5px;
       }
-
       &.active{
         color: #0cadf8;
         font-weight: bolder;
@@ -319,7 +224,6 @@ export default {
     top: 8px;
     font-size: 12px;
     span {
-      // display: block;
       font-family: Consola;
       color: #999;
     }
@@ -337,10 +241,8 @@ export default {
     width: 100%;
     text-align: center;
     margin-top: 10px;
-
     .text{
       cursor: pointer;
-      // color: #0cadf8;
       color: #1890ff;
     }
   }
@@ -349,7 +251,6 @@ export default {
     color: #bdbdbd;
     font-size: 50px;
     padding: 5px;
-
     &.is-active{
       color: #d8d815;
     }

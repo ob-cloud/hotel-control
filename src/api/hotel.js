@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-22 11:45:49
+ * @Last Modified time: 2020-10-22 16:39:02
  */
 
 import { getAction, postFormAction, postAction, deleteAction } from '@/utils/ajax'
@@ -28,30 +28,22 @@ const addCompany = (params) => postAction('/sys/hotel/addCompany', params)
 const delCompany = (params) => postAction('/sys/hotel/deleteBatchCompany', params)
 
 // 房间
-const getRoomCascader = () => getAction('/common', {
-  CMD: 'get_building_floor_room'
-})
 const getRoomDeviceList = (params) => getAction('/common/room/devices', {
   CMD: 'get_room_device',
   device: JSON.stringify(params)
 })
-const getRoomList = ({hotelId, name, floorName, roomName, current, size}) => getAction('/sys/hotel/listRoom', {hotelId, name, floorName, roomName, current, size})
+
+const getRoomList = ({hotelId, name, floorName, roomName, pageNo, pageSize}) => getAction('/sys/hotel/listRoom', {hotelId, name, floorName, roomName, pageNo, pageSize})
 const addRoom = ({hotelId, name, pid}) => postFormAction('/sys/hotel/addOrUpdateRoom', {hotelId, name, pid})
 const editRoom = ({hotelId, name, pid, id}) => getAction('/sys/hotel/addOrUpdateRoom', {hotelId, name, pid, id})
-const delRoom = (id) => getAction('/common', {
-  CMD: 'delete_room',
-  room: JSON.stringify({
-    id
-  })
-})
-const bindRoomDevice= (params = {}) => postFormAction('/common', {
-  CMD: 'bind_room_device',
-  device: JSON.stringify(params)
-})
-const unbindRoomDevice = (params = {}) => postFormAction('/common', {
-  CMD: 'unbind_room_device',
-  device: JSON.stringify(params)
-})
+const delRoom = (id) => getAction('/sys/hotel/deleteRoom', {id})
+
+const getHotelRoomGatewayDeviceList = ({id, serialId, pageNo, pageSize}) => getAction('/sys/hotel/listRoomGatewayDeviceList', {id, serialId, pageNo, pageSize})
+const getHotelRoomInfraredDeviceList = ({id, serialId, pageNo, pageSize}) => getAction('/sys/hotel/listRoomGatewayDeviceList', {id, serialId, pageNo, pageSize})
+const bindRoomGateway = ({id, serialId}) => postAction('/sys/hotel/bindRoomGateway', {id, serialId})
+const unbindRoomGateway = ({serialId}) => postAction('/sys/hotel/unbindRoomGateway', {serialId})
+const bindRoomInfrared = ({id, serialId}) => postAction('/sys/hotel/bindRoomInfrared', {id, serialId})
+const unbindRoomInfrared = ({serialId}) => postAction('/sys/hotel/unbindRoomInfrared', {serialId})
 
 // 灯控
 const handleLampPower = (params = {}) => postFormAction('/common', {
@@ -75,7 +67,7 @@ const triggerAllPower = (deviceType) => getAction('/common', {
 })
 
 // 楼栋
-const getBuildingList = ({hotelId, name, current, size}) => getAction('/sys/hotel/listTower', {hotelId, name, current, size})
+const getBuildingList = ({hotelId, name, pageNo, pageSize}) => getAction('/sys/hotel/listTower', {hotelId, name, pageNo, pageSize})
 const getSelectBuildingList = () => getAction('/common', {
   CMD: 'get_select_building'
 })
@@ -85,7 +77,7 @@ const editBuilding = ({hotelId, name, id}) => postAction('/sys/hotel/addOrUpdate
 const delBuilding = (id) => deleteAction('/common', {id})
 
 // floor
-const getFloorList = ({hotelId, name, floorName, current, size}) => getAction('/sys/hotel/listFloor', {hotelId, name, floorName, current, size})
+const getFloorList = ({hotelId, name, floorName, pageNo, pageSize}) => getAction('/sys/hotel/listFloor', {hotelId, name, floorName, pageNo, pageSize})
 const getFloorByBuildingId = (buildingId) => getAction('/common', {
   CMD: 'get_building_floor',
   floor: JSON.stringify({
@@ -120,14 +112,19 @@ export {
   delCompany,
 
   // 房
-  getRoomCascader,
   getRoomDeviceList,
   getRoomList,
   addRoom,
   editRoom,
   delRoom,
-  bindRoomDevice,
-  unbindRoomDevice,
+
+  getHotelRoomGatewayDeviceList,
+  getHotelRoomInfraredDeviceList,
+  bindRoomGateway,
+  unbindRoomGateway,
+  bindRoomInfrared,
+  unbindRoomInfrared,
+
   handleLampPower,
   handleSwitchPower,
   getPowerStatus,

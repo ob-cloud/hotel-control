@@ -35,32 +35,32 @@ const getUserPermission = () => {
       "status": "1"
     }, {
       "action": "room:classroom:add",
-      "describe": "添加教室按钮",
+      "describe": "添加房间按钮",
       "type": "1",
       "status": "1"
     }, {
       "action": "room:classroom:edit",
-      "describe": "编辑教室按钮",
+      "describe": "编辑房间按钮",
       "type": "1",
       "status": "1"
     }, {
       "action": "room:classroom:delete",
-      "describe": "删除教室按钮",
+      "describe": "删除房间按钮",
       "type": "1",
       "status": "1"
     }, {
       "action": "room:classroom:device:view",
-      "describe": "查看教室设备按钮",
+      "describe": "查看房间设备按钮",
       "type": "1",
       "status": "1"
     }, {
       "action": "room:classroom:device:bind",
-      "describe": "绑定教室设备按钮",
+      "describe": "绑定房间设备按钮",
       "type": "1",
       "status": "1"
     }, {
       "action": "room:classroom:device:unbind",
-      "describe": "解绑教室设备按钮",
+      "describe": "解绑房间设备按钮",
       "type": "1",
       "status": "1"
     }, {

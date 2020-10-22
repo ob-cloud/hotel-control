@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { getFloorList, delFloor, handleLampPower, handleSwitchPower, getPowerStatus, triggerAllPower } from '@/api/hotel'
+import { getFloorList, delFloor } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
 import FloorModal from './modules/FloorModal'
@@ -61,8 +61,6 @@ export default {
   },
   mounted () {
     this.calculateContentHeight()
-    // Helper.windowOnResize(this, this.fixLayout)
-    this.$bus.$on('state', () => this.loadData())
   },
   methods: {
     searchReset () {
@@ -71,9 +69,6 @@ export default {
     },
     loadData (arg) {
       this.getDataList(arg)
-    },
-    fixLayout () {
-      // this.containerHeight = Helper.calculateTableHeight() - 20
     },
     getDataList (arg) {
       if (arg === 1) {
@@ -87,69 +82,11 @@ export default {
         }
       }).finally(() => this.loading = false)
     },
-    handleDeviceModal (item) {
-      this.$refs.deviceModal.show(item)
-    },
-    isLightActive (status) {
-      if (!status) return false
-      const state = status.slice(0, 2)
-      return state !== '00'
-    },
     handleRefresh () {
       this.loadData()
     },
     handleSearch () {
       this.loadData(1)
-    },
-    handleLamp (item) {
-      const params = {
-        floorId: item.id,
-        deviceType: item.lightState ? 2 : 1
-      }
-      handleLampPower(params).then(res => {
-        if (this.$isAjaxSuccess(res.code)) {
-          this.$message.success('操作成功')
-        } else this.$message.error(res.message)
-      })
-    },
-    handlePower (item) {
-      // const isPowerOn = this.isLightActive(item.deviceState)
-      // const params = {
-      //   floorId: item.id,
-      //   deviceType: item.allType === 1 ? 2 : 1
-      // }
-      // handleLampPower(params).then(res => {
-      //   if (this.$isAjaxSuccess(res.code)) {
-      //     this.$message.success('操作成功')
-      //     // this.loadData()
-      //   } else this.$message.error(res.message)
-      // })
-      const params = {
-        floorId: item.id,
-        deviceType: item.switchState ? 2 : 1
-      }
-      handleSwitchPower(params).then(res => {
-        if (this.$isAjaxSuccess(res.code)) {
-          this.$message.success('操作成功')
-        } else this.$message.error(res.message)
-      })
-    },
-    async handleAllPower () {
-      const that = this
-      const res = await getPowerStatus()
-      if (!this.$isAjaxSuccess(res.code)) return this.$message.warning('获取开关状态失败')
-      this.$confirm({
-        title: '确认操作',
-        content: '是否' + (res.result ? '关闭' : '开启') + '电源?',
-        onOk: function () {
-          triggerAllPower(+!res.result ? 1 : 2).then(response => {
-            if (that.$isAjaxSuccess(response.code)) {
-              that.$message.success('操作成功')
-              // that.loadData()
-            } else that.$message.error(response.message)
-          })
-        }
-      })
     },
     handleRemove (id) {
       delFloor(id).then(res => {

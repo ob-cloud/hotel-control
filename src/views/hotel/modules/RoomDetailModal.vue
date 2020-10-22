@@ -8,14 +8,13 @@
     @close="handleCancel"
     :visible="visible"
   >
-
     <a-page-header
       :title="`${model.roomName}房`"
       :breadcrumb="{ props: { routes } }"
       :sub-title="`${model.buildingName}栋${model.floorName}层`"
     />
     <a-descriptions style="padding: 10px 24px;">
-      <a-descriptions-item label="室内温度">{{ model.temperature }}℃</a-descriptions-item>
+      <a-descriptions-item label="室内温度"><i class="obicon obicon-temperature" style="color: #fa8c16;"></i>{{ model.temperature }}℃</a-descriptions-item>
       <a-descriptions-item label="插卡取电">
         <a-badge style="margin-left: 10px" :status="model.lightState ? 'processing' : 'default'" :text="`${model.lightState ? '取电中' : '未使用'}`" />
       </a-descriptions-item>
@@ -100,10 +99,11 @@
       </a-tab-pane>
     </a-tabs>
 
-
+    <!-- 绑定红外网关 -->
     <room-bind-obox-modal ref="bindModal" @ok="bindModalOk"></room-bind-obox-modal>
     <room-bind-infrared-modal ref="bindInfraredModal" @ok="bindModalOk"></room-bind-infrared-modal>
 
+    <!-- 设备操作 -->
     <humidity-action-modal placement="right" :drawerWidth="600" ref="humidityModal"></humidity-action-modal>
     <lamp-action-modal placement="right" :drawerWidth="600" ref="lampModal"></lamp-action-modal>
     <keypanel-action-modal placement="right" drawerWidth="60%" ref="keypanelModal"></keypanel-action-modal>
@@ -116,18 +116,15 @@
 <script>
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import { getRoomDeviceList } from '@/api/hotel'
-
-import { Descriptor, TypeHints } from 'hardware-suit'
-
 import RoomBindOboxModal from './RoomBindOboxModal'
 import RoomBindInfraredModal from './RoomBindInfraredModal'
-
 import LampActionModal from '@views/device/modules/LampActionModal'
 import KeypanelActionModal from '@views/device/modules/KeyPanelActionModal'
 import HumidityActionModal from '@views/device/modules/HumidityActionModal'
 import PowerSwitchModal from '@views/device/modules/PowerSwitchModal'
-
 import InfraredAirConditionModal from '@views/device/modules/InfraredAirConditionModal'
+
+import { Descriptor, TypeHints } from 'hardware-suit'
 
 const deviceColumns = [
   {
@@ -224,7 +221,15 @@ const infraredList = [{
 }]
 export default {
   mixins: [ProListMixin],
-  components: { RoomBindOboxModal, RoomBindInfraredModal, LampActionModal, KeypanelActionModal, HumidityActionModal, PowerSwitchModal, InfraredAirConditionModal },
+  components: {
+    RoomBindOboxModal,
+    RoomBindInfraredModal,
+    LampActionModal,
+    KeypanelActionModal,
+    HumidityActionModal,
+    PowerSwitchModal,
+    InfraredAirConditionModal
+  },
   data() {
     return {
       title: '房间详情',
@@ -308,7 +313,6 @@ export default {
       this.visible = false
     },
     handleTabChange (key) {
-      console.log('')
       this.tabActiveKey = key
     },
     handleAction (type, record) {

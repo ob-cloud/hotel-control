@@ -78,7 +78,7 @@ export default {
           dataIndex: 'sceneName',
         },
         {
-          title: '教室',
+          title: '房间',
           align: 'center',
           dataIndex: 'roomName',
         },
