@@ -474,33 +474,35 @@ const getUserPermission = () => {
       "path": "/isystem",
       "component": "Layouts/RouteView",
       "route": "1",
-      "children": [{
-        "path": "/isystem/setting",
-        "component": "system/SysSetting",
-        "route": "1",
-        hideChildrenInMenu: true,
-        "meta": {
-          "keepAlive": false,
-          "internalOrExternal": false,
-          "title": "系统配置"
-        },
-        redirect: '/isystem/setting/base',
-        "name": "isystem-setting",
-        "id": "1242639108812083202",
-        children: [{
-          "path": "/isystem/setting/base",
-          "component": "system/SysSettingBase",
-          "route": "1",
-          "hidden": true,
-          "meta": {
-            "keepAlive": false,
-            "internalOrExternal": false,
-            "title": "基础配置"
-          },
-          "name": "isystem-base-setting",
-          "id": "1242639108812083202"
-        }]
-      }, {
+      "children": [
+      //   {
+      //   "path": "/isystem/setting",
+      //   "component": "system/SysSetting",
+      //   "route": "1",
+      //   hideChildrenInMenu: true,
+      //   "meta": {
+      //     "keepAlive": false,
+      //     "internalOrExternal": false,
+      //     "title": "系统配置"
+      //   },
+      //   redirect: '/isystem/setting/base',
+      //   "name": "isystem-setting",
+      //   "id": "1242639108812083202",
+      //   children: [{
+      //     "path": "/isystem/setting/base",
+      //     "component": "system/SysSettingBase",
+      //     "route": "1",
+      //     "hidden": true,
+      //     "meta": {
+      //       "keepAlive": false,
+      //       "internalOrExternal": false,
+      //       "title": "基础配置"
+      //     },
+      //     "name": "isystem-base-setting",
+      //     "id": "1242639108812083202"
+      //   }]
+      // },
+      {
         "path": "/isystem/user",
         "component": "system/UserList",
         "route": "1",
