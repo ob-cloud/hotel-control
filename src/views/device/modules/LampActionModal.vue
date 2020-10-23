@@ -12,58 +12,11 @@
     :bodyStyle="{height: 'calc(100% - 60px)'}"
   >
     <bizz-lamp :siderWidth="150" :status="status" :deviceType="deviceType" :deviceChildType="deviceChildType" @change="handleLampChange"></bizz-lamp>
-    <!-- <a-layout style="height: 100%">
-      <a-layout-sider width="200px" style="background: #132436;">
-        <lamp :color="lampColor"></lamp>
-      </a-layout-sider>
-      <a-layout-content>
-        <a-card class="box-card" shadow="never">
-          <div slot="extra" class="clearfix">
-            <a-icon style="color: #ff4d4f;" type="warning" />
-            <span style="font-size: 12px; margin-left: 5px">{{ this.exceptionText }}</span>
-          </div>
-          <div class="card-content">
-            <a-row :gutter="40" class="card-content__item">
-              <a-col :span="3">
-                <span>开关</span>
-              </a-col>
-              <a-col :span="16" style="text-align: left;">
-                <a-switch
-                  v-model="power"
-                  inactive-color="#DC143C"
-                  checked-children="开"
-                  un-checked-children="关"
-                  @change="onPowerChange"
-                >
-                </a-switch>
-              </a-col>
-            </a-row>
-            <a-row :gutter="40" class="card-content__item">
-              <a-col :span="3">
-                <span>亮度</span>
-              </a-col>
-              <a-col :span="16">
-                <a-slider v-model="bright" :marks="{0: '0', 100: '100'}" :disabled="!isPowerOn" input-size="mini" @afterChange="onBrightChange"></a-slider>
-              </a-col>
-            </a-row>
-            <a-row :gutter="40" class="card-content__item" v-if="isColorLamp">
-              <a-col :span="3">
-                <span>色度</span>
-              </a-col>
-              <a-col :span="16">
-                <a-slider v-model="color" :min="0" :max="255" :disabled="!isPowerOn" :marks="{0: '0', 255: '255'}" input-size="mini" @afterChange="onColorChange"></a-slider>
-              </a-col>
-            </a-row>
-          </div>
-        </a-card>
-      </a-layout-content>
-    </a-layout> -->
   </a-drawer>
 </template>
 
 
 <script>
-// import Lamp from '@/components/IoT/Lamp'
 import { editSwitchStatus, getSwitchStatus } from '@/api/device'
 import { LedLampEquip, Descriptor } from 'hardware-suit'
 import BizzLamp from '@/components/Bizz/BizzLamp'

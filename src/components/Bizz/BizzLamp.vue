@@ -1,5 +1,5 @@
 <template>
-  <a-layout style="height: 100%">
+  <a-layout>
     <a-layout-sider :width="`${siderWidth}px`" style="background: #132436;">
       <lamp :color="lampColor"></lamp>
     </a-layout-sider>

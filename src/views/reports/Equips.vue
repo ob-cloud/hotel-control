@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="网关红外设备报表" :class="{ 'anty-list-cust':true }" :bordered="false" :style="{ marginTop: '24px' }">
+    <a-card title="网关红外设备报表" class="ant-card-slim" :class="{ 'anty-list-cust':true }" :bordered="false" :style="{ marginTop: '24px' }">
       <div class="extra-wrapper" slot="extra">
         <div class="extra-item">
           <a>今日</a>
