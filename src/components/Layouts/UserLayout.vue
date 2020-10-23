@@ -17,6 +17,13 @@ export default {
   computed: {
     systemLogo () {
       return require(`@/assets/` + config.pageOptions.logo)
+    },
+    logLogo () {
+      if (!config.pageOptions.logLogo) return ''
+      return require(`@/assets/` + config.pageOptions.logLogo)
+    },
+    logo () {
+      return this.logLogo ? this.logLogo : this.systemLogo
     }
   },
   methods: {
@@ -27,7 +34,7 @@ export default {
             <a href="/">
               {
                 config.pageOptions.logo && (
-                  <img src={this.systemLogo} class="logo" alt="logo" />
+                  <img src={this.logo} class="logo" alt="logo" />
                 )
               }
               <span class="title">{config.pageOptions.title || 'Admin-Pro'}</span>
@@ -71,7 +78,7 @@ export default {
           {this.renderHeader()}
           <route-view></route-view>
           {
-            config.pageOptions.hasFooter && this.renderFooter()
+            config.pageOptions.footer && this.renderFooter()
           }
         </div>
       </div>

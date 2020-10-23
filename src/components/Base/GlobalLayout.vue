@@ -141,7 +141,7 @@ export default {
 
           {/* <!-- layout footer --> */}
           {
-            config.pageOptions.hasFooter && (
+            config.pageOptions.footer && (
               <a-layout-footer>
                 <global-footer />
               </a-layout-footer>
