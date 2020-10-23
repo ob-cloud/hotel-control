@@ -285,7 +285,9 @@ const getBuildingList = () => {
       deviceState: "",
       lightState: Mock.mock('@integer(0, 1)'),
       switchState: Mock.mock('@integer(0, 1)'),
-      allType: 0
+      allType: 0,
+      createTime: Mock.mock('@datetime'),
+      operator: Mock.mock('@cname')
     })
   }
   console.log('mock getBuildingList: ', builder({
@@ -316,7 +318,9 @@ const getFloorList = () => {
       name: Mock.mock('@integer(1, 20)'),
       lightState: Mock.mock('@integer(0, 1)'),
       switchState: Mock.mock('@integer(0, 1)'),
-      allType: 0
+      allType: 0,
+      createTime: Mock.mock('@datetime'),
+      operator: Mock.mock('@cname')
     })
   }
   console.log('mock getFloorList: ', builder({

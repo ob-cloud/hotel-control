@@ -14,7 +14,26 @@
           <a-button v-isPermitted="'room:building:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
         </a-button-group>
       </div>
-      <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
+      <a-table
+        ref="table"
+        bordered
+        size="middle"
+        rowKey="id"
+        :columns="columns"
+        :dataSource="dataList"
+        :pagination="ipagination"
+        :loading="loading"
+        @change="handleTableChange"
+      >
+        <span slot="action" slot-scope="text, record">
+          <a @click="handleEdit(record)">编辑</a>
+          <a-divider v-isPermitted="'device:gateway:edit'" type="vertical" />
+          <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(record.id)">
+            <a>删除</a>
+          </a-popconfirm>
+        </span>
+      </a-table>
+      <!-- <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
         <a-spin :spinning="loading">
           <div class="block-item" v-for="item in dataList" :key="item.id">
             <div class="toolbar">
@@ -32,7 +51,7 @@
           </div>
         </a-spin>
         <a-pagination style="position: fixed; right: 70px; bottom: 30px;" simple :current="queryParam.pageNo" :pageSize.sync="queryParam.pageSize" :total="total" @change="handlePageChange" />
-      </div>
+      </div> -->
       <building-modal ref="modalForm" @ok="modalFormOk"></building-modal>
     </a-card>
   </div>
@@ -55,7 +74,39 @@ export default {
         pageNo: 1,
         pageSize: 10
       },
-      total: 0
+      total: 0,
+      columns: [{
+        title: '#',
+        dataIndex: '',
+        key: 'rowIndex',
+        width: 60,
+        align: 'center',
+        customRender (t, r, index) {
+          return parseInt(index) + 1
+        }
+      }, {
+        title: '楼栋名称',
+        align: 'center',
+        dataIndex: 'name',
+      }, {
+        title: '楼栋ID',
+        align: 'center',
+        dataIndex: 'id',
+      }, {
+        title: '创建时间',
+        align: 'center',
+        dataIndex: 'createTime',
+      }, {
+        title: '创建人',
+        align: 'center',
+        dataIndex: 'operator',
+      }, {
+        title: '操作',
+        dataIndex: 'action',
+        scopedSlots: { customRender: 'action' },
+        align: 'center',
+        width: 170
+      }]
     }
   },
   mounted () {
