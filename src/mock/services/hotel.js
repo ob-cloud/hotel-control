@@ -25,7 +25,7 @@ const getHotelList = (options) => {
       telephone: Mock.mock('@integer(10000000000, 19000000000)'),
       salesManId: Mock.mock('@id()'),
       salesManName: Mock.mock('@cname()'),
-      address: Mock.mock('@country(true)'),
+      address: Mock.mock('@county(true)'),
       createAt: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),
     })

@@ -31,6 +31,7 @@
           <a-select
             style="width: 100%"
             placeholder="请选择所属公司"
+            :disabled="disableSubmit"
             v-decorator="[ 'company', { initialValue: undefined, rules: [{required: true, message: '请选择所属公司!'}]}]"
           >
             <a-select-option v-for="(company, companyIndex) in companyList" :key="companyIndex.toString()" :value="company.id">
@@ -40,15 +41,15 @@
         </a-form-item>
 
         <a-form-item label="联系人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入联系人" v-decorator="[ 'contacts', validatorRules.normal]" />
+          <a-input placeholder="请输入联系人" :disabled="disableSubmit" v-decorator="[ 'contacts', validatorRules.normal]" />
         </a-form-item>
 
         <a-form-item label="联系方式" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入联系方式" v-decorator="[ 'contact', validatorRules.normal]" />
+          <a-input placeholder="请输入联系方式" :disabled="disableSubmit" v-decorator="[ 'contact', validatorRules.normal]" />
         </a-form-item>
 
         <a-form-item label="前台电话" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入前台电话" v-decorator="[ 'frontPhone', validatorRules.normal]" />
+          <a-input placeholder="请输入前台电话" :disabled="disableSubmit" v-decorator="[ 'frontPhone', validatorRules.normal]" />
         </a-form-item>
 
         <a-form-item label="业务员" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -57,6 +58,7 @@
             placeholder="请选择绑定业务员"
             optionFilterProp="children"
             v-model="selectedUser"
+            :disabled="disableSubmit"
           >
             <a-select-option v-for="(user, userIndex) in userList" :key="userIndex.toString()" :value="user.id">
               {{ user.name }}
@@ -65,7 +67,7 @@
         </a-form-item>
 
         <a-form-item label="公司地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入公司地址" v-decorator="[ 'address', {} ]" />
+          <a-input placeholder="请输入公司地址" v-decorator="[ 'address', {} ]" :disabled="disableSubmit" />
         </a-form-item>
 
         <!-- <a-form-item label="是否连锁" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -74,6 +76,33 @@
             <a-select-option :value="0">非连锁酒店</a-select-option>
           </a-select>
         </a-form-item> -->
+      </a-form>
+
+      <a-form v-if="showMoreDetail">
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="营业时间">
+          <a-range-picker
+            :disabled="disableSubmit"
+            v-decorator="[ 'operTime', {rules: [{ required: true, message: '请选择营业时间!' }]} ]"
+            format="h:mm"
+            :showTime="true"
+            :mode="['time', 'time']"
+            :placeholder="['开始时间', '结束时间']"
+          />
+        </a-form-item>
+
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="签约时间">
+          <a-range-picker
+            :disabled="disableSubmit"
+            v-decorator="[ 'signTime', {rules: [{ required: true, message: '请选择签约时间!' }]} ]"
+            format="YYYY-MM-DD"
+            :placeholder="['入驻时间', '失效时间']"
+          />
+        </a-form-item>
+
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="收费设置">
+          超过 <a-input-number :disabled="disableSubmit" v-decorator="[ 'fee.charge', {rules: [{ required: true, message: '请填写收费时间!' }]}]" controls-position="right" :min="1"></a-input-number> 小时，收取租金
+          <a-input-number :disabled="disableSubmit" v-decorator="[ 'rent', {rules: [{ required: true, message: '请填写租金!' }]} ]" controls-position="right" :min="1"></a-input-number> 元
+        </a-form-item>
       </a-form>
     </a-spin>
 
@@ -129,6 +158,11 @@
         },
         confirmLoading: false,
         form: this.$form.createForm(this),
+      }
+    },
+    computed: {
+      showMoreDetail () {
+        return this.title === '详情'
       }
     },
     methods: {
