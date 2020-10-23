@@ -172,7 +172,7 @@ const deviceColumns = [
     dataIndex: 'action',
     scopedSlots: { customRender: 'action' },
     align: 'center',
-    width: 170
+    width: 100
   }
 ]
 const infraredColumns = [
@@ -204,7 +204,7 @@ const infraredColumns = [
     dataIndex: 'action',
     scopedSlots: { customRender: 'action' },
     align: 'center',
-    width: 170
+    width: 100
   }
 ]
 
