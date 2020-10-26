@@ -3,7 +3,7 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="楼栋">
-          <a-input placeholder="请输入楼栋" v-decorator="[ 'buildName', validatorRules.buildName]" />
+          <a-input placeholder="请输入楼栋" v-decorator="[ 'name', validatorRules.buildName]" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -13,6 +13,7 @@
 <script>
 import pick from 'lodash.pick'
 import { addBuilding, editBuilding } from '@/api/hotel'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -36,6 +37,9 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['hotelId'])
+  },
   methods: {
     add () {
       this.edit({})
@@ -45,7 +49,7 @@ export default {
       this.model = Object.assign({}, record)
       this.visible = true
       this.$nextTick(() => {
-        this.form.setFieldsValue(pick(this.model, 'buildName'))
+        this.form.setFieldsValue(pick(this.model, 'name'))
       })
     },
     // 确定
@@ -56,6 +60,7 @@ export default {
         if (!err) {
           that.confirmLoading = true
           let formData = Object.assign(this.model, values)
+          formData = {...formData, hotelId: this.hotelId}
           let obj = !this.model.id ? addBuilding(formData) : editBuilding(formData)
           obj.then((res) => {
             if (that.$isAjaxSuccess(res.code)) {

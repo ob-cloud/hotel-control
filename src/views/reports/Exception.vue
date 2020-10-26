@@ -28,9 +28,9 @@
               <a-col :md="6" :sm="12">
                 <a-form-item label="事件类型">
                   <a-select v-model="queryParam.type" placeholder="请选择事件类型">
-                    <a-select-option value="1">欠费</a-select-option>
-                    <a-select-option value="2">掉线</a-select-option>
-                    <a-select-option value="3">异常</a-select-option>
+                    <a-select-option value="0">欠费</a-select-option>
+                    <a-select-option value="1">掉线</a-select-option>
+                    <a-select-option value="2">异常</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -45,8 +45,8 @@
           <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="id" :columns="columns" :pagination="ipagination" @change="handleTableChange">
             <span slot="action" slot-scope="text, record">
               <!-- <a @click="handleEdit(record)">操作</a> -->
-              <a style="font-size: 12px;" :style="`color: ${record.status ? '#1890ff' : '#f5222d'}`" @click="handleAction(record)">
-                {{ record.status ? '标记为已处理' : '标记为未处理' }}
+              <a style="font-size: 12px;" :style="`color: ${record.isOper ? '#1890ff' : '#f5222d'}`" @click="handleAction(record)">
+                {{ record.isOper ? '标记为未处理' : '标记为已处理' }}
               </a>
             </span>
           </a-table>
@@ -62,30 +62,26 @@
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import { getExceptionReportList, handleException } from '@/api/reports'
 const columns = [{
-  title: '营业日',
-  align:"center",
-  dataIndex: 'businessDay'
-}, {
   title: '异常事件',
   align:"center",
-  dataIndex: 'events'
+  dataIndex: 'title'
 }, {
   title: '事件类型',
   align:"center",
-  dataIndex: 'eventType',
+  dataIndex: 'type',
   customRender (type) {
-    return type === 1 ? '酒店欠费' :  type === 2 ? '掉线' : '异常'
+    return type === 0 ? '酒店欠费' :  type === 1 ? '掉线' : '异常'
   }
 }, {
   title: '异常时间',
   align:"center",
   sorter: true,
   sortOrder: 'descend',
-  dataIndex: 'abnormalTime'
+  dataIndex: 'createTime'
 }, {
   title: '是否已处理',
   align:"center",
-  dataIndex: 'status',
+  dataIndex: 'isOper',
   customRender (status) {
     return status ? '是' : '否'
   },
@@ -96,11 +92,11 @@ const columns = [{
     text: '否',
     value: 0,
   }],
-  onFilter: (value, record) => record.status === value
+  onFilter: (value, record) => record.isOper === value
 }, {
   title: '操作人',
   align:"center",
-  dataIndex: 'operator'
+  dataIndex: 'operUser'
 }, {
     title: '操作',
     dataIndex: 'action',

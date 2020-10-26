@@ -530,8 +530,8 @@ const getRoomDeviceList = () => {
   })
 }
 
-Mock.mock(/\/sys\/hotel\/listHotel/, 'get', getHotelList)
-Mock.mock(/\/sys\/hotel\/listAllHotel/, 'get', getHotelListAll)
+// Mock.mock(/\/sys\/hotel\/listHotel/, 'get', getHotelList)
+// Mock.mock(/\/sys\/hotel\/listAllHotel/, 'get', getHotelListAll)
 
 Mock.mock(/\/common\/getHotelUserList/, 'get', getUserListByHotel)
 
@@ -543,13 +543,13 @@ Mock.mock(/\/common\/bindHotelUser/, 'post', bindHotelUser)
 Mock.mock(/\/common\/unbindHotelUser/, 'post', unbindHotelUser)
 
 // 企业
-Mock.mock(/\/sys\/hotel\/listCompany/, 'get', getCompanyList)
-Mock.mock(/\/sys\/hotel\/listAllCompany/, 'get', getCompanyListAll)
+// Mock.mock(/\/sys\/hotel\/listCompany/, 'get', getCompanyList)
+// Mock.mock(/\/sys\/hotel\/listAllCompany/, 'get', getCompanyListAll)
 
 
-Mock.mock(/\/sys\/hotel\/listRoom/, 'get', getRoomList)
-Mock.mock(/\/sys\/hotel\/listTower/, 'get', getBuildingList)
-Mock.mock(/\/sys\/hotel\/listFloor/, 'get', getFloorList)
+// Mock.mock(/\/sys\/hotel\/listRoom/, 'get', getRoomList)
+// Mock.mock(/\/sys\/hotel\/listTower/, 'get', getBuildingList)
+// Mock.mock(/\/sys\/hotel\/listFloor/, 'get', getFloorList)
 
 Mock.mock(/\/common\/room\/devices/, 'get', getRoomDeviceList)
 

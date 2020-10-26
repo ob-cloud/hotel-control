@@ -60,11 +60,14 @@
 <script>
 import { getBuildingList, delBuilding } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
-
 import BuildingModal from './modules/BuildingModal'
+import { mapGetters } from 'vuex'
 export default {
   components: { BuildingModal },
   mixins: [ProListMixin],
+  computed: {
+    ...mapGetters(['hotelId'])
+  },
   data () {
     return {
       loading: false,
@@ -99,7 +102,7 @@ export default {
       }, {
         title: '创建人',
         align: 'center',
-        dataIndex: 'operator',
+        dataIndex: 'createBy',
       }, {
         title: '操作',
         dataIndex: 'action',
@@ -125,7 +128,7 @@ export default {
         this.queryParam.pageNo = 1
       }
       this.loading = true
-      getBuildingList(this.queryParam).then(res => {
+      getBuildingList({...this.queryParam, hotelId: this.hotelId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataList = res.result.records
           this.total = res.result.total

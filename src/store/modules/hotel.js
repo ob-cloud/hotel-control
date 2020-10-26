@@ -26,7 +26,7 @@ const hotel = {
           if (!isAjaxSuccess(response.code)) {
             reject()
           }
-          const hotelList = response.result.records || []
+          const hotelList = response.result || []
           if (hotelList && hotelList.length > 0) {
             const firstHotel = hotelList[0]
             commit('SET_HOTELID', firstHotel.id)

@@ -45,7 +45,7 @@
       </div>
       <room-modal ref="modalForm" @ok="modalFormOk"></room-modal>
       <room-detail-modal ref="detailModal"></room-detail-modal>
-      <room-obox-modal ref="deviceModal"></room-obox-modal>
+      <!-- <room-obox-modal ref="deviceModal"></room-obox-modal> -->
     </a-card>
   </div>
 </template>
@@ -56,10 +56,10 @@ import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
 import RoomModal from './modules/RoomModal'
 import RoomDetailModal from './modules/RoomDetailModal'
-import RoomOboxModal from './modules/RoomOboxModal'
+// import RoomOboxModal from './modules/RoomOboxModal'
 
 export default {
-  components: { RoomModal, RoomDetailModal, RoomOboxModal },
+  components: { RoomModal, RoomDetailModal },
   mixins: [ProListMixin],
   data () {
     return {
@@ -90,7 +90,7 @@ export default {
         this.queryParam.pageNo = 1
       }
       this.loading = true
-      getRoomList(this.queryParam).then(res => {
+      getRoomList({...this.queryParam, hotelId: this.$store.getters.hotelId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.roomList = res.result.records
           this.total = res.result.total

@@ -64,40 +64,14 @@ module.exports = {
         // target: 'http://10.10.92.161:8082/nurse',
         // target: 'https://aliiot.on-bright.com/nurseTest',
         // target: 'http://10.10.92.129',
-        target: 'http://192.168.31.98:8201',
+        target: 'https://aliiot.on-bright.com/control',
+        // target: 'http://192.168.200.129:8085/control',
         ws: false,
         changeOrigin: true,
         pathRewrite: {
           '/pro': ''  //默认所有请求都加了/pro前缀，需要去掉
         }
       },
-      '/pro/aliService': {
-        // target: 'http://10.10.92.129',
-        target: 'http://192.168.31.98:8201',
-        ws: false,
-        changeOrigin: true,
-        pathRewrite: {
-          '/pro': '/aliService'  //默认所有请求都加了/pro前缀，需要去掉
-        }
-      },
-      '/pro/facade': {
-        // target: 'http://10.10.92.129',
-        target: 'http://192.168.31.98:8201',
-        ws: false,
-        changeOrigin: true,
-        pathRewrite: {
-          '/pro': '/facade'  //默认所有请求都加了/pro前缀，需要去掉
-        }
-      },
-      '/image': {
-        // target: 'http://10.10.92.129',
-        target: 'http://192.168.31.98:8201',
-        ws: false,
-        changeOrigin: true,
-        pathRewrite: {
-          '/image': '/image'  //默认所有请求都加了/pro前缀，需要去掉
-        }
-      }
     }
   },
 

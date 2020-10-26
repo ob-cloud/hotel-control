@@ -64,29 +64,29 @@ import { getMineReportList } from '@/api/reports'
 const columns = [{
   title: '营业日',
   align:"center",
-  dataIndex: 'businessDay'
+  dataIndex: 'time'
 },{
   title: '酒店总数',
   align:"center",
-  dataIndex: 'hotelAccount'
+  dataIndex: 'hotels'
 },{
   title: '房间总数',
   align:"center",
-  dataIndex: 'roomAccount'
+  dataIndex: 'totalBuilding'
 },{
   title: '在用数',
   align:"center",
-  dataIndex: 'usageAccount'
+  dataIndex: 'totalUseRoom'
 },{
   title: '在用使用率',
   align:"center",
-  dataIndex: 'usageRate'
+  dataIndex: 'utilizationRate'
 },{
   title: '租金',
   align:"center",
   sorter: true,
   sortOrder: 'descend',
-  dataIndex: 'rent'
+  dataIndex: 'price'
 }]
 export default {
   mixins: [ ProListMixin ],

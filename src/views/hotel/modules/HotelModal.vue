@@ -23,7 +23,7 @@
       <a-form :form="form">
 
         <a-form-item label="酒店名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入酒店名称" v-decorator="[ 'name', validatorRules.name]" :readOnly="!!model.id" />
+          <a-input placeholder="请输入酒店名称" v-decorator="[ 'hotelName', validatorRules.name]" :readOnly="!!model.id" />
         </a-form-item>
 
         <a-form-item label="所属公司" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -32,24 +32,24 @@
             style="width: 100%"
             placeholder="请选择所属公司"
             :disabled="disableSubmit"
-            v-decorator="[ 'company', { initialValue: undefined, rules: [{required: true, message: '请选择所属公司!'}]}]"
+            v-decorator="[ 'companyId', { initialValue: undefined, rules: [{required: true, message: '请选择所属公司!'}]}]"
           >
             <a-select-option v-for="(company, companyIndex) in companyList" :key="companyIndex.toString()" :value="company.id">
-              {{ company.name }}
+              {{ company.companyName }}
             </a-select-option>
           </a-select>
         </a-form-item>
 
         <a-form-item label="联系人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入联系人" :disabled="disableSubmit" v-decorator="[ 'contacts', validatorRules.normal]" />
+          <a-input placeholder="请输入联系人" :disabled="disableSubmit" v-decorator="[ 'contact', validatorRules.normal]" />
         </a-form-item>
 
         <a-form-item label="联系方式" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入联系方式" :disabled="disableSubmit" v-decorator="[ 'contact', validatorRules.normal]" />
+          <a-input placeholder="请输入联系方式" :disabled="disableSubmit" v-decorator="[ 'contactPhone', validatorRules.normal]" />
         </a-form-item>
 
         <a-form-item label="前台电话" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入前台电话" :disabled="disableSubmit" v-decorator="[ 'frontPhone', validatorRules.normal]" />
+          <a-input placeholder="请输入前台电话" :disabled="disableSubmit" v-decorator="[ 'telephone', validatorRules.normal]" />
         </a-form-item>
 
         <a-form-item label="业务员" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -57,6 +57,7 @@
             style="width: 100%"
             placeholder="请选择绑定业务员"
             optionFilterProp="children"
+            v-decorator="[ 'saleManId', validatorRules.normal]"
             v-model="selectedUser"
             :disabled="disableSubmit"
           >
@@ -118,7 +119,7 @@
 <script>
   import pick from 'lodash.pick'
   import { addHotel, editHotel, getCompanyListAll } from '@/api/hotel'
-  import { getUserListUnPage } from '@/api/system'
+  import { getUserListByType } from '@/api/system'
 
   export default {
     name: 'HotelModal',
@@ -172,7 +173,7 @@
         this.modaltoggleFlag = !this.modaltoggleFlag;
       },
       initialUserList () {
-        getUserListUnPage().then((res) => {
+        getUserListByType().then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             this.userList = res.result.records
           } else {
@@ -183,7 +184,7 @@
       initialCompanyList () {
         getCompanyListAll().then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
-            this.companyList = res.result.records
+            this.companyList = res.result
           } else {
             console.log(res.message)
           }
@@ -205,7 +206,7 @@
         this.visible = true
         this.model = Object.assign({}, record)
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'name', 'company', 'contacts', 'contact', 'frontPhone', 'salemanId', 'address'))
+          this.form.setFieldsValue(pick(this.model, 'hotelName', 'companyId', 'contact', 'contactPhone', 'telephone', 'salemanId', 'address'))
         })
       },
       close () {

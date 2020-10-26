@@ -27,7 +27,7 @@
 
 <script>
 import pick from 'lodash.pick'
-import { getSelectBuildingList, getFloorByBuildingId, addRoom, editRoom } from '@/api/hotel'
+import { getBuildingListWithoutPage, getFloorByBuildingId, addRoom, editRoom } from '@/api/hotel'
 export default {
   data () {
     return {
@@ -68,7 +68,7 @@ export default {
       })
     },
     getBuildingList () {
-      getSelectBuildingList().then(res => {
+      getBuildingListWithoutPage().then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.buildingList = res.result.records
         }

@@ -24,7 +24,7 @@
             <a-form-item label="所属公司">
               <!-- <a-input placeholder="请输入所属公司名称" v-model="queryParam.company"></a-input> -->
               <a-select placeholder="请输入所属公司名称" v-model="queryParam.company" allowClear>
-                <a-select-option v-for="(company, index) in companyList" :key="index" :value="company.id">{{ company.name }}</a-select-option>
+                <a-select-option v-for="(company, index) in companyList" :key="index" :value="company.id">{{ company.companyName }}</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -172,7 +172,7 @@
           {
             title: '业务员',
             align: 'center',
-            dataIndex: 'salesManName',
+            dataIndex: 'saleManName',
           },
           // {
           //   title: '是否连锁',
@@ -209,7 +209,7 @@
       getCompanyLis () {
         getCompanyListAll().then(res => {
           if (this.$isAjaxSuccess(res.code)) {
-            this.companyList = res.result.records
+            this.companyList = res.result
           }
         })
       },

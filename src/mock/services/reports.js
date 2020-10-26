@@ -16,12 +16,12 @@ const getEnterpriseReportList = (options) => {
   for (let i = 1; i < next; i++) {
     result.push({
       id: Mock.mock('@id()'),
-      businessDay: Mock.mock('@date'),
-      hotelAccount: Mock.mock('@integer(10, 1000)'),
-      roomAccount: Mock.mock('@integer(10, 1000)'),
-      usageAccount: Mock.mock('@integer(10, 1000)'),
-      usageRate: Mock.mock('@integer(10, 1000)'),
-      rent: Mock.mock('@integer(10, 1000)'),
+      time: Mock.mock('@date'),
+      hotels: Mock.mock('@integer(10, 1000)'),
+      totalBuilding: Mock.mock('@integer(10, 1000)'),
+      totalUseRoom: Mock.mock('@integer(10, 1000)'),
+      utilizationRate: Mock.mock('@integer(10, 1000)'),
+      price: Mock.mock('@integer(10, 1000)'),
       createAt: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),
     })
@@ -44,6 +44,28 @@ const getEnterpriseReportList = (options) => {
   })
 }
 
+const getEnterpriseReportStatistic = () => {
+  console.log('mock getEnterpriseReportStatistic: ', builder({
+    "arrears": Mock.mock('@integer(100, 5000)'),
+    "averPrice": Mock.mock('@integer(100, 5000)'),
+    "hotelId": "",
+    "totalPrice": Mock.mock('@integer(100, 5000)'),
+    "totalRoom": 0,
+    "usrRoom": 0,
+    "utilizationRate": Mock.mock('@integer(100, 5000)'),
+  }))
+
+  return builder({
+    "arrears": Mock.mock('@integer(100, 5000)'),
+    "averPrice": Mock.mock('@integer(100, 5000)'),
+    "hotelId": "",
+    "totalPrice": Mock.mock('@integer(100, 5000)'),
+    "totalRoom": 0,
+    "usrRoom": 0,
+    "utilizationRate": Mock.mock('@integer(100, 5000)'),
+  })
+}
+
 
 const getHotelReportList = (options) => {
   const parameters = getQueryParameters(options)
@@ -57,11 +79,11 @@ const getHotelReportList = (options) => {
   for (let i = 1; i < next; i++) {
     result.push({
       id: Mock.mock('@id()'),
-      businessDay: Mock.mock('@date'),
-      roomAccount: Mock.mock('@integer(10, 1000)'),
-      usageAccount: Mock.mock('@integer(10, 1000)'),
-      usageRate: Mock.mock('@integer(10, 1000)'),
-      rent: Mock.mock('@integer(10, 1000)'),
+      time: Mock.mock('@date'),
+      totalBuilding: Mock.mock('@integer(10, 1000)'),
+      totalUseRoom: Mock.mock('@integer(10, 1000)'),
+      utilizationRate: Mock.mock('@integer(10, 1000)'),
+      price: Mock.mock('@integer(10, 1000)'),
       createAt: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),
     })
@@ -84,6 +106,27 @@ const getHotelReportList = (options) => {
   })
 }
 
+const getHotelReportStatistic = () => {
+  console.log('mock getHotelReportStatistic: ', builder({
+    "arrears": Mock.mock('@integer(100, 5000)'),
+    "averPrice": Mock.mock('@integer(100, 5000)'),
+    "hotelId": "",
+    "totalPrice": Mock.mock('@integer(100, 5000)'),
+    "totalRoom": 0,
+    "usrRoom": 0,
+    "utilizationRate": Mock.mock('@integer(100, 5000)'),
+  }))
+
+  return builder({
+    "arrears": Mock.mock('@integer(100, 5000)'),
+    "averPrice": Mock.mock('@integer(100, 5000)'),
+    "hotelId": "",
+    "totalPrice": Mock.mock('@integer(100, 5000)'),
+    "totalRoom": 0,
+    "usrRoom": 0,
+    "utilizationRate": Mock.mock('@integer(100, 5000)'),
+  })
+}
 
 const getMineReportList = (options) => {
   const parameters = getQueryParameters(options)
@@ -97,12 +140,12 @@ const getMineReportList = (options) => {
   for (let i = 1; i < next; i++) {
     result.push({
       id: Mock.mock('@id()'),
-      businessDay: Mock.mock('@date'),
-      hotelAccount: Mock.mock('@integer(10, 1000)'),
-      roomAccount: Mock.mock('@integer(10, 1000)'),
-      usageAccount: Mock.mock('@integer(10, 1000)'),
-      usageRate: Mock.mock('@integer(10, 1000)'),
-      rent: Mock.mock('@integer(10, 1000)'),
+      time: Mock.mock('@date'),
+      hotels: Mock.mock('@integer(10, 1000)'),
+      totalBuilding: Mock.mock('@integer(10, 1000)'),
+      totalUseRoom: Mock.mock('@integer(10, 1000)'),
+      utilizationRate: Mock.mock('@integer(10, 1000)'),
+      price: Mock.mock('@integer(10, 1000)'),
       createAt: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),
     })
@@ -138,14 +181,13 @@ const getEquipsReportList = (options) => {
   for (let i = 1; i < next; i++) {
     result.push({
       id: Mock.mock('@id()'),
-      businessDay: Mock.mock('@date'),
+      time: Mock.mock('@date'),
       hotelName: Mock.mock('@cword(3, 5)') + '酒店',
-      roomCount: Mock.mock('@integer(10, 1000)'),
-      deviceCount: Mock.mock('@integer(10, 1000)'),
-      gatewayOfflineCount: Mock.mock('@integer(0, 100)'),
-      infraredOfflineCount: Mock.mock('@integer(0, 100)'),
-      gatewayOfflineRate: Mock.mock('@integer(0, 100)'),
-      infraredOfflineRate: Mock.mock('@integer(0, 100)'),
+      deviceTotal: Mock.mock('@integer(10, 1000)'),
+      oboxline: Mock.mock('@integer(0, 100)'),
+      irLiner: Mock.mock('@integer(0, 100)'),
+      oboxRate: Mock.mock('@integer(0, 100)'),
+      irRate: Mock.mock('@integer(0, 100)'),
       createAt: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),
     })
@@ -164,10 +206,34 @@ const getEquipsReportList = (options) => {
     pageNo: pageNo,
     total: totalCount,
     totalPage: totalPage,
-    records: result
+    tableDeviceResponse: result
   })
 }
 
+
+const getEquipsReportStatistic = () => {
+  console.log('mock getEquipsReportStatistic: ', builder({
+    "deviceTotal": Mock.mock('@integer(100, 5000)'),
+		"hotelId": "",
+		"irLine": Mock.mock('@integer(100, 5000)'),
+		"irRate": Mock.mock('@integer(100, 5000)'),
+		"irTotal": Mock.mock('@integer(100, 5000)'),
+		"oboxLine": Mock.mock('@integer(100, 5000)'),
+		"oboxRate": Mock.mock('@integer(100, 5000)'),
+		"oboxTotal": Mock.mock('@integer(100, 5000)'),
+  }))
+
+  return builder({
+    "deviceTotal": Mock.mock('@integer(100, 5000)'),
+		"hotelId": "",
+		"irLine": Mock.mock('@integer(100, 5000)'),
+		"irRate": Mock.mock('@integer(100, 5000)'),
+		"irTotal": Mock.mock('@integer(100, 5000)'),
+		"oboxLine": Mock.mock('@integer(100, 5000)'),
+		"oboxRate": Mock.mock('@integer(100, 5000)'),
+		"oboxTotal": Mock.mock('@integer(100, 5000)'),
+  })
+}
 
 const getExceptionReportList = (options) => {
   const parameters = getQueryParameters(options)
@@ -182,11 +248,12 @@ const getExceptionReportList = (options) => {
     result.push({
       id: Mock.mock('@id()'),
       businessDay: Mock.mock('@date'),
-      events: Mock.mock('@cword(3, 5)'),
-      eventType: Mock.mock('@integer(1, 3)'),
-      status: Mock.mock('@integer(0, 1)'),
-      operator: Mock.mock('@cname()'),
-      abnormalTime: Mock.mock('@datetime'),
+      title: Mock.mock('@cword(3, 5)'),
+      msgContent: Mock.mock('@cword(3, 5)'),
+      type: Mock.mock('@integer(0, 2)'),
+      isOper: Mock.mock('@integer(0, 1)'),
+      operUser: Mock.mock('@cname()'),
+      createTime: Mock.mock('@datetime'),
       updatedAt: Mock.mock('@datetime'),
     })
   }
@@ -216,9 +283,12 @@ const handleException = (options) => {
   return builder({}, '成功')
 }
 
-Mock.mock(/\/common\/reports\/enterprise/, 'get', getEnterpriseReportList)
-Mock.mock(/\/common\/reports\/hotel/, 'get', getHotelReportList)
-Mock.mock(/\/common\/reports\/mine/, 'get', getMineReportList)
-Mock.mock(/\/common\/reports\/equips/, 'get', getEquipsReportList)
-Mock.mock(/\/common\/reports\/exception/, 'get', getExceptionReportList)
-Mock.mock(/\/common\/reports\/handleException/, 'post', handleException)
+Mock.mock(/\/table\/getAgentDetails/, 'get', getEnterpriseReportList)
+Mock.mock(/\/table\/getAgentTotal/, 'get', getEnterpriseReportStatistic)
+Mock.mock(/\/table\/getHotelDetails/, 'get', getHotelReportList)
+Mock.mock(/\/table\/getHotelTotal/, 'get', getHotelReportStatistic)
+Mock.mock(/\/table\/reports\/mine/, 'get', getMineReportList)
+Mock.mock(/\/table\/getDeviceDetails/, 'get', getEquipsReportList)
+Mock.mock(/\/table\/getDeviceTotal/, 'get', getEquipsReportStatistic)
+Mock.mock(/\/table\/getExceptionList/, 'get', getExceptionReportList)
+Mock.mock(/\/table\/editException/, 'post', handleException)

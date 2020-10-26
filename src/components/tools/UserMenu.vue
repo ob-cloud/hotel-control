@@ -1,7 +1,7 @@
 <template>
   <div class="user-wrapper">
     <div class="content-box">
-      <bizz-conserve-select :value="hotelId" :dataSource="hotelList" :optionItemProp="{label: 'name'}" @select="onHotelSelect" placeholder="请选择酒店" />
+      <bizz-conserve-select :value="hotelId" :dataSource="hotelList" :optionItemProp="{label: 'hotelName'}" @select="onHotelSelect" placeholder="请选择酒店" />
       <notice-icon class="action" />
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">

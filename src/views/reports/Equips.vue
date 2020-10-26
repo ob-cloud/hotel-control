@@ -37,16 +37,16 @@
           <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
             <a-row :gutter="16">
               <a-col :span="6">
-                <a-statistic title="设备总数" :value="1128" style="margin-right: 50px"></a-statistic>
+                <a-statistic title="设备总数" :value="statistic.deviceTotal" style="margin-right: 50px"></a-statistic>
               </a-col>
               <a-col :span="6">
-                <a-statistic title="离线总数" :value="93"></a-statistic>
+                <a-statistic title="离线总数" :value="statistic.oboxLine + statistic.irLine"></a-statistic>
               </a-col>
               <a-col :span="6">
-                <a-statistic title="网关离线率" :value="18" style="margin-right: 50px"><template #suffix>%</template></a-statistic>
+                <a-statistic title="网关离线率" :value="statistic.oboxRate" style="margin-right: 50px"><template #suffix>%</template></a-statistic>
               </a-col>
               <a-col :span="6">
-                <a-statistic title="红外离线率" :value="28" style="margin-right: 50px"><template #suffix>%</template></a-statistic>
+                <a-statistic title="红外离线率" :value="statistic.irRate" style="margin-right: 50px"><template #suffix>%</template></a-statistic>
               </a-col>
             </a-row>
           </div>
@@ -60,11 +60,11 @@
 
 <script>
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
-import { getEquipsReportList } from '@/api/reports'
+import { getEquipsReportList, getEquipsReportStatistic } from '@/api/reports'
 const columns = [{
   title: '营业日',
   align:"center",
-  dataIndex: 'businessDay'
+  dataIndex: 'time'
 },{
   title: '酒店名字',
   align:"center",
@@ -72,7 +72,7 @@ const columns = [{
 },{
   title: '设备总数',
   align:"center",
-  dataIndex: 'deviceCount'
+  dataIndex: 'deviceTotal'
 },{
   title: '离线设备',
   align:"center",
@@ -80,11 +80,11 @@ const columns = [{
   children: [{
     title: '网关',
     align: 'center',
-    dataIndex: 'gatewayOfflineCount'
+    dataIndex: 'oboxline'
   }, {
     title: '红外',
     align: 'center',
-    dataIndex: 'infraredOfflineCount'
+    dataIndex: 'irLiner'
   }]
 },{
   title: '离线率',
@@ -93,14 +93,14 @@ const columns = [{
   children: [{
     title: '网关',
     align: 'center',
-    dataIndex: 'gatewayOfflineRate',
+    dataIndex: 'oboxRate',
     customRender (rate) {
       return rate ? `${rate}%` : ''
     }
   }, {
     title: '红外',
     align: 'center',
-    dataIndex: 'infraredOfflineRate',
+    dataIndex: 'irRate',
     customRender (rate) {
       return rate ? `${rate}%` : ''
     }
@@ -114,11 +114,20 @@ export default {
         pageNo: 1,
         pageSize: 10
       },
+      statistic: {},
       dataSource: [],
       columns: columns,
     }
   },
+  mounted () {
+    this.loadStatistic()
+  },
   methods: {
+    loadStatistic () {
+      getEquipsReportStatistic().then(res => {
+        if (this.$isAjaxSuccess(res.code)) this.statistic = res.result
+      })
+    },
     loadData (arg) {
       this.loadDataSource(arg)
     },
@@ -132,7 +141,7 @@ export default {
       this.loading = true
       getEquipsReportList(params).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.dataSource = res.result.records
+          this.dataSource = res.result.tableDeviceResponse
           this.ipagination.total = res.result.total || 0
         } else {
           this.$message.warning(res.message)

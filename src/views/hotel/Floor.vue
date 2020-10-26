@@ -61,8 +61,8 @@
 <script>
 import { getFloorList, delFloor } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
-
 import FloorModal from './modules/FloorModal'
+import { mapGetters } from 'vuex'
 export default {
   components: { FloorModal },
   mixins: [ProListMixin],
@@ -88,7 +88,7 @@ export default {
       }, {
         title: '楼栋名称',
         align: 'center',
-        dataIndex: 'towerName',
+        dataIndex: 'buildName',
       }, {
         title: '楼层名称',
         align: 'center',
@@ -104,7 +104,7 @@ export default {
       }, {
         title: '创建人',
         align: 'center',
-        dataIndex: 'operator',
+        dataIndex: 'createBy',
       }, {
         title: '操作',
         dataIndex: 'action',
@@ -116,6 +116,9 @@ export default {
   },
   mounted () {
     this.calculateContentHeight()
+  },
+  computed: {
+    ...mapGetters(['hotelId'])
   },
   methods: {
     searchReset () {
@@ -130,7 +133,7 @@ export default {
         this.queryParam.pageNo = 1
       }
       this.loading = true
-      getFloorList(this.queryParam).then(res => {
+      getFloorList({...this.queryParam, hotelId: this.hotelId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataList = res.result.records
           this.total = res.result.total

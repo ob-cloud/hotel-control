@@ -36,13 +36,13 @@
           <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-statistic title="租金总额" :value="1128" style="margin-right: 50px"><template #suffix>RMB</template></a-statistic>
+                <a-statistic title="租金总额" :value="statistic.totalPrice" style="margin-right: 50px"><template #suffix>RMB</template></a-statistic>
               </a-col>
               <a-col :span="8">
-                <a-statistic title="使用率" :value="93"><template #suffix>%</template></a-statistic>
+                <a-statistic title="使用率" :value="statistic.utilizationRate"><template #suffix>%</template></a-statistic>
               </a-col>
               <a-col :span="6">
-                <a-statistic title="租金" :value="1128" style="margin-right: 50px"><template #suffix>RMB</template></a-statistic>
+                <a-statistic title="租金" :value="statistic.averPrice" style="margin-right: 50px"><template #suffix>RMB</template></a-statistic>
               </a-col>
               <!-- <a-col :span="8">
                 <a-statistic title="欠费总额" :value="93"><template #suffix>RMB</template></a-statistic>
@@ -59,29 +59,29 @@
 
 <script>
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
-import { getHotelReportList } from '@/api/reports'
+import { getHotelReportList, getHotelReportStatistic } from '@/api/reports'
 const columns = [{
   title: '营业日',
   align:"center",
-  dataIndex: 'businessDay'
+  dataIndex: 'time'
 },{
   title: '房间总数',
   align:"center",
-  dataIndex: 'roomAccount'
+  dataIndex: 'totalBuilding'
 },{
   title: '在用数',
   align:"center",
-  dataIndex: 'usageAccount'
+  dataIndex: 'totalUseRoom'
 },{
   title: '在用使用率',
   align:"center",
-  dataIndex: 'usageRate'
+  dataIndex: 'utilizationRate'
 },{
   title: '租金',
   align:"center",
   sorter: true,
   sortOrder: 'descend',
-  dataIndex: 'rent'
+  dataIndex: 'price'
 }]
 export default {
   mixins: [ ProListMixin ],
@@ -91,11 +91,20 @@ export default {
         pageNo: 1,
         pageSize: 10
       },
+      statistic: {},
       dataSource: [],
       columns: columns,
     }
   },
+  mounted () {
+    this.loadStatistic()
+  },
   methods: {
+    loadStatistic () {
+      getHotelReportStatistic().then(res => {
+        if (this.$isAjaxSuccess(res.code)) this.statistic = res.result
+      })
+    },
     loadData (arg) {
       this.loadDataSource(arg)
     },

@@ -3,14 +3,14 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="楼栋">
-          <a-select placeholder="请选择楼栋" v-decorator="[ 'buildingId', validatorRules.buildingId]">
+          <a-select placeholder="请选择楼栋" v-decorator="[ 'buildId', validatorRules.buildingId]">
             <a-select-option v-for="item in buildingList" :key="item.id" :value="item.id">
-              {{ item.buildName }}
+              {{ item.name }}
             </a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="楼层">
-          <a-input placeholder="请输入楼层" v-decorator="[ 'floorName', validatorRules.floorName]" />
+          <a-input placeholder="请输入楼层" v-decorator="[ 'name', validatorRules.floorName]" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -19,7 +19,7 @@
 
 <script>
 import pick from 'lodash.pick'
-import { getSelectBuildingList, addFloor, editFloor } from '@/api/hotel'
+import { getBuildingListWithoutPage, addFloor, editFloor } from '@/api/hotel'
 export default {
   data () {
     return {
@@ -46,9 +46,9 @@ export default {
   },
   methods: {
     getBuildingList () {
-      getSelectBuildingList().then(res => {
+      getBuildingListWithoutPage(this.$store.getters.hotelId).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.buildingList = res.result.records
+          this.buildingList = res.result
         }
       })
     },
@@ -61,7 +61,7 @@ export default {
       this.getBuildingList()
       this.visible = true
       this.$nextTick(() => {
-        this.form.setFieldsValue(pick(this.model, 'buildingId', 'floorName'))
+        this.form.setFieldsValue(pick(this.model, 'buildId', 'name'))
       })
     },
     // 确定

@@ -11,7 +11,7 @@
     :destroyOnClose="true"
     :bodyStyle="{height: 'calc(100% - 60px)'}"
   >
-    <air-condition></air-condition>
+    <air-condition @change="handleChange"></air-condition>
   </a-drawer>
 </template>
 
@@ -70,6 +70,9 @@ export default {
     },
     handleOk () {
     },
+    handleChange (status) {
+      console.log('-=-=-=-= ', status)
+    }
   },
 }
 </script>

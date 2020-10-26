@@ -2,11 +2,27 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-20 14:26:24
+ * @Last Modified time: 2020-10-26 17:47:20
  */
 
 // import {request} from '@/common/request'
-import { getAction, postFormAction, deleteAction, postAction } from '@/utils/ajax'
+import { getAction, postFormAction, deleteAction, postAction, putAction } from '@/utils/ajax'
+
+// hotel device
+const getHotelDeviceList = ({hotelId, oboxSerialId, deviceName = undefined, pageNo, pageSize}) => getAction('/device/getDevice', {hotelId, oboxSerialId, deviceName, pageNo, pageSize})
+const delHotelDevice = (deviceSerialId) => deleteAction('/device/delDevice', {deviceSerialId})
+const scanHotelDevice = ({hotelId, oboxSerialId, isElectric = undefined}) => getAction('/device/getDevice', {hotelId, serialId: oboxSerialId, isElectric})
+const editHotelDevice = (deviceSerialId, deviceName) => putAction('/device/reDeviceName', {deviceSerialId, deviceName})
+const stopHotelDevice = (deviceSerialId, isStop) => postAction('/device/stopDevice', {deviceSerialId, isStop})
+
+// hotel infrared
+const getHotelIrList = ({hotelId, serialId, state, deviceName, pageNo, pageSize}) => getAction('/device/getHotelIr', {hotelId, serialId, state, deviceName, pageNo, pageSize})
+const editHotelIr = (serialId, deviceName) => postAction('/device/editIr', {serialId, deviceName})
+const controlHotelIrDevice = ({hotelId, serialId, indexOsm, key}) => postAction('/device/wifi/controlIr', {hotelId, serialId, indexOsm, key})
+
+// hotel obox
+const getHotelOboxList = ({hotelId, serialId, state, oboxName, pageNo, pageSize}) => getAction('/device/getHotelObox', {hotelId, serialId, state, oboxName, pageNo, pageSize})
+const editHotelObox = (serialId, oboxName) => postAction('/device/editIr', {serialId, oboxName})
 
 // device
 const getDeviceList = (params) => getAction('/common', {
@@ -324,6 +340,20 @@ const stopInfrared = (id) => postAction(`/common/stopInfrared`, { id })
 
 export {
   // 设备
+  getHotelDeviceList,
+  delHotelDevice,
+  scanHotelDevice,
+  editHotelDevice,
+  stopHotelDevice,
+
+  // 红外
+  getHotelIrList,
+  editHotelIr,
+  controlHotelIrDevice,
+
+  getHotelOboxList,
+  editHotelObox,
+
   getDeviceList,
   getAllBuildingDeviceList,
   delDevice,

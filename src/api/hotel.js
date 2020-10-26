@@ -2,30 +2,30 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-22 17:53:06
+ * @Last Modified time: 2020-10-26 17:57:07
  */
 
-import { getAction, postFormAction, postAction, deleteAction } from '@/utils/ajax'
+import { getAction, postFormAction, postAction, deleteAction, putAction } from '@/utils/ajax'
 
 // 酒店
 const getHotelList = (params) => getAction('/sys/hotel/listHotel', { ...params })
 const getHotelListAll = () => getAction('/sys/hotel/listAllHotel')
-const editHotel = () => postAction('/sys/hotel/editHotel', {})
-const addHotel = () => postAction('/sys/hotel/addHotel', {})
+const editHotel = ({address, companyId, hotelName, id, saleManId, telephone, description}) => putAction('/sys/hotel/editHotel', {address, companyId, hotelName, id, saleManId, telephone, description})
+const addHotel = ({address, companyId, hotelName, saleManId, telephone, description}) => postAction('/sys/hotel/addHotel', {address, companyId, hotelName, saleManId, telephone, description})
 const delHotel = (ids) => deleteAction('/sys/hotel/deleteBatchHotel', {ids})
 const getUserListByHotel = (params) => getAction('/common/getHotelUserList', params)
 const bindHotelUser = (hotelId, userId) => postAction('/common/bindHotelUser', { hotelId, userId })
 const unbindHotelUser = (hotelId, userId) => postAction('/common/unbindHotelUser', { hotelId, userId })
 const getHotelSetting = (hotelId) => getAction('/sys/hotel/listHotelSetting', {hotelId})
 const addHotelSetting = (params) => postAction('/sys/hotel/addOrUpdateHotelSetting', params)
-const editHotelSetting = (params) => postAction('/sys/hotel/addOrUpdateHotelSetting', params)
+const editHotelSetting = (params) => putAction('/sys/hotel/addOrUpdateHotelSetting', params)
 
 // 企业
 const getCompanyList = (params) => getAction('/sys/hotel/listCompany', params)
 const getCompanyListAll = () => getAction('/sys/hotel/listAllCompany')
-const editCompany = (params) => postAction('/sys/hotel/editCompany', params)
+const editCompany = (params) => putAction('/sys/hotel/editCompany', params)
 const addCompany = (params) => postAction('/sys/hotel/addCompany', params)
-const delCompany = (params) => postAction('/sys/hotel/deleteBatchCompany', params)
+const delCompany = (ids) => deleteAction('/sys/hotel/deleteBatchCompany', {ids})
 
 // 房间
 const getRoomDeviceList = (params) => getAction('/common/room/devices', {
@@ -69,14 +69,12 @@ const triggerAllPower = (deviceType) => getAction('/common', {
 })
 
 // 楼栋
-const getBuildingList = ({hotelId, name, pageNo, pageSize}) => getAction('/sys/hotel/listTower', {hotelId, name, pageNo, pageSize})
-const getSelectBuildingList = () => getAction('/common', {
-  CMD: 'get_select_building'
-})
+const getBuildingList = ({hotelId, name, pageNo, pageSize}) => getAction('/sys/hotel/listBuilding', {hotelId, name, pageNo, pageSize})
+const getBuildingListWithoutPage = (hotelId) => getAction('/sys/hotel/listAllBuilding', {hotelId})
 
-const addBuilding = ({hotelId, name}) => postAction('/sys/hotel/addOrUpdateTower', {hotelId, name})
-const editBuilding = ({hotelId, name, id}) => postAction('/sys/hotel/addOrUpdateTower', {hotelId, name, id})
-const delBuilding = (id) => deleteAction('/common', {id})
+const addBuilding = ({hotelId, name}) => postAction('/sys/hotel/addOrUpdateBuild', {hotelId, name})
+const editBuilding = ({hotelId, name, id}) => postAction('/sys/hotel/addOrUpdateBuild', {hotelId, name, id})
+const delBuilding = (ids) => deleteAction('/sys/hotel/deleteBatchBuild', {ids})
 
 // floor
 const getFloorList = ({hotelId, name, floorName, pageNo, pageSize}) => getAction('/sys/hotel/listFloor', {hotelId, name, floorName, pageNo, pageSize})
@@ -86,12 +84,9 @@ const getFloorByBuildingId = (buildingId) => getAction('/common', {
     buildingId
   })
 })
-const addFloor = ({hotelId, name, pid}) => postFormAction('/sys/hotel/addOrUpdateFloor', {hotelId, name, pid})
-const editFloor = ({hotelId, name, pid, id}) => postFormAction('/sys/hotel/addOrUpdateFloor', {hotelId, name, pid, id})
-const delFloor = (id) => postFormAction('/common', {
-  CMD: 'delete_floor',
-  floor: JSON.stringify({id})
-})
+const addFloor = ({hotelId, name, buildId}) => postAction('/sys/hotel/addOrUpdateFloor', {hotelId, name, buildId})
+const editFloor = ({name, buildId, id}) => postAction('/sys/hotel/addOrUpdateFloor', {name, buildId, id})
+const delFloor = (ids) => deleteAction('/sys/hotel/deleteBatchFloor', {ids})
 
 export {
   getHotelList,
@@ -135,7 +130,7 @@ export {
   triggerAllPower,
 
   getBuildingList,
-  getSelectBuildingList,
+  getBuildingListWithoutPage,
   addBuilding,
   editBuilding,
   delBuilding,

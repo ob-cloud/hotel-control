@@ -53,7 +53,8 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           that.confirmLoading = true
-          let formData = Object.assign(this.model, values)
+          let formData = Object.assign({}, values)
+          if (this.model.id) formData.id = this.model.id
           console.log(formData)
           let obj = !this.model.id ? addCompany(formData) : editCompany(formData)
           obj.then((res) => {

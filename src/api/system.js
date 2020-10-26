@@ -21,6 +21,7 @@ const editUser = (params) => putAction('/sys/user/edit', params)
 const queryUserRole = (params) => getAction('/sys/user/queryUserRole', params)
 const getUserList = (params) => getAction('/sys/user/list', params)
 const getUserListUnPage = (params) => getAction('/sys/user/listAll', params)
+const getUserListByType = (type) => getAction('/sys/user/listByType', {type})
 // 批量冻结用户
 const frozenBatch = (params) => putAction('/sys/user/frozenBatch', params)
 // 修改系统用户密码
@@ -127,6 +128,7 @@ export {
   queryUserRole,
   getUserList,
   getUserListUnPage,
+  getUserListByType,
   frozenBatch,
   getUserPermissionList,
   changePassword,
