@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-27 16:13:32
+ * @Last Modified time: 2020-10-27 17:07:01
  */
 
 import { getAction, postFormAction, postAction, deleteAction, putAction } from '@/utils/ajax'
@@ -78,7 +78,7 @@ const editBuilding = ({hotelId, name, id}) => postAction('/sys/hotel/addOrUpdate
 const delBuilding = (ids) => deleteAction('/sys/hotel/deleteBatchBuild', {ids})
 
 // floor
-const getFloorList = ({hotelId, name, floorName, pageNo, pageSize}) => getAction('/sys/hotel/listFloor', {hotelId, name, floorName, pageNo, pageSize})
+const getFloorList = ({hotelId, buildName, floorName, pageNo, pageSize}) => getAction('/sys/hotel/listFloor', {hotelId, buildName, floorName, pageNo, pageSize})
 const getFloorByBuildingId = (buildId) => getAction('/sys/hotel/listAllFloor', {buildId})
 const addFloor = ({hotelId, name, buildId}) => postAction('/sys/hotel/addOrUpdateFloor', {hotelId, name, buildId})
 const editFloor = ({name, buildId, id}) => postAction('/sys/hotel/addOrUpdateFloor', {name, buildId, id})

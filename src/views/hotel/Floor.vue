@@ -3,7 +3,7 @@
     <a-card>
       <div slot="title" class="search-bar">
         <div class="caption">
-          <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.name" placeholder="请输入楼栋名称"></a-input>
+          <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.buildName" placeholder="请输入楼栋名称"></a-input>
           <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.floorName" placeholder="请输入楼层名称"></a-input>
           <a-button type="primary" @click="handleSearch" icon="search">查询</a-button>
           <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
@@ -12,7 +12,7 @@
       <div slot="extra">
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
-          <a-button v-isPermitted="'room:floor:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
+          <a-button type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
         </a-button-group>
       </div>
       <a-table
@@ -28,6 +28,8 @@
       >
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
+          <a-divider type="vertical" />
+          <a @click="handleAction(record)">添加房间</a>
           <a-divider type="vertical" />
           <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(record.id)">
             <a>删除</a>
@@ -54,6 +56,7 @@
         <a-pagination style="position: fixed; right: 70px; bottom: 30px;" simple :current="queryParam.pageNo" :pageSize.sync="queryParam.pageSize" :total="total" @change="handlePageChange" />
       </div> -->
       <floor-modal ref="modalForm" @ok="modalFormOk"></floor-modal>
+      <room-modal :readonly="true" ref="roomForm" @ok="modalFormOk"></room-modal>
     </a-card>
   </div>
 </template>
@@ -62,9 +65,10 @@
 import { getFloorList, delFloor } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import FloorModal from './modules/FloorModal'
+import RoomModal from './modules/RoomModal'
 import { mapGetters } from 'vuex'
 export default {
-  components: { FloorModal },
+  components: { FloorModal, RoomModal },
   mixins: [ProListMixin],
   data () {
     return {
@@ -101,11 +105,13 @@ export default {
         title: '创建时间',
         align: 'center',
         dataIndex: 'createTime',
-      }, {
-        title: '创建人',
-        align: 'center',
-        dataIndex: 'createBy',
-      }, {
+      },
+      // {
+      //   title: '创建人',
+      //   align: 'center',
+      //   dataIndex: 'createBy',
+      // },
+      {
         title: '操作',
         dataIndex: 'action',
         scopedSlots: { customRender: 'action' },
@@ -158,6 +164,9 @@ export default {
       this.queryParam.pageNo = pageNo
       this.queryParam.pageSize = pageSize
       this.loadData()
+    },
+    handleAction (record) {
+      this.$refs.roomForm.edit({buildId: record.buildId, floorId: record.id})
     }
   },
 }

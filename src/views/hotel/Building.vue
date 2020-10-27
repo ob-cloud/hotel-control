@@ -11,7 +11,7 @@
       <div slot="extra">
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
-          <a-button v-isPermitted="'room:building:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
+          <a-button type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
         </a-button-group>
       </div>
       <a-table
@@ -27,6 +27,8 @@
       >
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
+          <a-divider type="vertical" />
+          <a @click="handleAction(record)">添加楼层</a>
           <a-divider type="vertical" />
           <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(record.id)">
             <a>删除</a>
@@ -53,6 +55,7 @@
         <a-pagination style="position: fixed; right: 70px; bottom: 30px;" simple :current="queryParam.pageNo" :pageSize.sync="queryParam.pageSize" :total="total" @change="handlePageChange" />
       </div> -->
       <building-modal ref="modalForm" @ok="modalFormOk"></building-modal>
+      <floor-modal :readonly="true" ref="floorForm" @ok="modalFormOk"></floor-modal>
     </a-card>
   </div>
 </template>
@@ -61,9 +64,10 @@
 import { getBuildingList, delBuilding } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import BuildingModal from './modules/BuildingModal'
+import FloorModal from './modules/FloorModal'
 import { mapGetters } from 'vuex'
 export default {
-  components: { BuildingModal },
+  components: { BuildingModal, FloorModal },
   mixins: [ProListMixin],
   computed: {
     ...mapGetters(['hotelId'])
@@ -99,11 +103,13 @@ export default {
         title: '创建时间',
         align: 'center',
         dataIndex: 'createTime',
-      }, {
-        title: '创建人',
-        align: 'center',
-        dataIndex: 'createBy',
-      }, {
+      },
+      // {
+      //   title: '创建人',
+      //   align: 'center',
+      //   dataIndex: 'createBy',
+      // },
+      {
         title: '操作',
         dataIndex: 'action',
         scopedSlots: { customRender: 'action' },
@@ -153,6 +159,9 @@ export default {
       this.queryParam.pageNo = pageNo
       this.queryParam.pageSize = pageSize
       this.loadData()
+    },
+    handleAction (record) {
+      this.$refs.floorForm.edit({buildId: record.id})
     }
   },
 }

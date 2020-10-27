@@ -123,7 +123,7 @@
             this.$emit('ok', userId)
             this.$message.success('绑定成功')
           }else this.$message.error(res.message)
-        }).finally(() => this.handleCancel())
+        }).catch(this.$message.error('服务异常')).finally(() => {this.loading = false; this.handleCancel()})
       }
     }
   }

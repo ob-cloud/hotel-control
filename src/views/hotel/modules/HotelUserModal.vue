@@ -124,11 +124,10 @@
         this.loading = true
         unbindHotelUser(this.hotelId, userId).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
-            this.loading = false
             this.getUserList()
             this.$message.success('解绑成功')
           }else this.$message.error(res.message)
-        })
+        }).catch(this.$message.error('服务异常')).finally(() => this.loading = false)
       },
       handleUnbindBatch () {}
     }

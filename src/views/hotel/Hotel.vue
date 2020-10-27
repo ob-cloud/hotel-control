@@ -87,7 +87,7 @@
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a @click="handleDetail(record)">查看详情</a>
+                <a @click="handleDetail({...record, detail: true})">查看详情</a>
               </a-menu-item>
               <a-menu-item>
                 <a @click="handleAccount(record)">绑定账户</a>

@@ -3,14 +3,14 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="楼栋">
-          <a-select placeholder="请选择楼栋" v-decorator="[ 'buildId', validatorRules.buildId]" @change="handleBuildingChange">
+          <a-select placeholder="请选择楼栋" v-decorator="[ 'buildId', validatorRules.buildId]" @change="handleBuildingChange" :disabled="readonly">
             <a-select-option v-for="item in buildingList" :key="item.id" :value="item.id">
               {{ item.name }}
             </a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="楼层">
-          <a-select placeholder="请选择楼层" v-decorator="[ 'floorId', validatorRules.floorId]">
+          <a-select placeholder="请选择楼层" v-decorator="[ 'floorId', validatorRules.floorId]" :disabled="readonly">
             <a-select-option v-for="item in layerList" :key="item.id" :value="item.id">
               {{ item.name }}
             </a-select-option>
@@ -29,6 +29,12 @@
 import pick from 'lodash.pick'
 import { getBuildingListWithoutPage, getFloorByBuildingId, addRoom, editRoom } from '@/api/hotel'
 export default {
+  props: {
+    readonly: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       title: '操作',

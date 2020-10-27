@@ -23,7 +23,7 @@
       <a-form :form="form">
 
         <a-form-item label="酒店名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入酒店名称" v-decorator="[ 'hotelName', validatorRules.name]" :readOnly="!!model.id" />
+          <a-input placeholder="请输入酒店名称" v-decorator="[ 'hotelName', { rules: [{required: true, message: '酒店名称不能为空!'}]}]" :readOnly="!!model.id" />
         </a-form-item>
 
         <a-form-item label="所属公司" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -41,15 +41,15 @@
         </a-form-item>
 
         <a-form-item label="联系人" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入联系人" :disabled="disableSubmit" v-decorator="[ 'contact', validatorRules.normal]" />
+          <a-input placeholder="请输入联系人" :disabled="disableSubmit" v-decorator="[ 'contact', { initialValue: '', rules: [{required: true, message: '联系人不能为空!'}]}]" />
         </a-form-item>
 
         <a-form-item label="联系方式" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入联系方式" :disabled="disableSubmit" v-decorator="[ 'contactPhone', validatorRules.normal]" />
+          <a-input placeholder="请输入联系方式" :disabled="disableSubmit" v-decorator="[ 'contactPhone', validatorRules.phone]" />
         </a-form-item>
 
         <a-form-item label="前台电话" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入前台电话" :disabled="disableSubmit" v-decorator="[ 'telephone', validatorRules.normal]" />
+          <a-input placeholder="请输入前台电话" :disabled="disableSubmit" v-decorator="[ 'telephone', validatorRules.mobile]" />
         </a-form-item>
 
         <a-form-item label="业务员" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -57,7 +57,7 @@
             style="width: 100%"
             placeholder="请选择绑定业务员"
             optionFilterProp="children"
-            v-decorator="[ 'saleManId', validatorRules.normal]"
+            v-decorator="[ 'saleManId', { initialValue: undefined, rules: [{required: true, message: '业务员不能为空!'}]}]"
             v-model="selectedUser"
             :disabled="disableSubmit"
           >
@@ -68,7 +68,7 @@
         </a-form-item>
 
         <a-form-item label="公司地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入公司地址" v-decorator="[ 'address', validatorRules.normal ]" :disabled="disableSubmit" />
+          <a-input placeholder="请输入公司地址" v-decorator="[ 'address', { initialValue: '', rules: [{required: true, message: '公司地址不能为空!'}]} ]" :disabled="disableSubmit" />
         </a-form-item>
 
         <!-- <a-form-item label="是否连锁" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -79,12 +79,13 @@
         </a-form-item> -->
       </a-form>
 
-      <a-form v-if="showMoreDetail">
+      <a-form :form="setForm" v-if="showMoreDetail">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="营业时间">
           <a-range-picker
             :disabled="disableSubmit"
-            v-decorator="[ 'operTime', {rules: [{ required: true, message: '请选择营业时间!' }]} ]"
+            v-decorator="[ 'operTime', {} ]"
             format="h:mm"
+            valueFormat="h:mm"
             :showTime="true"
             :mode="['time', 'time']"
             :placeholder="['开始时间', '结束时间']"
@@ -94,15 +95,16 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="签约时间">
           <a-range-picker
             :disabled="disableSubmit"
-            v-decorator="[ 'signTime', {rules: [{ required: true, message: '请选择签约时间!' }]} ]"
+            v-decorator="[ 'signTime', {} ]"
             format="YYYY-MM-DD"
+            valueFormat="YYYY-MM-DD"
             :placeholder="['入驻时间', '失效时间']"
           />
         </a-form-item>
 
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="收费设置">
-          超过 <a-input-number :disabled="disableSubmit" v-decorator="[ 'fee.charge', {rules: [{ required: true, message: '请填写收费时间!' }]}]" controls-position="right" :min="1"></a-input-number> 小时，收取租金
-          <a-input-number :disabled="disableSubmit" v-decorator="[ 'rent', {rules: [{ required: true, message: '请填写租金!' }]} ]" controls-position="right" :min="1"></a-input-number> 元
+          超过 <a-input-number :disabled="disableSubmit" v-decorator="[ 'fee.overTime', {initialValue: ''}]" controls-position="right" :min="1"></a-input-number> 小时，收取租金
+          <a-input-number :disabled="disableSubmit" v-decorator="[ 'fee.price', {initialValue: ''} ]" controls-position="right" :min="1"></a-input-number> 元
         </a-form-item>
       </a-form>
     </a-spin>
@@ -118,9 +120,8 @@
 
 <script>
   import pick from 'lodash.pick'
-  import { addHotel, editHotel, getCompanyListAll } from '@/api/hotel'
+  import { addHotel, editHotel, getCompanyListAll, getHotelSetting } from '@/api/hotel'
   import { getUserListByType } from '@/api/system'
-
   export default {
     name: 'HotelModal',
     components: {
@@ -134,14 +135,9 @@
         hotelId: '', //保存酒店id
         disableSubmit: false,
         validatorRules: {
-          name: {
-            rules: [{
-              required: true, message: '请输入酒店名称!'
-            }]
-          },
           normal: { rules: [{required: true, message: '不能为空!'}]},
-          realname: {rules: [{ required: true, message: '请输入用户名称!' }]},
-          phone: {rules: [{validator: this.validatePhone}]}
+          phone: {rules: [{required: true, message: '手机号码不能为空!'}, {validator: this.validatePhone}]},
+          mobile: {rules: [{required: true, message: '电话号码不能空!'}, {validator: this.validateMobile}]}
         },
         title: '操作',
         visible: false,
@@ -159,6 +155,7 @@
         },
         confirmLoading: false,
         form: this.$form.createForm(this),
+        setForm: this.$form.createForm(this)
       }
     },
     computed: {
@@ -208,6 +205,7 @@
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'hotelName', 'companyId', 'contact', 'contactPhone', 'telephone', 'salemanId', 'address'))
         })
+        if (record.detail) this.initHotelSetting()
       },
       close () {
         this.$emit('close')
@@ -256,6 +254,17 @@
           }
         }
       },
+      validateMobile (rule, value, callback) {
+        if (!value) {
+          callback()
+        } else {
+          if (new RegExp(/^([0-9]{3,4}-)?[0-9]{7,8}$/).test(value)) {
+            callback()
+          } else {
+            callback('请输入正确格式的电话号码!')
+          }
+        }
+      },
       handleConfirmBlur (e) {
         const value = e.target.value
         this.confirmDirty = this.confirmDirty || !!value
@@ -265,6 +274,19 @@
       resetScreenSize() {
         let screenWidth = document.body.clientWidth
         this.drawerWidth = screenWidth < 500 ? screenWidth : 700
+      },
+      initHotelSetting () {
+        getHotelSetting(this.$store.getters.hotelId).then(res => {
+          if(this.$isAjaxSuccess(res.code)) {
+            const model = Object.assign({}, res.result || {})
+            this.$nextTick(() => {
+              const signTime = [model.checkTime, model.exitTime]
+              const operTime = [model.startTime, model.endTime]
+              const fee = {overTime: model.overTime, price: model.price}
+              this.setForm.setFieldsValue({signTime, operTime, fee})
+            })
+          }
+        })
       },
     }
   }

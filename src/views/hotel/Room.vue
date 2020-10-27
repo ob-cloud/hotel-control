@@ -18,30 +18,33 @@
       </div>
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
         <a-spin :spinning="loading">
-          <div class="block-item" :class="{'active': item.lightState}" v-for="item in roomList" :key="item.id">
-            <div class="toolbar left" v-if="item.temperature">
-              <span title="温度"><i class="obicon obicon-temperature" style="color: #f66c32;"></i>{{ item.temperature }}℃</span>
+          <template v-if="roomList.length">
+            <div class="block-item" :class="{'active': item.lightState}" v-for="item in roomList" :key="item.id">
+              <div class="toolbar left" v-if="item.temperature">
+                <span title="温度"><i class="obicon obicon-temperature" style="color: #f66c32;"></i>{{ item.temperature }}℃</span>
+              </div>
+              <div class="toolbar">
+                <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
+                <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i> -->
+                <a-popconfirm :title="`${item.elec ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleLamp(item, e)">
+                  <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" title="插卡取电"></i>
+                </a-popconfirm>
+                <a-icon class="icon" type="edit" title="编辑" @click="(e) => { e.stopPropagation(); handleEdit(item) }" />
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
+                  <a-icon class="icon" type="delete" @click="(e) => e.stopPropagation()" />
+                </a-popconfirm>
+              </div>
+              <div class="content">
+                <i class="building-sign obicon obicon-room-o"></i>
+                <p class="text" @click="handleDetail(item)">
+                  {{ item.buildName }}{{ item.floorName }}{{ item.name }}
+                </p>
+              </div>
             </div>
-            <div class="toolbar">
-              <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
-              <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i> -->
-              <a-popconfirm :title="`${item.elec ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleLamp(item, e)">
-                <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" title="插卡取电"></i>
-              </a-popconfirm>
-              <a-icon class="icon" type="edit" title="编辑" @click="(e) => { e.stopPropagation(); handleEdit(item) }" />
-              <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
-                <a-icon class="icon" type="delete" @click="(e) => e.stopPropagation()" />
-              </a-popconfirm>
-            </div>
-            <div class="content">
-              <i class="building-sign obicon obicon-room-o"></i>
-              <p class="text" @click="handleDetail(item)">
-                {{ item.buildName }}{{ item.floorName }}{{ item.name }}
-              </p>
-            </div>
-          </div>
+          </template>
+          <a-empty :image="simpleImage" v-else />
         </a-spin>
-        <a-pagination simple style="position: fixed; right: 70px; bottom: 30px;" :current="queryParam.pageNo" :pageSize.sync="queryParam.pageSize" :total="total" :showSizeChanger="true" @change="handlePageChange" />
+        <a-pagination v-if="roomList.length" simple style="position: fixed; right: 70px; bottom: 30px;" :current="queryParam.pageNo" :pageSize.sync="queryParam.pageSize" :total="total" :showSizeChanger="true" @change="handlePageChange" />
       </div>
       <room-modal ref="modalForm" @ok="modalFormOk"></room-modal>
       <room-detail-modal ref="detailModal"></room-detail-modal>
@@ -53,7 +56,7 @@
 <script>
 import { getRoomList, delRoom, handleLampPower } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
-
+import { Empty } from 'ant-design-vue'
 import RoomModal from './modules/RoomModal'
 import RoomDetailModal from './modules/RoomDetailModal'
 // import RoomOboxModal from './modules/RoomOboxModal'
@@ -72,6 +75,9 @@ export default {
       },
       total: 0
     }
+  },
+  beforeCreate() {
+    this.simpleImage = Empty.PRESENTED_IMAGE_SIMPLE
   },
   mounted () {
     this.calculateContentHeight()
