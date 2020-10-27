@@ -94,7 +94,8 @@
 <script>
   import GatewayModal from './modules/GatewayModal'
   import GatewayScanModal from './modules/GatewayScanModal'
-  import { getOboxList, delObox } from '@/api/device'
+  // import { getOboxList, delObox } from '@/api/device'
+  import { getHotelOboxList, delObox } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
   export default {
@@ -160,15 +161,14 @@
         params.pageNo = this.ipagination.current
         params.pageSize = this.ipagination.pageSize
         this.loading = true
-        getOboxList(params).then((res) => {
+        getHotelOboxList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             this.dataSource = res.result.records
             this.ipagination.total = res.result.total || 0
           } else {
             this.$message.warning(res.message)
           }
-          this.loading = false
-        })
+        }).finally(() => this.loading = false)
       },
       handleDelete (id) {
         delObox(id).then(res => {

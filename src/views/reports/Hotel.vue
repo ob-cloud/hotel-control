@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     loadStatistic () {
-      getHotelReportStatistic().then(res => {
+      getHotelReportStatistic(this.$store.getters.hotelId).then(res => {
         if (this.$isAjaxSuccess(res.code)) this.statistic = res.result
       })
     },
@@ -116,15 +116,14 @@ export default {
       params.pageNo = this.ipagination.current
       params.pageSize = this.ipagination.pageSize
       this.loading = true
-      getHotelReportList(params).then((res) => {
+      getHotelReportList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataSource = res.result.records
           this.ipagination.total = res.result.total || 0
         } else {
           this.$message.warning(res.message)
         }
-        this.loading = false
-      })
+      }).finally(() => this.loading = false)
     },
   },
 }

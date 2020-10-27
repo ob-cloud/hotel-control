@@ -13,30 +13,30 @@
       <div slot="extra">
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
-          <a-button v-isPermitted="'room:classroom:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
+          <a-button type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
         </a-button-group>
       </div>
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
         <a-spin :spinning="loading">
           <div class="block-item" :class="{'active': item.lightState}" v-for="item in roomList" :key="item.id">
-            <div class="toolbar left">
+            <div class="toolbar left" v-if="item.temperature">
               <span title="温度"><i class="obicon obicon-temperature" style="color: #f66c32;"></i>{{ item.temperature }}℃</span>
             </div>
             <div class="toolbar">
               <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
               <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i> -->
-              <a-popconfirm :title="`${item.lightState ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleLamp(item, e)">
-                <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" v-isPermitted="'room:classroom:lamp'" title="插卡取电"></i>
+              <a-popconfirm :title="`${item.elec ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleLamp(item, e)">
+                <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" title="插卡取电"></i>
               </a-popconfirm>
-              <a-icon v-isPermitted="'room:classroom:edit'" class="icon" type="edit" title="编辑" @click="(e) => { e.stopPropagation(); handleEdit(item) }" />
+              <a-icon class="icon" type="edit" title="编辑" @click="(e) => { e.stopPropagation(); handleEdit(item) }" />
               <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
-                <a-icon v-isPermitted="'room:classroom:delete'" class="icon" type="delete" @click="(e) => e.stopPropagation()" />
+                <a-icon class="icon" type="delete" @click="(e) => e.stopPropagation()" />
               </a-popconfirm>
             </div>
             <div class="content">
               <i class="building-sign obicon obicon-room-o"></i>
               <p class="text" @click="handleDetail(item)">
-                {{ item.buildingName }}栋{{ item.floorName }}层{{ item.roomName }}房
+                {{ item.buildName }}{{ item.floorName }}{{ item.name }}
               </p>
             </div>
           </div>
@@ -114,7 +114,7 @@ export default {
       e.stopPropagation()
       const params = {
         roomId: item.id,
-        deviceType: item.lightState ? 2 : 1
+        deviceType: item.elec ? 2 : 1
       }
       handleLampPower(params).then(res => {
         if (this.$isAjaxSuccess(res.code)) {

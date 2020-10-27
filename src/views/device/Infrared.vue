@@ -109,7 +109,8 @@
 <script>
   import InfraredModal from './modules/InfraredModal'
   import InfraredAirConditionModal from './modules/InfraredAirConditionModal'
-  import { getInfratedDeviceList, delInfratedDevice, stopInfrared } from '@/api/device'
+  // import { getInfratedDeviceList, delInfratedDevice, stopInfrared } from '@/api/device'
+  import { getHotelIrList, delInfratedDevice, stopInfrared } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { TypeHints } from 'hardware-suit'
 
@@ -183,15 +184,14 @@
         params.pageNo = this.ipagination.current
         params.pageSize = this.ipagination.pageSize
         this.loading = true
-        getInfratedDeviceList(params).then((res) => {
+        getHotelIrList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             this.dataSource = res.result.records
             this.ipagination.total = res.result.total || 0
           } else {
             this.$message.warning(res.message)
           }
-          this.loading = false
-        })
+        }).finally(() => this.loading = false)
       },
       handleControl (record) {
         this.$refs.airModal.show(record)

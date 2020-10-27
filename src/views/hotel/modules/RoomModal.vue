@@ -3,22 +3,22 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="楼栋">
-          <a-select placeholder="请选择楼栋" v-decorator="[ 'buildingId', validatorRules.buildingId]" @change="handleBuildingChange">
+          <a-select placeholder="请选择楼栋" v-decorator="[ 'buildId', validatorRules.buildId]" @change="handleBuildingChange">
             <a-select-option v-for="item in buildingList" :key="item.id" :value="item.id">
-              {{ item.buildName }}
+              {{ item.name }}
             </a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="楼层">
           <a-select placeholder="请选择楼层" v-decorator="[ 'floorId', validatorRules.floorId]">
             <a-select-option v-for="item in layerList" :key="item.id" :value="item.id">
-              {{ item.floorName }}
+              {{ item.name }}
             </a-select-option>
           </a-select>
         </a-form-item>
 
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="房间">
-          <a-input placeholder="请输入房间" v-decorator="[ 'roomName', validatorRules.roomName]" />
+          <a-input placeholder="请输入房间" v-decorator="[ 'name', validatorRules.roomName]" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -47,7 +47,7 @@ export default {
       confirmLoading: false,
       form: this.$form.createForm(this),
       validatorRules: {
-        buildingId: { rules: [{ required: true, message: '请选择楼栋!' }] },
+        buildId: { rules: [{ required: true, message: '请选择楼栋!' }] },
         floorId: { rules: [{ required: true, message: '请选择楼层!' }] },
         roomName: { rules: [{ required: true, message: '请输入房间!' }] },
       }
@@ -61,29 +61,29 @@ export default {
       this.form.resetFields()
       this.model = Object.assign({}, record)
       this.getBuildingList()
-      if (record.buildingId) this.getLayerList(record.buildingId)
+      if (record.buildId) this.getLayerList(record.buildId)
       this.visible = true
       this.$nextTick(() => {
-        this.form.setFieldsValue(pick(this.model, 'buildingId', 'floorId', 'roomName'))
+        this.form.setFieldsValue(pick(this.model, 'buildId', 'floorId', 'name'))
       })
     },
     getBuildingList () {
-      getBuildingListWithoutPage().then(res => {
+      getBuildingListWithoutPage(this.$store.getters.hotelId).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.buildingList = res.result.records
+          this.buildingList = res.result
         }
       })
     },
-    getLayerList (buildingId) {
-      getFloorByBuildingId(buildingId).then(res => {
+    getLayerList (buildId) {
+      getFloorByBuildingId(buildId).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.layerList = res.result.records
+          this.layerList = res.result
         }
       })
     },
-    handleBuildingChange (buildingId) {
+    handleBuildingChange (buildId) {
       this.form.setFieldsValue({'floorId': ''})
-      this.getLayerList(buildingId)
+      this.getLayerList(buildId)
     },
     // 确定
     handleOk () {

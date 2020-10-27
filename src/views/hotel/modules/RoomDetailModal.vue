@@ -9,17 +9,17 @@
     :visible="visible"
   >
     <a-page-header
-      :title="`${model.roomName}房`"
+      :title="`${model.name}房`"
       :breadcrumb="{ props: { routes } }"
-      :sub-title="`${model.buildingName}栋${model.floorName}层`"
+      :sub-title="`${model.buildName}栋${model.floorName}层`"
     />
     <a-descriptions style="padding: 10px 24px;">
-      <a-descriptions-item label="室内温度"><i class="obicon obicon-temperature" style="color: #fa8c16;"></i>{{ model.temperature }}℃</a-descriptions-item>
+      <a-descriptions-item label="室内温度"><i v-if="model.temperature" class="obicon obicon-temperature" style="color: #fa8c16;"></i>{{ model.temperature ? `${model.temperature}℃` : '--' }}</a-descriptions-item>
       <a-descriptions-item label="插卡取电">
-        <a-badge style="margin-left: 10px" :status="model.lightState ? 'processing' : 'default'" :text="`${model.lightState ? '取电中' : '未使用'}`" />
+        <a-badge style="margin-left: 10px" :status="model.elec ? 'processing' : 'default'" :text="`${model.elec ? '取电中' : '未使用'}`" />
       </a-descriptions-item>
       <a-descriptions-item label="在住状态">
-        <a-badge style="margin-left: 10px" :status="model.lightState ? 'success' : 'default'" :text="`${model.lightState ? '在住' : '空闲'}`" />
+        <a-badge style="margin-left: 10px" :status="model.elec ? 'success' : 'default'" :text="`${model.elec ? '在住' : '空闲'}`" />
       </a-descriptions-item>
     </a-descriptions>
 

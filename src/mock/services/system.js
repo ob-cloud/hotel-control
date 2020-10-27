@@ -610,5 +610,5 @@ const getAnnouncementList = (options) => {
   })
 }
 
-Mock.mock(/\/sys\/permission\/getUserPermission/, 'get', getUserPermission)
+// Mock.mock(/\/sys\/permission\/getUserPermission/, 'get', getUserPermission)
 Mock.mock(/\/sys\/announcement\/list/, 'get', getAnnouncementList)

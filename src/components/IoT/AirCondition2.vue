@@ -33,80 +33,71 @@
 <script>
 import { AirConditionEquip } from 'hardware-suit'
 export default {
+  props: {
+    airEquip: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data () {
     return {
       templure: 26,
       speed: 0,
       mode: 0,
       power: 0,
-      airConditionEquip: null
     }
   },
   computed: {
     isPowerOn () {
-      return this.airConditionEquip.isPowerOn()
+      return this.airEquip.isPowerOn()
     },
     tempValue () {
-      return this.airConditionEquip.getTemperatureText()
+      return this.airEquip.getTemperatureText()
     },
     speedValue () {
-      return this.airConditionEquip.getSpeedText()
+      return this.airEquip.getSpeedText()
     },
     modeValue () {
-      return this.airConditionEquip.getSpeedText()
+      return this.airEquip.getSpeedText()
     },
     isTempSettable () {
-      return this.airConditionEquip.isTemperatureValid()
+      return this.airEquip.isTemperatureValid()
     },
     isSpeedSettable () {
-      return this.airConditionEquip.isFanSpeedValid()
+      return this.airEquip.isFanSpeedValid()
     },
   },
   mounted () {
-    this.airConditionEquip = new AirConditionEquip()
+  },
+  beforeCreate () {
+    if (!Object.keys(this.airEquip).length) this.airEquip = new AirConditionEquip()
   },
   methods: {
     handlePower () {
-      // this.isPowerOn = !this.isPowerOn
-      // this.power = +this.isPowerOn
-      this.airConditionEquip.setPowerOn()
-      // { powerOnly: true, status: this.airConditionEquip.getPowerBytes() }
-      this.emitEvent()
+      this.airEquip.setPower(!this.airEquip.getPowerStatus())
+      // { powerOnly: true, status: this.airEquip.getPowerBytes() }
+      this.emitEvent({ powerOnly: true })
     },
     handleFan () {
       if (!this.isPowerOn) return
-      // this.speed += 1
-      // this.speed > 3 && (this.speed = 0)
-      this.airConditionEquip.setSpeed(this.airConditionEquip.getSpeedValue() + 1)
+      this.airEquip.setSpeed(this.airEquip.getSpeedValue() + 1)
       this.emitEvent()
     },
     handleMode () {
       if (!this.isPowerOn) return
-      // this.mode += 1
-      // this.mode > 4 && (this.mode = 0)
-      // if ([2, 3].includes(this.mode)) this.speed = 1
-      // this.templure = 26
-      const mode = this.airConditionEquip.getModeValue()
-      this.airConditionEquip.setMode(mode + 1)
+      const mode = this.airEquip.getModeValue()
+      this.airEquip.setMode(mode + 1)
       this.emitEvent()
     },
     hadnleTemp (val) {
       if (!this.isPowerOn) return
-      // this.templure += val
-      // this.templure < 16 && (this.templure += 1)
-      // this.templure > 30 && (this.templure -= 1)
-      const temperature = this.airConditionEquip.getTemperature()
-      this.airConditionEquip.setTemperature(temperature + val)
+      const temperature = this.airEquip.getTemperature()
+      this.airEquip.setTemperature(temperature + val)
       this.emitEvent()
     },
-    emitEvent (extra = { powerOnly: false }) {
-      const air = {
-        power: this.power,
-        speed: this.speed,
-        temperature: this.templure,
-        mode: this.mode
-      }
-      this.$emit('change', { ...air, ...extra})
+    emitEvent ({ powerOnly }) {
+      const status = powerOnly ? this.airEquip.getPowerBytes() : this.airEquip.getBytes()
+      this.$emit('change', status)
     }
   },
   destroyed () {

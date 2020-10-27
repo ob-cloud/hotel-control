@@ -129,15 +129,14 @@ export default {
       params.pageNo = this.ipagination.current
       params.pageSize = this.ipagination.pageSize
       this.loading = true
-      getExceptionReportList(params).then((res) => {
+      getExceptionReportList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataSource = res.result.records
           this.ipagination.total = res.result.total || 0
         } else {
           this.$message.warning(res.message)
         }
-        this.loading = false
-      })
+      }).finally(() => this.loading = false)
     },
     handleAction (record) {
       this.loading = true

@@ -30,8 +30,8 @@
 </template>
 
 <script>
-  import { bindHotelUser } from '@/api/hotel'
-  import { getUserList } from '@/api/system'
+  import { bindHotelUser, getUserPageByHotel } from '@/api/hotel'
+  // import { getUserList } from '@/api/system'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
   export default {
@@ -52,13 +52,13 @@
           {
             title: '用户名',
             align: 'center',
-            dataIndex: 'username',
+            dataIndex: 'realname',
             width: 120
           },
           {
             title: '账户名',
             align: 'center',
-            dataIndex: 'account',
+            dataIndex: 'username',
             width: 120
           },
           {
@@ -83,7 +83,7 @@
         params.pageNo = this.ipagination.current
         params.pageSize = this.ipagination.pageSize
         this.loading = true
-        getUserList(params).then((res) => {
+        getUserPageByHotel(params).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             this.dataSource = res.result.records
             this.ipagination.total = res.result.total || 0

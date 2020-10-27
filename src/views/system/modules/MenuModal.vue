@@ -71,7 +71,7 @@
 
           <a-form-item v-show="!show" :labelCol="labelCol" :wrapperCol="wrapperCol" label="状态">
             <!-- <dict-select-tag v-decorator="['status', {initialValue: ''}]" placeholder="请选择状态" :type="'radio'" :triggerChange="true" dictCode="valid_status" /> -->
-            <a-radio-group v-decorator="['status', {initialValue: ''}]">
+            <a-radio-group v-decorator="['status', {initialValue: '1'}]">
               <a-radio value="0">无效</a-radio>
               <a-radio value="1">有效</a-radio>
             </a-radio-group>
@@ -237,7 +237,7 @@
             this.model.keepAlive = this.isKeepalive
             this.model.internalOrExternal = this.internalOrExternal
             let formData = Object.assign(this.model, values)
-            // formData.children = null
+            formData.children = undefined
             if ((formData.menuType === 1 || formData.menuType === 2) && !formData.parentId) {
               this.validateStatus = 'error'
               this.$message.error('请检查你填的类型以及信息是否正确！')

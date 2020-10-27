@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-26 17:57:07
+ * @Last Modified time: 2020-10-27 16:13:32
  */
 
 import { getAction, postFormAction, postAction, deleteAction, putAction } from '@/utils/ajax'
@@ -10,15 +10,16 @@ import { getAction, postFormAction, postAction, deleteAction, putAction } from '
 // 酒店
 const getHotelList = (params) => getAction('/sys/hotel/listHotel', { ...params })
 const getHotelListAll = () => getAction('/sys/hotel/listAllHotel')
-const editHotel = ({address, companyId, hotelName, id, saleManId, telephone, description}) => putAction('/sys/hotel/editHotel', {address, companyId, hotelName, id, saleManId, telephone, description})
+const editHotel = ({address, companyId, hotelName, contact, contactPhone, id, saleManId, telephone, description}) => putAction('/sys/hotel/editHotel', {address, companyId, hotelName, id, saleManId, contact, contactPhone, telephone, description})
 const addHotel = ({address, companyId, hotelName, saleManId, telephone, description}) => postAction('/sys/hotel/addHotel', {address, companyId, hotelName, saleManId, telephone, description})
 const delHotel = (ids) => deleteAction('/sys/hotel/deleteBatchHotel', {ids})
-const getUserListByHotel = (params) => getAction('/common/getHotelUserList', params)
-const bindHotelUser = (hotelId, userId) => postAction('/common/bindHotelUser', { hotelId, userId })
-const unbindHotelUser = (hotelId, userId) => postAction('/common/unbindHotelUser', { hotelId, userId })
+const getUserListByHotel = () => getAction('/sys/user/listByType', {type: 1})
+const getUserPageByHotel = ({pageNo, pageSize, type = 1}) => getAction('/sys/user/pageByType', {pageNo, pageSize, type})
+const bindHotelUser = (hotelId, userIds) => postAction('/sys/hotel/bindHotel', { hotelId, userIds })
+const unbindHotelUser = (hotelId) => postAction('/sys/hotel/bindHotel', { hotelId })
 const getHotelSetting = (hotelId) => getAction('/sys/hotel/listHotelSetting', {hotelId})
-const addHotelSetting = (params) => postAction('/sys/hotel/addOrUpdateHotelSetting', params)
-const editHotelSetting = (params) => putAction('/sys/hotel/addOrUpdateHotelSetting', params)
+const addHotelSetting = ({checkTime, exitTime, hotelId, startTime, endTime, overTime, price}) => postAction('/sys/hotel/addOrUpdateHotelSetting', {checkTime, exitTime, hotelId, startTime, endTime, overTime, price})
+const editHotelSetting = ({id, checkTime, exitTime, hotelId, startTime, endTime, overTime, price}) => putAction('/sys/hotel/addOrUpdateHotelSetting', {id, checkTime, exitTime, hotelId, startTime, endTime, overTime, price})
 
 // 企业
 const getCompanyList = (params) => getAction('/sys/hotel/listCompany', params)
@@ -34,9 +35,9 @@ const getRoomDeviceList = (params) => getAction('/common/room/devices', {
 })
 
 const getRoomList = ({hotelId, name, floorName, roomName, pageNo, pageSize}) => getAction('/sys/hotel/listRoom', {hotelId, name, floorName, roomName, pageNo, pageSize})
-const addRoom = ({hotelId, name, pid}) => postFormAction('/sys/hotel/addOrUpdateRoom', {hotelId, name, pid})
-const editRoom = ({hotelId, name, pid, id}) => getAction('/sys/hotel/addOrUpdateRoom', {hotelId, name, pid, id})
-const delRoom = (id) => getAction('/sys/hotel/deleteRoom', {id})
+const addRoom = ({name, floorId}) => postAction('/sys/hotel/addOrUpdateRoom', {name, floorId})
+const editRoom = ({name, floorId, id}) => postAction('/sys/hotel/addOrUpdateRoom', {name, floorId, id})
+const delRoom = (id) => deleteAction('/sys/hotel/deleteRoom', {id})
 
 const getRoomGatewayList = ({id}) => getAction('/sys/hotel/listGatewayList', {id})
 const getRoomInfraredList = ({id}) => getAction('/sys/hotel/listInfraredList', {id})
@@ -78,12 +79,7 @@ const delBuilding = (ids) => deleteAction('/sys/hotel/deleteBatchBuild', {ids})
 
 // floor
 const getFloorList = ({hotelId, name, floorName, pageNo, pageSize}) => getAction('/sys/hotel/listFloor', {hotelId, name, floorName, pageNo, pageSize})
-const getFloorByBuildingId = (buildingId) => getAction('/common', {
-  CMD: 'get_building_floor',
-  floor: JSON.stringify({
-    buildingId
-  })
-})
+const getFloorByBuildingId = (buildId) => getAction('/sys/hotel/listAllFloor', {buildId})
 const addFloor = ({hotelId, name, buildId}) => postAction('/sys/hotel/addOrUpdateFloor', {hotelId, name, buildId})
 const editFloor = ({name, buildId, id}) => postAction('/sys/hotel/addOrUpdateFloor', {name, buildId, id})
 const delFloor = (ids) => deleteAction('/sys/hotel/deleteBatchFloor', {ids})
@@ -95,6 +91,7 @@ export {
   addHotel,
   delHotel,
   getUserListByHotel,
+  getUserPageByHotel,
   bindHotelUser,
   unbindHotelUser,
   getHotelSetting,

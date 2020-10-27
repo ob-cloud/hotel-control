@@ -130,7 +130,8 @@
   import KeypanelActionModal from './modules/KeyPanelActionModal'
   import HumidityActionModal from './modules/HumidityActionModal'
   import PowerSwitchModal from './modules/PowerSwitchModal'
-  import { getOboxDeviceList, getAllOboxList, delDevice, stopCardPower } from '@/api/device'
+  // import { getOboxDeviceList, getAllOboxList, delDevice, stopCardPower } from '@/api/device'
+  import { getHotelDeviceList, getAllOboxList, delDevice, stopCardPower } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { Descriptor, TypeHints, LedLampEquip } from 'hardware-suit'
 
@@ -228,7 +229,7 @@
         params.pageNo = this.ipagination.current
         params.pageSize = this.ipagination.pageSize
         this.loading = true
-        getOboxDeviceList(params).then((res) => {
+        getHotelDeviceList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             this.dataSource = res.result.records
             this.ipagination.total = res.result.total

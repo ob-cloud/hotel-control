@@ -62,13 +62,13 @@
             :disabled="disableSubmit"
           >
             <a-select-option v-for="(user, userIndex) in userList" :key="userIndex.toString()" :value="user.id">
-              {{ user.name }}
+              {{ user.realname }}
             </a-select-option>
           </a-select>
         </a-form-item>
 
         <a-form-item label="公司地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入公司地址" v-decorator="[ 'address', {} ]" :disabled="disableSubmit" />
+          <a-input placeholder="请输入公司地址" v-decorator="[ 'address', validatorRules.normal ]" :disabled="disableSubmit" />
         </a-form-item>
 
         <!-- <a-form-item label="是否连锁" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -173,9 +173,9 @@
         this.modaltoggleFlag = !this.modaltoggleFlag;
       },
       initialUserList () {
-        getUserListByType().then((res) => {
+        getUserListByType(0).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
-            this.userList = res.result.records
+            this.userList = res.result
           } else {
             console.log(res.message)
           }

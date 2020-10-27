@@ -27,7 +27,7 @@
       >
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
-          <a-divider v-isPermitted="'device:gateway:edit'" type="vertical" />
+          <a-divider type="vertical" />
           <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(record.id)">
             <a>删除</a>
           </a-popconfirm>

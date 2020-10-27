@@ -883,5 +883,5 @@ Mock.mock(/\/api\/user\/info/, 'get', info)
 Mock.mock(/\/api\/user\/nav/, 'get', userNav)
 Mock.mock(/\/api\/user\/queryPermissionList/, 'get', queryPermissionList)
 
-Mock.mock(/\/sys\/user\/listAll/, 'get', getUserList)
-Mock.mock(/\/sys\/user\/list/, 'get', getUserListPage)
+// Mock.mock(/\/sys\/user\/listAll/, 'get', getUserList)
+// Mock.mock(/\/sys\/user\/list/, 'get', getUserListPage)

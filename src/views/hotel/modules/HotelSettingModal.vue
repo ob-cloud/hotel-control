@@ -8,6 +8,7 @@
             format="h:mm"
             :showTime="true"
             :mode="['time', 'time']"
+            valueFormat="h:mm"
             :placeholder="['开始时间', '结束时间']"
           />
         </a-form-item>
@@ -15,14 +16,15 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="签约时间">
           <a-range-picker
             v-decorator="[ 'signTime', {rules: [{ required: true, message: '请选择签约时间!' }]} ]"
-            format="YYYY-MM-DD"
+            format="YYYY-MM-DD hh:mm:ss"
+            valueFormat="YYYY-MM-DD hh:mm:ss"
             :placeholder="['入驻时间', '失效时间']"
           />
         </a-form-item>
 
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="收费设置">
-          超过 <a-input-number v-decorator="[ 'fee.charge', {rules: [{ required: true, message: '请填写收费时间!' }]}]" controls-position="right" :min="1"></a-input-number> 小时，收取租金
-          <a-input-number v-decorator="[ 'rent', {rules: [{ required: true, message: '请填写租金!' }]} ]" controls-position="right" :min="1"></a-input-number> 元
+          超过 <a-input-number v-decorator="[ 'fee.overTime', {rules: [{ required: true, message: '请填写收费时间!' }]}]" controls-position="right" :min="1"></a-input-number> 小时，收取租金
+          <a-input-number v-decorator="[ 'fee.price', {rules: [{ required: true, message: '请填写租金!' }]} ]" controls-position="right" :min="1"></a-input-number> 元
         </a-form-item>
 
         <!-- <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="租金">
@@ -36,7 +38,6 @@
 </template>
 
 <script>
-import pick from 'lodash.pick'
 import moment from 'moment'
 import { getHotelSetting, addHotelSetting, editHotelSetting } from '@/api/hotel'
 export default {
@@ -77,9 +78,12 @@ export default {
     initHotelSetting () {
       getHotelSetting(this.hotelId).then(res => {
         if(this.$isAjaxSuccess(res.code)) {
-          this.model = Object.assign({}, res.result)
+          this.model = Object.assign({}, res.result || {})
           this.$nextTick(() => {
-            this.form.setFieldsValue(pick(this.model, 'operTime', 'charge', 'rent', 'signTime'))
+            const signTime = [this.model.checkTime, this.model.exitTime]
+            const operTime = [this.model.startTime, this.model.endTime]
+            const fee = {overTime: this.model.overTime, price: this.model.price}
+            this.form.setFieldsValue({signTime, operTime, fee})
           })
         }
       })
@@ -91,7 +95,17 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           that.confirmLoading = true
-          let formData = Object.assign(this.model, values)
+          const model = Object.assign(this.model, values)
+          let formData = {}
+          formData.hotelId = this.$store.getters.hotelId
+          formData.checkTime = model.signTime[0]
+          formData.exitTime = model.signTime[1]
+          formData.startTime = model.operTime[0]
+          formData.endTime = model.operTime[1]
+          formData.overTime = model.fee.overTime
+          formData.price = model.fee.price
+          console.log(model, formData)
+          if (model.id) formData.id = model.id
           let obj = !this.model.id ? addHotelSetting(formData) : editHotelSetting(formData)
           obj.then((res) => {
             if (that.$isAjaxSuccess(res.code)) {

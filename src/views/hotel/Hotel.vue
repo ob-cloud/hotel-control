@@ -6,7 +6,7 @@
         <a-row :gutter="24">
 
           <a-col :md="6" :sm="12">
-            <a-form-item label="名称">
+            <a-form-item label="酒店名称">
               <a-input placeholder="请输入酒店名称" v-model="queryParam.name"></a-input>
 
             </a-form-item>
@@ -23,7 +23,7 @@
           <a-col :md="6" :sm="8">
             <a-form-item label="所属公司">
               <!-- <a-input placeholder="请输入所属公司名称" v-model="queryParam.company"></a-input> -->
-              <a-select placeholder="请输入所属公司名称" v-model="queryParam.company" allowClear>
+              <a-select placeholder="请输入所属公司名称" v-model="queryParam.companyId" allowClear>
                 <a-select-option v-for="(company, index) in companyList" :key="index" :value="company.id">{{ company.companyName }}</a-select-option>
               </a-select>
             </a-form-item>
@@ -38,7 +38,7 @@
             </a-col> -->
             <a-col :md="6" :sm="8">
               <a-form-item label="业务员">
-                <a-input placeholder="请输入业务员" v-model="queryParam.salesman"></a-input>
+                <a-input placeholder="请输入业务员" v-model="queryParam.saleName" allowClear></a-input>
               </a-form-item>
             </a-col>
           </template>
@@ -79,7 +79,7 @@
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
-          <a-divider v-isPermitted="'device:gateway:edit'" type="vertical" />
+          <a-divider type="vertical" />
 
           <a-dropdown>
             <a class="ant-dropdown-link">

@@ -90,7 +90,7 @@
         this.loading = true
         getUserListByHotel(params).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
-            this.dataSource = res.result.records
+            this.dataSource = res.result
             this.ipagination.total = res.result.total || 0
           } else {
             this.$message.warning(res.message)
