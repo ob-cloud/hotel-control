@@ -43,8 +43,8 @@
       >
 
         <span slot="action" slot-scope="text, record">
-          <a @click="showAnnouncement(record)">查看</a>
-          <a-divider type="vertical" />
+          <!-- <a @click="showAnnouncement(record)">查看</a>
+          <a-divider type="vertical" /> -->
           <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
             <a>删除</a>
           </a-popconfirm>
@@ -84,6 +84,11 @@
             customRender (t, r, index) {
               return parseInt(index) + 1
             }
+          },
+          {
+            title: '酒店名称',
+            align: 'center',
+            dataIndex: 'hotelName'
           },
           {
             title: '标题',
@@ -144,8 +149,7 @@
           } else {
             this.$message.warning(res.message)
           }
-          this.loading = false
-        })
+        }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
       },
       showAnnouncement (record){
         editAnnouncementStatus({anntId: record.anntId}).then((res)=>{
