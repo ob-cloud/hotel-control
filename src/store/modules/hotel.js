@@ -29,7 +29,8 @@ const hotel = {
           const hotelList = response.result || []
           if (hotelList && hotelList.length > 0) {
             const firstHotel = hotelList[0]
-            commit('SET_HOTELID', firstHotel.id)
+            const hotelId = Vue.ls.get(HOTELID)
+            commit('SET_HOTELID', hotelId || firstHotel.id)
             commit('SET_HOTELLIST', hotelList)
           } else {
             reject(new Error('getHotelListAll: hotel list must be a non-null array!'))

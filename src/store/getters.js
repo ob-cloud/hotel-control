@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { USER_INFO } from '@/store/mutation-types'
+import { USER_INFO, HOTELID } from '@/store/mutation-types'
 const getters = {
   device: state => state.app.device,
   theme: state => state.app.theme,
@@ -15,7 +15,7 @@ const getters = {
   addRouters: state => state.permission.addRouters,
   multiTab: state => state.app.multiTab,
   lang: state => state.i18n.lang,
-  hotelId: state => state.hotel.hotelId,
+  hotelId: state => { state.hotel.hotelId = Vue.ls.get(HOTELID); return state.hotel.hotelId },
   hotelList: state => state.hotel.hotelList,
   reloadFlag: state => state.app.reloadFlag
 }
