@@ -27,11 +27,11 @@
                 <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
                 <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i> -->
                 <a-popconfirm :title="`${item.elec ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleLamp(item, e)">
-                  <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" @click="(e) => e.stopPropagation()" title="插卡取电"></i>
+                  <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" title="插卡取电"></i>
                 </a-popconfirm>
-                <a-icon class="icon" type="edit" title="编辑" @click="(e) => { e.stopPropagation(); handleEdit(item) }" />
+                <a-icon class="icon" type="edit" title="编辑" @click="(e) => { handleEdit(item) }" />
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
-                  <a-icon class="icon" type="delete" @click="(e) => e.stopPropagation()" />
+                  <a-icon class="icon" type="delete" />
                 </a-popconfirm>
               </div>
               <div class="content">
@@ -103,8 +103,7 @@ export default {
         }
       }).finally(() => this.loading = false)
     },
-    handleDeviceModal (item, e) {
-      e.stopPropagation()
+    handleDeviceModal (item) {
       this.$refs.deviceModal.show(item)
     },
     handleDetail (record) {
@@ -116,8 +115,7 @@ export default {
     handleSearch () {
       this.loadData(1)
     },
-    handleLamp (item, e) {
-      e.stopPropagation()
+    handleLamp (item) {
       const params = {
         roomId: item.id,
         deviceType: item.elec ? 2 : 1

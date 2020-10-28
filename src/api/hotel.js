@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-27 17:07:01
+ * @Last Modified time: 2020-10-28 10:38:53
  */
 
 import { getAction, postFormAction, postAction, deleteAction, putAction } from '@/utils/ajax'
@@ -37,16 +37,18 @@ const getRoomDeviceList = (params) => getAction('/common/room/devices', {
 const getRoomList = ({hotelId, name, floorName, roomName, pageNo, pageSize}) => getAction('/sys/hotel/listRoom', {hotelId, name, floorName, roomName, pageNo, pageSize})
 const addRoom = ({name, floorId}) => postAction('/sys/hotel/addOrUpdateRoom', {name, floorId})
 const editRoom = ({name, floorId, id}) => postAction('/sys/hotel/addOrUpdateRoom', {name, floorId, id})
-const delRoom = (id) => deleteAction('/sys/hotel/deleteRoom', {id})
+const delRoom = (ids) => deleteAction('/sys/hotel/deleteBatchRoom', {ids})
 
-const getRoomGatewayList = ({id}) => getAction('/sys/hotel/listGatewayList', {id})
-const getRoomInfraredList = ({id}) => getAction('/sys/hotel/listInfraredList', {id})
-const getRoomGatewayDeviceList = ({id, serialId, pageNo, pageSize}) => getAction('/sys/hotel/listHotelGatewayDeviceList', {id, serialId, pageNo, pageSize})
-const getRoomInfraredDeviceList = ({id, serialId, pageNo, pageSize}) => getAction('/sys/hotel/listHotelInfraredDeviceList', {id, serialId, pageNo, pageSize})
-const bindRoomGateway = ({id, serialId}) => postAction('/sys/hotel/bindRoomGateway', {id, serialId})
-const unbindRoomGateway = ({serialId}) => postAction('/sys/hotel/unbindRoomGateway', {serialId})
-const bindRoomInfrared = ({id, serialId}) => postAction('/sys/hotel/bindRoomInfrared', {id, serialId})
-const unbindRoomInfrared = ({serialId}) => postAction('/sys/hotel/unbindRoomInfrared', {serialId})
+const getRoomGatewayList = ({roomId, pageNo, pageSize}) => getAction('/room/getRoomObox', {roomId, pageNo, pageSize})
+const getRoomInfraredList = ({roomId, pageNo, pageSize}) => getAction('/room/getRoomIr', {roomId, pageNo, pageSize})
+const getRoomGatewayDeviceList = ({roomId, pageNo, pageSize}) => getAction('/room/getRoomOboxDevice', {roomId, pageNo, pageSize})
+const getRoomInfraredDeviceList = ({roomId, pageNo, pageSize}) => getAction('/room/getRoomIrDevice', {roomId, pageNo, pageSize})
+const bindRoomGateway = ({id, deviceSerialId, roomId}) => postAction('/room/bandObox', {id, deviceSerialId, roomId})
+const unbindRoomGateway = ({id, deviceSerialId, roomId}) => postAction('/room/unBandObox', {id, deviceSerialId, roomId})
+const bindRoomInfrared = ({id, deviceSerialId, roomId}) => postAction('/room/bandIr', {id, deviceSerialId, roomId})
+const unbindRoomInfrared = ({id, deviceSerialId, roomId}) => postAction('/room/unBandIr', {id, deviceSerialId, roomId})
+const getRoomUnbindGatewayList = ({hotelId, pageNo, pageSize}) => getAction('/room/getUnBandObox', {hotelId, pageNo, pageSize})
+const getRoomUnbindInfraredList = ({hotelId, pageNo, pageSize}) => getAction('/room/getUnBandIr', {hotelId, pageNo, pageSize})
 
 // 灯控
 const handleLampPower = (params = {}) => postFormAction('/common', {
@@ -120,6 +122,8 @@ export {
   unbindRoomGateway,
   bindRoomInfrared,
   unbindRoomInfrared,
+  getRoomUnbindGatewayList,
+  getRoomUnbindInfraredList,
 
   handleLampPower,
   handleSwitchPower,

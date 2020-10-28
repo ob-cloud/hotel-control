@@ -3,9 +3,9 @@
     <a-card title="集团经营报表" class="ant-card-slim" :class="{ 'anty-list-cust':true }" :bordered="false" :style="{ marginTop: '24px' }">
       <div class="extra-wrapper" slot="extra">
         <div class="extra-item">
-          <a>今日</a>
-          <a>本月</a>
-          <a>本年</a>
+          <a @click="queryParam.type = 3; searchQuery()">今日</a>
+          <a @click="queryParam.type = 2; searchQuery()">本月</a>
+          <a @click="queryParam.type = 1; searchQuery()">本年</a>
           <!-- <a @click="handleToggleSearch" style="">
             <a-tag>
               {{ toggleSearchStatus ? '收起条件' : '更多条件' }}
@@ -23,7 +23,6 @@
               <a-col :md="6" :sm="12">
                 <a-form-item label="序列号">
                   <a-input placeholder="请输入设备序列号" v-model="queryParam.deviceId"></a-input>
-
                 </a-form-item>
               </a-col>
               <a-col :md="6" :sm="8">

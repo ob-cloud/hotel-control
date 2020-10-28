@@ -9,9 +9,9 @@
     :visible="visible"
   >
     <a-page-header
-      :title="`${model.name}房`"
+      :title="`${model.name}`"
       :breadcrumb="{ props: { routes } }"
-      :sub-title="`${model.buildName}栋${model.floorName}层`"
+      :sub-title="`${model.buildName}${model.floorName}`"
     />
     <a-descriptions style="padding: 10px 24px;">
       <a-descriptions-item label="室内温度"><i v-if="model.temperature" class="obicon obicon-temperature" style="color: #fa8c16;"></i>{{ model.temperature ? `${model.temperature}℃` : '--' }}</a-descriptions-item>
@@ -32,20 +32,20 @@
               <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
             </a-button>
           </a>
-          <a-list item-layout="horizontal" :data-source="oboxList" :loading="loadingGateway">
+          <a-list item-layout="horizontal" :data-source="oboxList" :loading="loadingGateway" :pagination="{pageSize: 10}">
             <a-list-item slot="renderItem" slot-scope="item">
               <a slot="actions">
                 <a-popconfirm title="解绑网关，请谨慎操作！" @confirm="() => handleUnbind(1, item)">
                   <span>解绑</span>
                 </a-popconfirm>
               </a>
-              <a-list-item-meta :description="item.obox_serial_id">
+              <a-list-item-meta :description="item.oboxSerialId">
                 <span slot="title">
-                  {{ item.obox_name }}
+                  {{ item.oboxName }}
                 </span>
                 <i slot="avatar" style="color: #5b94f0; font-size: 30px;" class="obicon obicon-equip"></i>
               </a-list-item-meta>
-              <a-badge style="margin-left: 10px;" :status="item.obox_status ? 'success' : 'default'" :text="`${item.obox_status ? '在线' : '离线'}`" />
+              <a-badge style="margin-left: 10px;" :status="item.isOnline ? 'success' : 'default'" :text="`${item.isOnline ? '在线' : '离线'}`" />
             </a-list-item>
           </a-list>
         </a-card>
@@ -58,20 +58,20 @@
               <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
             </a-button>
           </a>
-          <a-list item-layout="horizontal" :data-source="infraredList" :loading="loadingInfrared">
+          <a-list item-layout="horizontal" :data-source="infraredList" :loading="loadingInfrared" :pagination="{pageSize: 10}">
             <a-list-item slot="renderItem" slot-scope="item">
               <a slot="actions">
                 <a-popconfirm title="解绑红外，请谨慎操作！" @confirm="() => handleUnbind(2, item)">
                   <span>解绑</span>
                 </a-popconfirm>
               </a>
-              <a-list-item-meta :description="item.obox_serial_id">
+              <a-list-item-meta :description="item.deviceSerialId">
                 <span slot="title">
-                  {{ item.obox_name }}
+                  {{ item.deviceName }}
                 </span>
                 <i slot="avatar" style="color: #5b94f0; font-size: 30px;" class="obicon obicon-infrared"></i>
               </a-list-item-meta>
-              <a-badge style="margin-left: 10px;" :status="item.obox_status ? 'success' : 'default'" :text="`${item.obox_status ? '在线' : '离线'}`" />
+              <a-badge style="margin-left: 10px;" :status="item.isOnline ? 'success' : 'default'" :text="`${item.isOnline ? '在线' : '离线'}`" />
             </a-list-item>
           </a-list>
         </a-card>
@@ -91,7 +91,7 @@
         </a-table>
       </a-tab-pane>
       <a-tab-pane key="2" tab="红外设备" force-render>
-        <a-table bordered size="small" rowKey="deviceId" :columns="infraredColumns" :dataSource="infraredList" :loading="loading">
+        <a-table bordered size="small" rowKey="deviceId" :columns="infraredColumns" :dataSource="irDeviceList" :loading="loading">
           <span slot="action" slot-scope="text, record">
             <a v-if="TypeHints.isInfrared(record.type)" @click="handleAction(5, record)">控制</a>
           </span>
@@ -116,9 +116,10 @@
 <script>
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import {
-  getRoomDeviceList,
   getRoomGatewayList,
   getRoomInfraredList,
+  getRoomGatewayDeviceList,
+  getRoomInfraredDeviceList,
   unbindRoomGateway,
   unbindRoomInfrared
 } from '@/api/hotel'
@@ -148,13 +149,13 @@ const deviceColumns = [
     align: 'center',
     dataIndex: 'state',
     customRender (status, row) {
-      return Descriptor.getStatusDescriptor(status, row.device_type, row.device_child_type)
+      return Descriptor.getStatusDescriptor(status, row.deviceType, row.deviceChildType)
     }
   },
   {
     title: '设备类型',
     align: 'center',
-    dataIndex: 'device_type',
+    dataIndex: 'deviceType',
     customRender (t) {
       return Descriptor.getTypeDescriptor(t)
     }
@@ -162,9 +163,9 @@ const deviceColumns = [
   {
     title: '设备子类型',
     align: 'center',
-    dataIndex: 'device_child_type',
+    dataIndex: 'deviceChildType',
     customRender (t, row) {
-      return Descriptor.getTypeDescriptor(row.device_type, t)
+      return Descriptor.getTypeDescriptor(row.deviceType, t)
     }
   },
   {
@@ -225,15 +226,21 @@ export default {
       drawerWidth: '60%',
       visible: false,
       loading: false,
-      loadingGateway: false,
-      loadingInfrared: false,
       roomId: '',
       model: {},
-      deviceList: [],
+      oboxListParams: {pageNo: 1, pageSize: 10},
+      loadingGateway: false,
       oboxList: [],
       deviceColumns: deviceColumns,
+      deviceList: [],
+      queryParam: {pageNo: 1, pageSize: 10},
+
+      irListParams: {pageNo: 1, pageSize: 10},
+      loadingInfrared: false,
       infraredColumns: infraredColumns,
       infraredList: [],
+      irDeviceList: [],
+      queryirParam: {pageNo: 1, pageSize: 10},
       TypeHints
     }
   },
@@ -259,13 +266,13 @@ export default {
   methods: {
     getGatewayList () {
       this.loadingGateway = true
-      getRoomGatewayList({id: 1}).then(res => {
+      getRoomGatewayList({...this.oboxListParams, roomId: this.roomId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) this.oboxList = res.result.records
       }).finally(() => this.loadingGateway = false)
     },
     getInfraredList () {
       this.loadingInfrared = true
-      getRoomInfraredList({id: 1}).then(res => {
+      getRoomInfraredList({...this.irListParams, roomId: this.roomId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) this.infraredList = res.result.records
       }).finally(() => this.loadingInfrared = false)
     },
@@ -281,15 +288,29 @@ export default {
       params.pageNo = this.ipagination.current
       params.pageSize = this.ipagination.pageSize
       params.roomId = this.roomId
-      getRoomDeviceList(params).then(res => {
+      getRoomGatewayDeviceList(params).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.deviceList = res.result.records
         }
       }).finally(() => this.loading = false)
     },
+    getIrdDeviceList (arg) {
+      if (arg === 1) {
+        this.ipagination.current = 1
+      }
+      this.loading = true
+      const params = {...this.queryParam}
+      params.pageNo = this.ipagination.current
+      params.pageSize = this.ipagination.pageSize
+      params.roomId = this.roomId
+      getRoomInfraredDeviceList(params).then(res => {
+        if (this.$isAjaxSuccess(res.code)) {
+          this.irDeviceList = res.result.records
+        }
+      }).finally(() => this.loading = false)
+    },
     show (record) {
       this.visible = true
-      console.log('---- ', record)
       this.roomId = record.id
       this.model = { ...record }
       this.getGatewayList()
@@ -302,7 +323,9 @@ export default {
     },
     handleUnbind (type, record) {
       console.log(type, record)
-      const obj = type === 1 ? unbindRoomGateway(record) : unbindRoomInfrared(record)
+      let params = type === 1 ? {deviceSerialId: record.oboxSerialId} : {deviceSerialId: record.serialId}
+      params = {...params, id: record.id, roomId: this.roomId}
+      const obj = type === 1 ? unbindRoomGateway(params) : unbindRoomInfrared(params)
       obj.then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('解绑成功')

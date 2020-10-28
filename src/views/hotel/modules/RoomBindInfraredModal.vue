@@ -21,7 +21,7 @@
         @change="handleTableChange"
       >
         <span slot="action" slot-scope="text, record">
-          <a @click="handleBind(record.id)">绑定</a>
+          <a @click="handleBind(record)">绑定</a>
         </span>
       </a-table>
     </a-card>
@@ -29,8 +29,7 @@
 </template>
 
 <script>
-  import { bindHotelUser } from '@/api/hotel'
-  import { getInfratedDeviceList } from '@/api/device'
+  import { getRoomUnbindInfraredList, bindRoomInfrared } from '@/api/hotel'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
   export default {
@@ -42,24 +41,24 @@
         title: '绑定红外',
         visible: false,
         model: {},
-        hotelId: '',
+        roomId: '',
         columns: [
           {
             title: '序列号',
             align: 'center',
-            dataIndex: 'deviceId',
+            dataIndex: 'deviceSerialId',
           },
           {
             title: '设备名称',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'deviceName',
           },
           {
             title: '设备状态',
             align: 'center',
-            dataIndex: 'online',
+            dataIndex: 'isOnline',
             customRender (status) {
-              return status === 0 ? '在线' : '离线'
+              return status ? '在线' : '离线'
             }
           },
           {
@@ -79,7 +78,7 @@
     },
     methods: {
       loadData (arg) {
-        this.hotelId && this.getDataSourceList(arg)
+        this.roomId && this.getDataSourceList(arg)
       },
       getDataSourceList (arg) {
         if (arg === 1) {
@@ -89,7 +88,7 @@
         params.pageNo = this.ipagination.current
         params.pageSize = this.ipagination.pageSize
         this.loading = true
-        getInfratedDeviceList(params).then((res) => {
+        getRoomUnbindInfraredList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             this.dataSource = res.result.records
             this.ipagination.total = res.result.total || 0
@@ -102,10 +101,7 @@
       show (record) {
         this.visible = true
         this.model = Object.assign({}, record)
-        // if (record.hasOwnProperty('id')) {
-        //   this.hotelId = record.id
-        //   this.getDataSourceList()
-        // }
+        this.roomId = record.roomId
         this.getDataSourceList()
       },
       close () {
@@ -115,15 +111,16 @@
       handleCancel () {
         this.close()
       },
-      handleBind (userId) {
+      handleBind (record) {
         this.loading = true
-        bindHotelUser(this.hotelId, userId).then(res => {
+        const params = {id: record.id, deviceSerialId: record.deviceSerialId}
+        bindRoomInfrared({...params, roomId: this.roomId}).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.loading = false
-            this.$emit('ok', userId)
+            this.$emit('ok', record.id, record.deviceSerialId)
             this.$message.success('绑定成功')
           }else this.$message.error(res.message)
-        }).catch(this.$message.error('服务异常')).finally(() => {this.loading = false; this.handleCancel()})
+        }).catch(() => this.$message.error('服务异常')).finally(() => {this.loading = false; this.handleCancel()})
       }
     }
   }
