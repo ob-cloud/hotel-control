@@ -85,12 +85,15 @@ const user = {
     },
 
     // 登出
-    Logout ({ commit }) {
+    Logout ({ commit, state }) {
       return new Promise((resolve) => {
+        const token = state.token
         commit('SET_TOKEN', '')
         commit('SET_PERMISSIONLIST', [])
+        // 退出重置酒店信息，避免同个客户端不同账户重复登录
+        commit('SET_HOTELLIST', [])
         Vue.ls.remove(ACCESS_TOKEN)
-        logout().then(() => {
+        logout(token).then(() => {
           resolve()
         }).catch(() => {
           resolve()

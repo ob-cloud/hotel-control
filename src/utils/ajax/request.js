@@ -58,7 +58,7 @@ service.interceptors.response.use((response) => {
     store.dispatch('Logout').then(() => {
       setTimeout(() => {
         window.location.reload()
-      }, 1500)
+      }, 1000)
     })
   }
   return response.data
