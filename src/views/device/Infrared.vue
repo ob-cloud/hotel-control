@@ -69,26 +69,24 @@
       >
 
         <span slot="action" slot-scope="text, record">
-          <a v-isPermitted="'device:infrared:edit'" @click="handleEdit(record)">编辑</a>
-
-          <a-divider v-isPermitted="'device:infrared:edit'" type="vertical" />
-
+          <a v-isPermitted="'infrared:edit'" @click="handleEdit(record)">编辑</a>
+          <a-divider v-isPermitted="'infrared:edit'" type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
               <!--  v-if="TypeHints.isInfrared(record.type)"  -->
-              <a-menu-item v-isPermitted="'device:infrared:control'">
+              <a-menu-item v-isPermitted="'infrared:control'">
                 <a @click="handleControl(record)">控制</a>
               </a-menu-item>
-              <a-menu-item v-isPermitted="'device:infrared:control'">
+              <a-menu-item v-isPermitted="'infrared:control'">
                 <a-popconfirm title="确定停用吗?请谨慎操作" @confirm="() => handleStopService(record.deviceId)">
                   <a>停用</a>
                 </a-popconfirm>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:infrared:delete'">
+              <a-menu-item v-isPermitted="'infrared:del'">
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.deviceId)">
                   <a>删除</a>
                 </a-popconfirm>

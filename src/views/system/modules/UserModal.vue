@@ -58,6 +58,7 @@
           <a-select v-decorator="[ 'type', { initialValue: 0 }]" placeholder="请选择用户类型">
             <a-select-option :value="0">集团用户</a-select-option>
             <a-select-option :value="1">酒店用户</a-select-option>
+            <a-select-option :value="2">超级用户</a-select-option>
           </a-select>
         </a-form-item>
 
@@ -225,7 +226,7 @@
           order: true
         }).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
-            this.roleList = res.result.records
+            this.roleList = res.result
           } else {
             console.log(res.message)
           }

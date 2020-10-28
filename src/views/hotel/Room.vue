@@ -13,7 +13,7 @@
       <div slot="extra">
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
-          <a-button type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
+          <a-button v-isPermitted="'room:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
         </a-button-group>
       </div>
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
@@ -27,11 +27,11 @@
                 <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
                 <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i> -->
                 <a-popconfirm :title="`${item.elec ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleLamp(item, e)">
-                  <i class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" title="插卡取电"></i>
+                  <i v-isPermitted="'room:control'" class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" title="插卡取电"></i>
                 </a-popconfirm>
-                <a-icon class="icon" type="edit" title="编辑" @click="(e) => { handleEdit(item) }" />
+                <a-icon v-isPermitted="'room:edit'" class="icon" type="edit" title="编辑" @click="(e) => { handleEdit(item) }" />
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
-                  <a-icon class="icon" type="delete" />
+                  <a-icon v-isPermitted="'room:del'" class="icon" type="delete" />
                 </a-popconfirm>
               </div>
               <div class="content">

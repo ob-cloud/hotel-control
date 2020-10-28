@@ -64,16 +64,14 @@
       >
 
         <span slot="action" slot-scope="text, record">
-          <a v-isPermitted="'device:gateway:edit'" @click="handleEdit(record)">编辑</a>
-
-          <a-divider v-isPermitted="'device:gateway:edit'" type="vertical" />
-
+          <a v-isPermitted="'gateway:edit'" @click="handleEdit(record)">编辑</a>
+          <a-divider v-isPermitted="'gateway:edit'" type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item v-isPermitted="'device:gateway:delete'">
+              <a-menu-item v-isPermitted="'gateway:del'">
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.obox_serial_id)">
                   <a>删除</a>
                 </a-popconfirm>

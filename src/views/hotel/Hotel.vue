@@ -59,7 +59,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator" style="border-top: 5px">
-      <a-button @click="handleAdd" type="primary" icon="plus">添加酒店</a-button>
+      <a-button v-isPermitted="'hotel:add'" @click="handleAdd" type="primary" icon="plus">添加酒店</a-button>
     </div>
 
     <!-- table区域-begin -->
@@ -77,30 +77,28 @@
       >
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
-
-          <a-divider type="vertical" />
-
+          <a v-isPermitted="'hotel:edit'" @click="handleEdit(record)">编辑</a>
+          <a-divider v-isPermitted="'hotel:edit'" type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a @click="handleDetail({...record, detail: true})">查看详情</a>
+                <a v-isPermitted="'hotel:detail'" @click="handleDetail({...record, detail: true})">查看详情</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="handleAccount(record)">绑定账户</a>
+                <a v-isPermitted="'hotel:user:bind'" @click="handleAccount(record)">绑定账户</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="handleSetting(record)">酒店设置</a>
+                <a v-isPermitted="'hotel:setting'" @click="handleSetting(record)">酒店设置</a>
               </a-menu-item>
               <a-menu-item>
                 <a-popconfirm title="切换到当前酒店?" @confirm="() => handleSelect(record.id)">
-                  <a tille="切换为当前系统酒店">切换酒店</a>
+                  <a v-isPermitted="'hotel:switch'" tille="切换为当前系统酒店">切换酒店</a>
                 </a-popconfirm>
               </a-menu-item>
-              <a-menu-item v-isPermitted="'device:gateway:delete'">
+              <a-menu-item v-isPermitted="'hotel:del'">
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
                   <a>删除</a>
                 </a-popconfirm>

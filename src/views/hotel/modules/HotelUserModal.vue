@@ -84,13 +84,13 @@
           this.ipagination.current = 1
         }
         const params = {}
-        params.id = this.hotelId
+        params.hotelId = this.hotelId
         params.pageNo = this.ipagination.current
         params.pageSize = this.ipagination.pageSize
         this.loading = true
         getUserListByHotel(params).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
-            this.dataSource = res.result
+            this.dataSource = res.result.records
             this.ipagination.total = res.result.total || 0
           } else {
             this.$message.warning(res.message)

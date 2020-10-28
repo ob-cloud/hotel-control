@@ -23,7 +23,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator" style="border-top: 5px">
-      <a-button @click="handleAdd" type="primary" icon="plus">添加企业</a-button>
+      <a-button v-isPermitted="'company:add'" @click="handleAdd" type="primary" icon="plus">添加企业</a-button>
     </div>
 
     <!-- table区域-begin -->
@@ -40,10 +40,10 @@
         @change="handleTableChange"
       >
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
-          <a-divider type="vertical" />
+          <a v-isPermitted="'company:edit'" @click="handleEdit(record)">编辑</a>
+          <a-divider v-isPermitted="'company:edit'" type="vertical" />
           <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-            <a>删除</a>
+            <a v-isPermitted="'company:del'">删除</a>
           </a-popconfirm>
         </span>
 

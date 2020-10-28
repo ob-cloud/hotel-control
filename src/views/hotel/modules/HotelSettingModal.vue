@@ -97,7 +97,7 @@ export default {
           that.confirmLoading = true
           const model = Object.assign(this.model, values)
           let formData = {}
-          formData.hotelId = this.$store.getters.hotelId
+          formData.hotelId = this.hotelId
           formData.checkTime = model.signTime[0]
           formData.exitTime = model.signTime[1]
           formData.startTime = model.operTime[0]

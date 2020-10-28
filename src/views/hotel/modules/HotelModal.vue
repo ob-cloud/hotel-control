@@ -199,6 +199,7 @@
         this.initialUserList()
         this.initialCompanyList()
         this.form.resetFields()
+        this.setForm.resetFields()
         this.hotelId = record.id
         this.visible = true
         this.model = Object.assign({}, record)
@@ -276,7 +277,7 @@
         this.drawerWidth = screenWidth < 500 ? screenWidth : 700
       },
       initHotelSetting () {
-        getHotelSetting(this.$store.getters.hotelId).then(res => {
+        getHotelSetting(this.hotelId).then(res => {
           if(this.$isAjaxSuccess(res.code)) {
             const model = Object.assign({}, res.result || {})
             this.$nextTick(() => {

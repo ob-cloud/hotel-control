@@ -55,11 +55,11 @@ service.interceptors.response.use((response) => {
       message: '无权限',
       description: '权限验证失败'
     })
-    // store.dispatch('Logout').then(() => {
-    //   setTimeout(() => {
-    //     window.location.reload()
-    //   }, 1500)
-    // })
+    store.dispatch('Logout').then(() => {
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500)
+    })
   }
   return response.data
 }, err)

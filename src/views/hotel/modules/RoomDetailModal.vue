@@ -28,15 +28,15 @@
         <a-card size="small">
           <span slot="title">网关</span>
           <a slot="extra" href="#">
-            <a-button style="font-size: 12px;" size="small" type="link" @click="handleBind(1)">
+            <a-button v-isPermitted="'room:gateway:bind'" style="font-size: 12px;" size="small" type="link" @click="handleBind(1)">
               <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
             </a-button>
           </a>
-          <a-list item-layout="horizontal" :data-source="oboxList" :loading="loadingGateway" :pagination="{pageSize: 10}">
+          <a-list item-layout="horizontal" :data-source="oboxList" :loading="loadingGateway" :pagination="{pageSize: 10, size: 'small'}">
             <a-list-item slot="renderItem" slot-scope="item">
               <a slot="actions">
                 <a-popconfirm title="解绑网关，请谨慎操作！" @confirm="() => handleUnbind(1, item)">
-                  <span>解绑</span>
+                  <span v-isPermitted="'room:gateway:unbind'">解绑</span>
                 </a-popconfirm>
               </a>
               <a-list-item-meta :description="item.oboxSerialId">
@@ -54,15 +54,15 @@
         <a-card size="small">
           <span slot="title">红外</span>
           <a slot="extra" href="#">
-            <a-button style="font-size: 12px;" size="small" type="link" @click="handleBind(2)">
+            <a-button v-isPermitted="'room:ir:bind'" style="font-size: 12px;" size="small" type="link" @click="handleBind(2)">
               <a-space><i class="obicon obicon-bangding"></i>绑定</a-space>
             </a-button>
           </a>
-          <a-list item-layout="horizontal" :data-source="infraredList" :loading="loadingInfrared" :pagination="{pageSize: 10}">
+          <a-list item-layout="horizontal" :data-source="infraredList" :loading="loadingInfrared" :pagination="{pageSize: 10, size: 'small'}">
             <a-list-item slot="renderItem" slot-scope="item">
               <a slot="actions">
                 <a-popconfirm title="解绑红外，请谨慎操作！" @confirm="() => handleUnbind(2, item)">
-                  <span>解绑</span>
+                  <span v-isPermitted="'room:ir:unbind'">解绑</span>
                 </a-popconfirm>
               </a>
               <a-list-item-meta :description="item.deviceSerialId">

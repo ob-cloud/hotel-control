@@ -12,7 +12,7 @@
       <div slot="extra">
         <a-button-group>
           <a-button type="primary" icon="reload" title="刷新" @click="handleRefresh"></a-button>
-          <a-button type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
+          <a-button v-isPermitted="'floor:add'" type="primary" icon="plus" title="添加" @click="handleAdd"></a-button>
         </a-button-group>
       </div>
       <a-table
@@ -27,12 +27,12 @@
         @change="handleTableChange"
       >
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
-          <a-divider type="vertical" />
-          <a @click="handleAction(record)">添加房间</a>
-          <a-divider type="vertical" />
+          <a v-isPermitted="'floor:edit'" @click="handleEdit(record)">编辑</a>
+          <a-divider v-isPermitted="'floor:edit'" type="vertical" />
+          <a v-isPermitted="'floor:room:add'" @click="handleAction(record)">添加房间</a>
+          <a-divider v-isPermitted="'floor:room:add'" type="vertical" />
           <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(record.id)">
-            <a>删除</a>
+            <a v-isPermitted="'floor:del'">删除</a>
           </a-popconfirm>
         </span>
       </a-table>

@@ -87,19 +87,17 @@ const user = {
     // 登出
     Logout ({ commit }) {
       return new Promise((resolve) => {
+        commit('SET_TOKEN', '')
+        commit('SET_PERMISSIONLIST', [])
+        Vue.ls.remove(ACCESS_TOKEN)
         logout().then(() => {
           resolve()
         }).catch(() => {
           resolve()
-        }).finally(() => {
-          // commit('SET_TOKEN', '')
-          // commit('SET_ROLES', [])
-          // Vue.ls.remove(ACCESS_TOKEN)
-          resolve()
         })
-        commit('SET_TOKEN', '')
-        commit('SET_PERMISSIONLIST', [])
-        Vue.ls.remove(ACCESS_TOKEN)
+        // commit('SET_TOKEN', '')
+        // commit('SET_PERMISSIONLIST', [])
+        // Vue.ls.remove(ACCESS_TOKEN)
       })
     }
 

@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-28 10:38:53
+ * @Last Modified time: 2020-10-28 15:31:35
  */
 
 import { getAction, postFormAction, postAction, deleteAction, putAction } from '@/utils/ajax'
@@ -13,7 +13,7 @@ const getHotelListAll = () => getAction('/sys/hotel/listAllHotel')
 const editHotel = ({address, companyId, hotelName, contact, contactPhone, id, saleManId, telephone, description}) => putAction('/sys/hotel/editHotel', {address, companyId, hotelName, id, saleManId, contact, contactPhone, telephone, description})
 const addHotel = ({address, companyId, hotelName, saleManId, telephone, description}) => postAction('/sys/hotel/addHotel', {address, companyId, hotelName, saleManId, telephone, description})
 const delHotel = (ids) => deleteAction('/sys/hotel/deleteBatchHotel', {ids})
-const getUserListByHotel = () => getAction('/sys/user/listByType', {type: 1})
+const getUserListByHotel = ({hotelId, type = 1, pageNo, pageSize}) => getAction('/sys/user/pageBindHotel', {hotelId, type, pageNo, pageSize})
 const getUserPageByHotel = ({pageNo, pageSize, type = 1}) => getAction('/sys/user/pageByType', {pageNo, pageSize, type})
 const bindHotelUser = (hotelId, userIds) => postAction('/sys/hotel/bindHotel', { hotelId, userIds })
 const unbindHotelUser = (hotelId) => postAction('/sys/hotel/bindHotel', { hotelId })

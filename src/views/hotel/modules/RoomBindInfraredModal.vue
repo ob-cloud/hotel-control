@@ -95,8 +95,7 @@
           } else {
             this.$message.warning(res.message)
           }
-          this.loading = false
-        })
+        }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
       },
       show (record) {
         this.visible = true
