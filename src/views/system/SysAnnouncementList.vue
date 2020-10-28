@@ -91,7 +91,7 @@
             dataIndex: 'title'
           },
           {
-            title: '消息标题',
+            title: '消息详情',
             align: 'center',
             dataIndex: 'target'
           },
