@@ -66,7 +66,7 @@ import { getFloorList, delFloor } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import FloorModal from './modules/FloorModal'
 import RoomModal from './modules/RoomModal'
-import { mapGetters } from 'vuex'
+import * as dayjs from 'dayjs'
 export default {
   components: { FloorModal, RoomModal },
   mixins: [ProListMixin],
@@ -97,14 +97,19 @@ export default {
         title: '楼层名称',
         align: 'center',
         dataIndex: 'name',
-      }, {
-        title: '楼层ID',
-        align: 'center',
-        dataIndex: 'id',
-      }, {
+      },
+      // {
+      //   title: '楼层ID',
+      //   align: 'center',
+      //   dataIndex: 'id',
+      // },
+      {
         title: '创建时间',
         align: 'center',
         dataIndex: 'createTime',
+        customRender (t) {
+          return t ? dayjs(t).format('YYYY-MM-DD HH:mm:ss') : ''
+        }
       },
       // {
       //   title: '创建人',
@@ -123,9 +128,6 @@ export default {
   mounted () {
     this.calculateContentHeight()
   },
-  computed: {
-    ...mapGetters(['hotelId'])
-  },
   methods: {
     searchReset () {
       this.queryParam = { pageNo: 1, pageSize: 10 }
@@ -139,7 +141,7 @@ export default {
         this.queryParam.pageNo = 1
       }
       this.loading = true
-      getFloorList({...this.queryParam, hotelId: this.hotelId}).then(res => {
+      getFloorList({...this.queryParam, hotelId: this.$store.getters.hotelId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataList = res.result.records
           this.total = res.result.total

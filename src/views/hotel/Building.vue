@@ -65,13 +65,10 @@ import { getBuildingList, delBuilding } from '@/api/hotel'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import BuildingModal from './modules/BuildingModal'
 import FloorModal from './modules/FloorModal'
-import { mapGetters } from 'vuex'
+import * as dayjs from 'dayjs'
 export default {
   components: { BuildingModal, FloorModal },
   mixins: [ProListMixin],
-  computed: {
-    ...mapGetters(['hotelId'])
-  },
   data () {
     return {
       loading: false,
@@ -95,14 +92,19 @@ export default {
         title: '楼栋名称',
         align: 'center',
         dataIndex: 'name',
-      }, {
-        title: '楼栋ID',
-        align: 'center',
-        dataIndex: 'id',
-      }, {
+      },
+      // {
+      //   title: '楼栋ID',
+      //   align: 'center',
+      //   dataIndex: 'id',
+      // },
+      {
         title: '创建时间',
         align: 'center',
         dataIndex: 'createTime',
+        customRender (t) {
+          return t ? dayjs(t).format('YYYY-MM-DD HH:mm:ss') : ''
+        }
       },
       // {
       //   title: '创建人',
@@ -134,7 +136,7 @@ export default {
         this.queryParam.pageNo = 1
       }
       this.loading = true
-      getBuildingList({...this.queryParam, hotelId: this.hotelId}).then(res => {
+      getBuildingList({...this.queryParam, hotelId: this.$store.getters.hotelId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataList = res.result.records
           this.total = res.result.total

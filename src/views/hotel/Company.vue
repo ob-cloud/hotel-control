@@ -59,6 +59,7 @@
   import CompanyModal from './modules/CompanyModal'
   import { getCompanyList, delCompany } from '@/api/hotel'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
+  import * as dayjs from 'dayjs'
 
   export default {
     name: '',
@@ -85,7 +86,10 @@
           {
             title: '添加时间',
             align: 'center',
-            dataIndex: 'createTime'
+            dataIndex: 'createTime',
+            customRender (t) {
+              return t ? dayjs(t).format('YYYY-MM-DD HH:mm:ss') : ''
+            }
           },
           {
             title: '操作',
