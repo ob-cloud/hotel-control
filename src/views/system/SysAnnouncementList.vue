@@ -93,7 +93,7 @@
           {
             title: '消息详情',
             align: 'center',
-            dataIndex: 'target'
+            dataIndex: 'msg'
           },
           {
             title: '消息类型',
@@ -106,16 +106,16 @@
           {
             title: '上报时间',
             align: 'center',
-            dataIndex: 'createAt'
+            dataIndex: 'date'
           },
-          {
-            title: '阅读状态',
-            align: 'center',
-            dataIndex: 'status',
-            customRender(t) {
-              return t ? '已读' : '未读'
-            }
-          },
+          // {
+          //   title: '阅读状态',
+          //   align: 'center',
+          //   dataIndex: 'status',
+          //   customRender(t) {
+          //     return t ? '已读' : '未读'
+          //   }
+          // },
           {
             title: '操作',
             dataIndex: 'action',
