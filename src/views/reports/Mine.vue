@@ -3,9 +3,14 @@
     <a-card title="我的酒店经营报表" class="ant-card-slim" :class="{ 'anty-list-cust':true }" :bordered="false" :style="{ marginTop: '24px' }">
       <div class="extra-wrapper" slot="extra">
         <div class="extra-item">
-          <a>今日</a>
+          <!-- <a>今日</a>
           <a>本月</a>
-          <a>本年</a>
+          <a>本年</a> -->
+          <a-radio-group :defaultValue="3" v-model="queryParam.type" @change="searchQuery">
+            <a-radio-button :value="3">今日</a-radio-button>
+            <a-radio-button :value="2">本月</a-radio-button>
+            <a-radio-button :value="1">本年</a-radio-button>
+          </a-radio-group>
           <!-- <a @click="handleToggleSearch" style="">
             <a-tag>
               {{ toggleSearchStatus ? '收起条件' : '更多条件' }}
