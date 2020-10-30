@@ -14,7 +14,7 @@
 
           <a-col :md="6" :sm="8">
             <a-form-item label="操作行为">
-              <a-input placeholder="请输入操作行为" v-model="queryParam.sysDesc"></a-input>
+              <a-input placeholder="请输入操作行为" v-model="queryParam.content"></a-input>
             </a-form-item>
           </a-col>
 
@@ -22,12 +22,12 @@
           <template v-if="toggleSearchStatus">
             <a-col :md="6" :sm="8">
               <a-form-item label="日志类型">
-                <a-select placeholder="请日志类型" v-model="queryParam.logType" allowClear>
+                <a-select placeholder="请日志类型" v-model="queryParam.type" allowClear>
                   <!-- <a-select-option :value="-1">在线</a-select-option> -->
                   <a-select-option :value="1">设备管理</a-select-option>
                   <a-select-option :value="2">场景管理</a-select-option>
                   <a-select-option :value="3">用户管理</a-select-option>
-                  <a-select-option :value="4">房间管理</a-select-option>
+                  <a-select-option :value="4">酒店管理</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>

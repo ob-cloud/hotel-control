@@ -52,7 +52,7 @@
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import { getRoomObox, unbindObox2Room } from '@/api/device'
 import { getRoomDeviceList } from '@/api/hotel'
-import { getSmartSceneList } from '@/api/scene'
+// import { getSmartSceneList } from '@/api/scene'
 
 import { Descriptor } from 'hardware-suit'
 import BindOboxModal from './BindOboxModal'
@@ -155,17 +155,17 @@ export default {
       }).finally(() => this.loading = false)
     },
     getSceneList () {
-      const params = {
-        roomId: this.roomId,
-        pageNo: 1,
-        pageSize: 1000
-      }
-      this.sceneLoading = true
-      getSmartSceneList(params).then((res) => {
-        if (this.$isAjaxSuccess(res.code)) {
-          this.sceneList = res.result.records
-        }
-      }).finally(() => this.sceneLoading = false)
+      // const params = {
+      //   roomId: this.roomId,
+      //   pageNo: 1,
+      //   pageSize: 1000
+      // }
+      // this.sceneLoading = true
+      // getSmartSceneList(params).then((res) => {
+      //   if (this.$isAjaxSuccess(res.code)) {
+      //     this.sceneList = res.result.records
+      //   }
+      // }).finally(() => this.sceneLoading = false)
     },
     show (record) {
       this.visible = true

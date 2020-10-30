@@ -1,5 +1,9 @@
 import { getAction, postAction, putAction, deleteAction, getRequestUrl } from '@/utils/ajax'
 
+// 首页
+const getGroupStatistic = () => getAction('/home/getAgent')
+const getHotelStatistic = (hotelId) => getAction('/home/getHotel', {hotelId})
+
 ////// Menu
 // 获取菜单、按钮权限列表
 const getMenuList = (params) => getAction('/sys/permission/list', params)
@@ -93,15 +97,14 @@ const delBatchMessageTemplate = (params) => deleteAction('/message/sysMessageTem
 ///// 通过ajaxGetDictItems 使用
 const getSystemConfig = () => getAction('/sys/common/setting')
 
-const getSysLogList = (log = {}) => getAction('/common', {
-  CMD: 'get_sys_log',
-  log: JSON.stringify(log)
-})
-const exportsLogs = (beginTime, endTime) => {
-  return getRequestUrl('/facade/getExportLog', {beginTime, endTime})
+const getSysLogList = (log = {}) => getAction('/log/getLog', log)
+const exportsLogs = (startTime, endTime) => {
+  return getRequestUrl('/log/getExportLog', {startTime, endTime})
 }
 
 export {
+  getGroupStatistic,
+  getHotelStatistic,
   // Menu
   getMenuList,
   addMenu,
