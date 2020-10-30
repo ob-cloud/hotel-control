@@ -72,7 +72,7 @@
             </a>
             <a-menu slot="overlay">
               <a-menu-item v-isPermitted="'gateway:del'">
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.obox_serial_id)">
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.oboxSerialId)">
                   <a>删除</a>
                 </a-popconfirm>
               </a-menu-item>
@@ -93,7 +93,7 @@
   import GatewayModal from './modules/GatewayModal'
   import GatewayScanModal from './modules/GatewayScanModal'
   // import { getOboxList, delObox } from '@/api/device'
-  import { getHotelOboxList, delObox } from '@/api/device'
+  import { getHotelOboxList, delHotelObox } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
   export default {
@@ -168,8 +168,8 @@
           }
         }).finally(() => this.loading = false)
       },
-      handleDelete (id) {
-        delObox(id).then(res => {
+      handleDelete (oboxSerialId) {
+        delHotelObox(oboxSerialId).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.loadData(1)
             this.$message.success('删除成功')

@@ -14,9 +14,9 @@
 
           <a-col :md="6" :sm="8">
             <a-form-item label="网关">
-              <a-select placeholder="请选择网关" v-model="queryParam.obox_serial_id" allowClear>
-                <a-select-option v-for="item in oboxList" :key="item.obox_serial_id" :value="item.obox_serial_id">
-                  {{ item.obox_name }}（{{ item.obox_status === 1 ? '在线' : '离线' }}）
+              <a-select placeholder="请选择网关" v-model="queryParam.oboxSerialId" allowClear>
+                <a-select-option v-for="item in oboxList" :key="item.oboxSerialId" :value="item.oboxSerialId">
+                  {{ item.oboxName }}（{{ item.isOnline === 1 ? '在线' : '离线' }}）
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -26,7 +26,7 @@
           <template v-if="toggleSearchStatus">
             <a-col :md="6" :sm="8">
               <a-form-item label="设备名称">
-                <a-input placeholder="请输入设备名称" v-model="queryParam.name"></a-input>
+                <a-input placeholder="请输入设备名称" v-model="queryParam.deviceName"></a-input>
               </a-form-item>
             </a-col>
           </template>
@@ -129,7 +129,7 @@
   import HumidityActionModal from './modules/HumidityActionModal'
   import PowerSwitchModal from './modules/PowerSwitchModal'
   // import { getOboxDeviceList, getAllOboxList, delDevice, stopCardPower } from '@/api/device'
-  import { getHotelDeviceList, getAllOboxList, delDevice, stopCardPower } from '@/api/device'
+  import { getHotelDeviceList, getAllHotelOboxList, delDevice, stopCardPower } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { Descriptor, TypeHints, LedLampEquip } from 'hardware-suit'
 
@@ -237,7 +237,7 @@
         }).finally(() => this.loading = false)
       },
       getOboxList () {
-        getAllOboxList().then(res => {
+        getAllHotelOboxList(this.$store.getters.hotelId).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.oboxList = res.result
           }

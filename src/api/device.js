@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-27 18:10:53
+ * @Last Modified time: 2020-10-30 17:03:12
  */
 
 // import {request} from '@/common/request'
@@ -22,7 +22,9 @@ const controlHotelIrDevice = ({hotelId, serialId, indexOsm, key}) => postAction(
 
 // hotel obox
 const getHotelOboxList = ({hotelId, serialId, state, oboxName, pageNo, pageSize}) => getAction('/device/getHotelObox', {hotelId, serialId, state, oboxName, pageNo, pageSize})
+const getAllHotelOboxList = (hotelId) => getAction('/device/getOboxList', {hotelId})
 const editHotelObox = (serialId, oboxName) => postAction('/device/editObox', {serialId, oboxName})
+const delHotelObox = (oboxSerialId) => postAction('/device/delObox', {oboxSerialId})
 
 // device
 const getDeviceList = (params) => getAction('/common', {
@@ -349,7 +351,9 @@ export {
   controlHotelIrDevice,
 
   getHotelOboxList,
+  getAllHotelOboxList,
   editHotelObox,
+  delHotelObox,
 
   getDeviceList,
   getAllBuildingDeviceList,
