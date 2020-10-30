@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-30 17:03:12
+ * @Last Modified time: 2020-10-30 17:28:07
  */
 
 // import {request} from '@/common/request'
@@ -19,6 +19,7 @@ const stopHotelDevice = (deviceSerialId, isStop) => postAction('/device/stopDevi
 const getHotelIrList = ({hotelId, serialId, state, deviceName, pageNo, pageSize}) => getAction('/device/getHotelIr', {hotelId, serialId, state, deviceName, pageNo, pageSize})
 const editHotelIr = (serialId, deviceName) => putAction('/device/editIr', {serialId, deviceName})
 const controlHotelIrDevice = ({hotelId, serialId, indexOsm, key}) => postAction('/device/wifi/controlIr', {hotelId, serialId, indexOsm, key})
+const stopHotelInfrared = (serialId, state) => putAction('/device/editIr', {serialId, state})
 
 // hotel obox
 const getHotelOboxList = ({hotelId, serialId, state, oboxName, pageNo, pageSize}) => getAction('/device/getHotelObox', {hotelId, serialId, state, oboxName, pageNo, pageSize})
@@ -349,6 +350,7 @@ export {
   getHotelIrList,
   editHotelIr,
   controlHotelIrDevice,
+  stopHotelInfrared,
 
   getHotelOboxList,
   getAllHotelOboxList,

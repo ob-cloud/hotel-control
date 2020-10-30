@@ -81,7 +81,7 @@
                 <a @click="handleControl(record)">控制</a>
               </a-menu-item>
               <a-menu-item v-isPermitted="'infrared:control'">
-                <a-popconfirm title="确定停用吗?请谨慎操作" @confirm="() => handleStopService(record.deviceId)">
+                <a-popconfirm :title="`确定${record.isBand === 1 ? '启用' : '停用'}吗?请谨慎操作`" @confirm="() => handleStopService(record.deviceId, record.isBand)">
                   <a>停用</a>
                 </a-popconfirm>
               </a-menu-item>
@@ -108,7 +108,7 @@
   import InfraredModal from './modules/InfraredModal'
   import InfraredAirConditionModal from './modules/InfraredAirConditionModal'
   // import { getInfratedDeviceList, delInfratedDevice, stopInfrared } from '@/api/device'
-  import { getHotelIrList, delInfratedDevice, stopInfrared } from '@/api/device'
+  import { getHotelIrList, delInfratedDevice, stopHotelInfrared } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { TypeHints } from 'hardware-suit'
 
@@ -140,9 +140,17 @@
           {
             title: '设备状态',
             align: 'center',
-            dataIndex: 'online',
+            dataIndex: 'isOnline',
             customRender (status) {
-              return status === 0 ? '在线' : '离线'
+              return status ? '在线' : '离线'
+            }
+          },
+          {
+            title: '使用状态',
+            align: 'center',
+            dataIndex: 'isBand',
+            customRender (status) {
+              return status ? '停用' : '正常'
             }
           },
           // {
@@ -194,9 +202,9 @@
       handleControl (record) {
         this.$refs.airModal.show(record)
       },
-      handleStopService (id) {
+      handleStopService (id, state) {
         this.loading = true
-        stopInfrared(id).then(res => {
+        stopHotelInfrared(id, 1 - +state).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.$message.success('操作成功')
           }else this.$message.error(res.message || '操作失败')
