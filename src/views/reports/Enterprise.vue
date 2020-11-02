@@ -106,11 +106,11 @@ export default {
     }
   },
   mounted () {
-    this.loadStatistic()
+    // this.loadStatistic()
   },
   methods: {
     loadStatistic () {
-      getEnterpriseReportStatistic().then(res => {
+      getEnterpriseReportStatistic(this.queryParam.type).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.statistic = res.result || {}
         }
@@ -118,6 +118,7 @@ export default {
     },
     loadData (arg) {
       this.loadDataSource(arg)
+      this.loadStatistic()
     },
     loadDataSource(arg){
       if (arg === 1) {

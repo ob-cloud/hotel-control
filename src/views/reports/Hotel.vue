@@ -102,16 +102,17 @@ export default {
     }
   },
   mounted () {
-    this.loadStatistic()
+    // this.loadStatistic()
   },
   methods: {
     loadStatistic () {
-      getHotelReportStatistic(this.$store.getters.hotelId).then(res => {
+      getHotelReportStatistic(this.$store.getters.hotelId, this.queryParam.type).then(res => {
         if (this.$isAjaxSuccess(res.code)) this.statistic = res.result || {}
       })
     },
     loadData (arg) {
       this.loadDataSource(arg)
+      this.loadStatistic()
     },
     loadDataSource(arg){
       if (arg === 1) {

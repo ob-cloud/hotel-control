@@ -6,8 +6,8 @@
           <a-col :md="8" :sm="8">
             <a-form-item label="网关">
               <a-select placeholder="请选择网关" allowClear v-decorator="[ 'oboxSerialId', validatorRules.oboxSerialId]">
-                <a-select-option v-for="item in oboxList" :key="item.obox_serial_id" :value="item.obox_serial_id">
-                  {{ item.obox_name }}（{{ item.obox_status === 1 ? '在线' : '离线' }}）
+                <a-select-option v-for="item in oboxList" :key="item.oboxSerialId" :value="item.oboxSerialId">
+                  {{ item.oboxName }}（{{ item.isOnline ? '在线' : '离线' }}）
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { scanAndSaveDevicesToObox, pauseScanDevices, getAllOboxList } from '@/api/device'
+import { scanAndSaveDevicesToObox, pauseScanDevices, getAllHotelOboxList } from '@/api/device'
 import { Descriptor } from 'hardware-suit'
 export default {
   data () {
@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     getOboxList () {
-      getAllOboxList().then(res => {
+      getAllHotelOboxList(this.$store.getters.hotelId).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.oboxList = res.result
         }

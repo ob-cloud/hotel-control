@@ -65,7 +65,8 @@
 
 <script>
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
-import { getMineReportList } from '@/api/reports'
+// import { getMineReportList } from '@/api/reports'
+import { getMineReportList, getMineReportStatistic } from '@/api/reports'
 const columns = [{
   title: '营业日',
   align:"center",
@@ -106,8 +107,16 @@ export default {
     }
   },
   methods: {
+    loadStatistic () {
+      getMineReportStatistic(this.queryParam.type).then(res => {
+        if (this.$isAjaxSuccess(res.code)) {
+          this.statistic = res.result || {}
+        }
+      })
+    },
     loadData (arg) {
       this.loadDataSource(arg)
+      this.loadStatistic()
     },
     loadDataSource(arg){
       if (arg === 1) {
