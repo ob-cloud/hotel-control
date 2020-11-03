@@ -5,10 +5,10 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="营业时间">
           <a-range-picker
             v-decorator="[ 'operTime', {rules: [{ required: true, message: '请选择营业时间!' }]} ]"
-            format="h:mm"
-            :showTime="true"
+            format="HH:mm"
+            :showTime="{use12Hours: false, format: 'HH:mm'}"
             :mode="['time', 'time']"
-            valueFormat="h:mm"
+            valueFormat="HH:mm"
             :placeholder="['开始时间', '结束时间']"
           />
         </a-form-item>
