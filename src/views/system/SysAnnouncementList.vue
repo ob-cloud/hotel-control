@@ -106,7 +106,7 @@
             align: 'center',
             dataIndex: 'type',
             customRender (text) {
-              return ['', '酒店欠费', '设备离线', '设备异常'][text] || text
+              return ['酒店欠费', '设备离线', '设备异常'][text] || text
             }
           },
           {
