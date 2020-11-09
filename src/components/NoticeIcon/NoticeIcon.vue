@@ -88,8 +88,8 @@ export default {
     }
   },
   mounted () {
-    // this.initWebSocket(this.$store.getters.userInfo.id)
-    this.initWebSocket(this.$store.getters.token)
+    this.initWebSocket(this.$store.getters.userInfo.id)
+    // this.initWebSocket(this.$store.getters.token)
     this.websocket.onmessage = this.onWebSocketMessage
     // this.loadData()
   },
