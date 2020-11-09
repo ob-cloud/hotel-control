@@ -24,10 +24,10 @@
               <a-form-item label="日志类型">
                 <a-select placeholder="请日志类型" v-model="queryParam.type" allowClear>
                   <!-- <a-select-option :value="-1">在线</a-select-option> -->
-                  <a-select-option :value="1">设备管理</a-select-option>
-                  <a-select-option :value="2">场景管理</a-select-option>
-                  <a-select-option :value="3">用户管理</a-select-option>
-                  <a-select-option :value="4">酒店管理</a-select-option>
+                  <a-select-option value="设备管理">设备管理</a-select-option>
+                  <!-- <a-select-option value="场景管理">场景管理</a-select-option> -->
+                  <a-select-option value="用户管理">用户管理</a-select-option>
+                  <a-select-option value="酒店管理">酒店管理</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
