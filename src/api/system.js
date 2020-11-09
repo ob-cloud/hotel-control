@@ -71,7 +71,10 @@ const queryPermissionTreeList = (params) => getAction('/sys/role/queryTreeList',
 
 
 ///// Annoucement
-const getAnnouncementList = (params) => getAction('/sys/announcement/list', params)
+// const getAnnouncementList = (params) => getAction('/sys/announcement/list', params)
+const getAnnouncementList = ({title, type, pageNo, pageSize}) => getAction('/sys/sysAnnouncementSend/list', {title, type, pageNo, pageSize})
+const delAnnouncementList = (annId) => getAction('/sys/sysAnnouncementSend/delAnnouncement', {annId})
+
 // 发布
 const doReleaseData = (params) => getAction('/sys/annountCement/doReleaseData', params)
 // 撤销
@@ -147,6 +150,7 @@ export {
 
   // Annoucement
   getAnnouncementList,
+  delAnnouncementList,
   doReleaseData,
   doReovkeData,
   getAnnouncementListByUser,

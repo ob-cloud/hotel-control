@@ -7,14 +7,15 @@
         <a-row :gutter="24">
           <a-col :span="6">
             <a-form-item label="标题">
-              <a-input placeholder="请输入标题" v-model="queryParam.title"></a-input>
+              <a-input placeholder="请输入标题" v-model="queryParam.title" allowClear></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="12">
             <a-form-item label="消息类型">
-              <a-select v-model="queryParam.type" placeholder="请选择消息类型">
-                <a-select-option value="1">欠费</a-select-option>
-                <a-select-option value="2">离线</a-select-option>
+              <a-select v-model="queryParam.type" placeholder="请选择消息类型" allowClear>
+                <a-select-option :value="0">欠费</a-select-option>
+                <a-select-option :value="1">离线</a-select-option>
+                <a-select-option :value="2">异常</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -59,7 +60,7 @@
 
 <script>
   import ShowAnnouncement from '@/components/tools/ShowAnnouncement'
-  import { getAnnouncementList, editAnnouncementStatus } from '@/api/system'
+  import { getAnnouncementList, editAnnouncementStatus, delAnnouncementList } from '@/api/system'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
   export default {
@@ -105,7 +106,7 @@
             align: 'center',
             dataIndex: 'type',
             customRender (text) {
-              return ['', '酒店欠费', '设备离线'][text] || text
+              return ['', '酒店欠费', '设备离线', '设备异常'][text] || text
             }
           },
           {
@@ -142,7 +143,7 @@
         params.pageNo = this.ipagination.current
         params.pageSize = this.ipagination.pageSize
         this.loading = true
-        getAnnouncementList(params).then((res) => {
+        getAnnouncementList({...params}).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             this.dataSource = res.result.records
             this.ipagination.total = res.result.total || 0
@@ -159,6 +160,16 @@
         })
         this.$refs.ShowAnnouncement.detail(record)
       },
+      handleDelete (id) {
+        delAnnouncementList(id).then(res => {
+          if (this.$isAjaxSuccess(res.code)) {
+            this.loadData(1)
+            this.$message.success('删除成功')
+          } else {
+            this.$message.error(res.message)
+          }
+        })
+      }
     }
   }
 </script>
