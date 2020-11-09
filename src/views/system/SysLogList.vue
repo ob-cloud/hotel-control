@@ -95,17 +95,17 @@ export default {
         {
           title: '类型',
           align: 'center',
-          dataIndex: 'sysType',
+          dataIndex: 'type',
         },
         {
           title: '操作行为',
           align: 'center',
-          dataIndex: 'sysDesc',
+          dataIndex: 'content',
         },
         {
           title: '操作时间',
           align: 'center',
-          dataIndex: 'sysTime',
+          dataIndex: 'createTime',
           customRender (sysTime) {
             return parseTime(sysTime)
           }
@@ -130,7 +130,7 @@ export default {
       params.pageNo = this.ipagination.current
       params.pageSize = this.ipagination.pageSize
       this.loading = true
-      getSysLogList(params).then((res) => {
+      getSysLogList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataSource = res.result.records
           this.ipagination.total = res.result.total || 0
