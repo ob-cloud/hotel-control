@@ -97,7 +97,7 @@ const delBatchMessageTemplate = (params) => deleteAction('/message/sysMessageTem
 ///// 通过ajaxGetDictItems 使用
 const getSystemConfig = () => getAction('/sys/common/setting')
 
-const getSysLogList = (log = {}) => postAction('/log/getLog', log)
+const getSysLogList = (log = {}) => getAction('/log/getLog', log)
 const exportsLogs = (startTime, endTime) => {
   return getRequestUrl('/log/getExportLog', {startTime, endTime})
 }
