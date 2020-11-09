@@ -56,9 +56,10 @@ service.interceptors.response.use((response) => {
       description: '权限验证失败'
     })
     store.dispatch('Logout').then(() => {
-      setTimeout(() => {
-        window.location.reload()
-      }, 10)
+      // setTimeout(() => {
+      //   window.location.reload()
+      // }, 10)
+      window.location.reload()
     })
   }
   return response.data
