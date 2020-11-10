@@ -13,9 +13,10 @@
           <a-col :md="6" :sm="12">
             <a-form-item label="消息类型">
               <a-select v-model="queryParam.type" placeholder="请选择消息类型" allowClear>
-                <a-select-option :value="0">欠费</a-select-option>
-                <a-select-option :value="1">离线</a-select-option>
-                <a-select-option :value="2">异常</a-select-option>
+                <a-select-option :value="0">酒店欠费</a-select-option>
+                <a-select-option :value="1">设备离线</a-select-option>
+                <a-select-option :value="2">设备异常</a-select-option>
+                <a-select-option :value="3">设备上线</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -110,7 +111,7 @@
             align: 'center',
             dataIndex: 'type',
             customRender (text) {
-              return ['酒店欠费', '设备离线', '设备异常'][text] || text
+              return ['酒店欠费', '设备离线', '设备异常', '设备上线'][text] || text
             }
           },
           {
