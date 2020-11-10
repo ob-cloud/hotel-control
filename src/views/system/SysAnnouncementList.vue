@@ -120,13 +120,23 @@
           {
             title: '上报时间',
             align: 'center',
-            dataIndex: 'date'
+            sorter: true,
+            // sortOrder: 'descend',
+            // dataIndex: 'date'
           },
           {
             title: '阅读状态',
             align: 'center',
             dataIndex: 'readFlag',
             scopedSlots: { customRender: 'status' },
+            filters: [{
+              text: '已读',
+              value: '1',
+            }, {
+              text: '未读',
+              value: '0',
+            }],
+            onFilter: (value, record) => record.readFlag === value
           },
           {
             title: '操作',
