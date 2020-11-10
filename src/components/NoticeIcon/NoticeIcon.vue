@@ -23,7 +23,7 @@
                   <a-tag @click="showAnnouncement(record)" v-if="record.type === 1" color="orange">离线</a-tag>
                   <a-tag @click="showAnnouncement(record)" v-if="record.type === 2" color="red">异常</a-tag>
                   <a-tag @click="showAnnouncement(record)" v-if="record.type === 3" color="blue">上线</a-tag>
-                  <a-tag @click="showAnnouncement(record)" v-else color="red">其他</a-tag>
+                  <!-- <a-tag @click="showAnnouncement(record)" v-else color="red">其他</a-tag> -->
                   <!-- <a-tag @click="showAnnouncement(record)" v-if="record.type === 'H'" color="red">紧急消息</a-tag> -->
                 </div>
               </a-list-item>
