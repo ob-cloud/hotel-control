@@ -12,10 +12,9 @@
       <a-button icon="fullscreen" class="custom-btn" @click="handleClickToggleFullScreen" />
     </template>
     <a-card class="daily-article" :loading="loading">
-      <a-card-meta :title="record.title" :description="'发布人：'+record.sender + ' 发布时间： ' + record.sendTime">
-      </a-card-meta>
+      <a-card-meta :title="record.title" :description="'酒店：'+record.hotelName + ' 发布时间： ' + record.date" />
       <a-divider />
-      <span v-html="record.msgContent" class="article-content"></span>
+      <span v-html="record.msg" class="article-content"></span>
     </a-card>
   </a-modal>
 </template>

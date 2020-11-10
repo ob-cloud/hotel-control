@@ -74,6 +74,7 @@ const queryPermissionTreeList = (params) => getAction('/sys/role/queryTreeList',
 // const getAnnouncementList = (params) => getAction('/sys/announcement/list', params)
 const getAnnouncementList = ({title, type, pageNo, pageSize}) => getAction('/sys/sysAnnouncementSend/list', {title, type, pageNo, pageSize})
 const delAnnouncementList = (annId) => getAction('/sys/sysAnnouncementSend/delAnnouncement', {annId})
+const readAllAnnouncement = () => putAction('/sys/sysAnnouncementSend/readAll')
 
 // 发布
 const doReleaseData = (params) => getAction('/sys/annountCement/doReleaseData', params)
@@ -81,7 +82,7 @@ const doReleaseData = (params) => getAction('/sys/annountCement/doReleaseData', 
 const doReovkeData = (params) => getAction('/sys/annountCement/doReovkeData', params)
 // 获取用户通告信息
 // const getAnnouncementListByUser = (params) => getAction('/sys/announcement/listByUser', params)
-const getAnnouncementListByUser = (params) => getAction('/sys/annountCement/listByUser', params)
+const getAnnouncementListByUser = (params) => getAction('/sys/sysAnnouncementSend/getAnnBell', params)
 // 修改公告状态（已读）
 // const editAnnouncementStatus = (params) => putAction('/sys/announcement/editStatus', params)
 const editAnnouncementStatus = (params) => putAction('/sys/sysAnnouncementSend/editByAnntIdAndUserId', params)
@@ -151,6 +152,7 @@ export {
   // Annoucement
   getAnnouncementList,
   delAnnouncementList,
+  readAllAnnouncement,
   doReleaseData,
   doReovkeData,
   getAnnouncementListByUser,

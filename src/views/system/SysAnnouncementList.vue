@@ -29,6 +29,10 @@
       </a-form>
     </div>
 
+    <div class="table-operator">
+      <a-button type="primary" @click="readAll" icon="book">全部标注已读</a-button>
+    </div>
+
     <!-- table区域-begin -->
     <div>
       <a-table
@@ -44,8 +48,8 @@
       >
 
         <span slot="action" slot-scope="text, record">
-          <!-- <a @click="showAnnouncement(record)">查看</a>
-          <a-divider type="vertical" /> -->
+          <a @click="showAnnouncement(record)">查看</a>
+          <a-divider type="vertical" />
           <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
             <a>删除</a>
           </a-popconfirm>
@@ -60,7 +64,7 @@
 
 <script>
   import ShowAnnouncement from '@/components/tools/ShowAnnouncement'
-  import { getAnnouncementList, editAnnouncementStatus, delAnnouncementList } from '@/api/system'
+  import { getAnnouncementList, editAnnouncementStatus, delAnnouncementList, readAllAnnouncement } from '@/api/system'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
 
   export default {
@@ -114,14 +118,14 @@
             align: 'center',
             dataIndex: 'date'
           },
-          // {
-          //   title: '阅读状态',
-          //   align: 'center',
-          //   dataIndex: 'status',
-          //   customRender(t) {
-          //     return t ? '已读' : '未读'
-          //   }
-          // },
+          {
+            title: '阅读状态',
+            align: 'center',
+            dataIndex: 'readFlag',
+            customRender(t) {
+              return t === '1' ? '已读' : '未读'
+            }
+          },
           {
             title: '操作',
             dataIndex: 'action',
@@ -153,7 +157,7 @@
         }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
       },
       showAnnouncement (record){
-        editAnnouncementStatus({anntId: record.anntId}).then((res)=>{
+        editAnnouncementStatus({anntId: record.id}).then((res)=>{
           if(this.$isAjaxSuccess(res.code)){
             this.loadData()
           }
@@ -169,7 +173,22 @@
             this.$message.error(res.message)
           }
         })
-      }
+      },
+      readAll () {
+        const that = this
+        that.$confirm({
+          title: '确认操作',
+          content: '是否全部标注已读?',
+          onOk() {
+            readAllAnnouncement().then((res) => {
+              if (that.$isAjaxSuccess(res.code)) {
+                that.$message.success(res.message)
+                that.loadData()
+              }
+            })
+          }
+        })
+      },
     }
   }
 </script>

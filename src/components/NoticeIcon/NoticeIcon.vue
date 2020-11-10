@@ -20,9 +20,10 @@
                   <p style="color: rgba(0,0,0,.45);margin-bottom: 0px">{{ record.createTime | dayjs('YYYY-MM-DD HH:mm:ss') }} 发布</p>
                 </div>
                 <div style="text-align: right">
-                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'L'" color="blue">一般消息</a-tag>
-                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'M'" color="orange">重要消息</a-tag>
-                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'H'" color="red">紧急消息</a-tag>
+                  <a-tag @click="showAnnouncement(record)" v-if="record.type === 1" color="blue">离线</a-tag>
+                  <a-tag @click="showAnnouncement(record)" v-if="record.type === 2" color="orange">异常</a-tag>
+                  <a-tag @click="showAnnouncement(record)" v-else color="red">其他</a-tag>
+                  <!-- <a-tag @click="showAnnouncement(record)" v-if="record.type === 'H'" color="red">紧急消息</a-tag> -->
                 </div>
               </a-list-item>
               <div style="margin-top: 5px; text-align: center">
@@ -38,9 +39,10 @@
                   <p style="color: rgba(0,0,0,.45); margin-bottom: 0px">{{ record.createTime | dayjs('YYYY-MM-DD HH:mm:ss') }} 发布</p>
                 </div>
                 <div style="text-align: right">
-                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'L'" color="blue">一般消息</a-tag>
-                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'M'" color="orange">重要消息</a-tag>
-                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'H'" color="red">紧急消息</a-tag>
+                  <a-tag @click="showAnnouncement(record)" color="red">欠费</a-tag>
+                  <!-- <a-tag @click="showAnnouncement(record)" v-if="record.type === 'L'" color="blue">一般消息</a-tag>
+                  <a-tag @click="showAnnouncement(record)" v-if="record.type === 'M'" color="orange">重要消息</a-tag>
+                  <a-tag @click="showAnnouncement(record)" v-if="record.type === 'H'" color="red">紧急消息</a-tag> -->
                 </div>
               </a-list-item>
               <div style="margin-top: 5px; text-align: center">
@@ -52,7 +54,7 @@
       </a-spin>
     </template>
     <span @click="fetchNotice" class="header-notice" ref="noticeRef" style="padding: 0 18px">
-      <a-badge :count="noticeTotal">
+      <a-badge :count="noticeTotal" dot>
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
     </span>
@@ -91,18 +93,18 @@ export default {
     this.initWebSocket(this.$store.getters.userInfo.id)
     // this.initWebSocket(this.$store.getters.token)
     this.websocket.onmessage = this.onWebSocketMessage
-    // this.loadData()
+    this.loadData()
   },
   methods: {
     loadData () {
       getAnnouncementListByUser().then(res => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.notice = res.result.anntMsgList
-          this.noticeCount = res.result.anntMsgTotal
-          this.noticeTitle = `通知(${res.result.anntMsgTotal})`
-          this.sysMsg = res.result.sysMsgList
-          this.sysMsgCount = res.result.sysMsgTotal
-          this.sysMsgTitle = `系统消息(${this.sysMsgCount})`
+          this.notice = res.result.deviceList
+          this.noticeCount = res.result.deviceCount || 0
+          this.noticeTitle = `设备(${this.noticeCount})`
+          this.sysMsg = res.result.arrearsList
+          this.sysMsgCount = res.result.arrearsCount || 0
+          this.sysMsgTitle = `欠费(${this.sysMsgCount})`
         }
       }).catch(err => {
         console.log(err)
@@ -130,10 +132,10 @@ export default {
     },
     onWebSocketMessage (e) {
       const data = eval(`(${e.data})`)
-      // if (data.cmd !== 'heartcheck') {
-      //   this.loadData()
-      //   this.handleNotification(data)
-      // }
+      if (data.cmd !== 'heartcheck') {
+        this.loadData()
+        // this.handleNotification(data)
+      }
       //心跳重置检测
       // this.startHeartBeat()
 
@@ -192,12 +194,16 @@ export default {
   }
 </style>
 <style lang="less" scoped>
-  .header-notice{
-    display: inline-block;
-    transition: all 0.3s;
+p {
+  padding: 0;
+  margin: 0;
+}
+.header-notice{
+  display: inline-block;
+  transition: all 0.3s;
 
-    span {
-      vertical-align: initial;
-    }
+  span {
+    vertical-align: initial;
   }
+}
 </style>
