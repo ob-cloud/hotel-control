@@ -142,9 +142,6 @@ export default {
 
       console.log('socket message ', data)
       // 广播 websocket 事件
-      // if (data.type === 0 && SocketMessageCmdEvent[data.cmd]) {
-      //   this.$bus.$emit(SocketMessageCmdEvent[data.cmd], data)
-      // }
       this.broadcast(data)
     },
     handleNotification (data) {
