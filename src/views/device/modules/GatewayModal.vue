@@ -3,7 +3,7 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="名称">
-          <a-input placeholder="请输入名称" v-decorator="[ 'name', validatorRules.name]" />
+          <a-input placeholder="请输入名称" v-decorator="[ 'oboxName', validatorRules.name]" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -12,7 +12,7 @@
 
 <script>
 import pick from 'lodash.pick'
-import { editOboxName } from '@/api/device'
+import { editHotelObox } from '@/api/device'
 export default {
   data () {
     return {
@@ -40,10 +40,10 @@ export default {
     },
     edit (record) {
       this.form.resetFields()
-      this.model = Object.assign({}, {name: record.obox_name, serialId: record.obox_serial_id})
+      this.model = Object.assign({}, {oboxName: record.oboxName, serialId: record.oboxSerialId})
       this.visible = true
       this.$nextTick(() => {
-        this.form.setFieldsValue(pick(this.model, 'name'))
+        this.form.setFieldsValue(pick(this.model, 'oboxName'))
       })
     },
     // 确定
@@ -54,7 +54,7 @@ export default {
         if (!err) {
           that.confirmLoading = true
           let formData = Object.assign(this.model, values)
-          let obj = editOboxName(formData.serialId, formData.name)
+          let obj = editHotelObox(formData.serialId, formData.oboxName)
           obj.then((res) => {
             if (that.$isAjaxSuccess(res.code)) {
               that.$message.success(res.message)

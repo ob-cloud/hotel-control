@@ -77,23 +77,23 @@
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isXkeySocketSwitch(record.device_child_type)">
+              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType)">
                 <a v-isPermitted="'device:control'" @click="handleAction(0, record)">开关</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isHumidifierSensors(record.device_child_type)">
+              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isHumidifierSensors(record.deviceChildType)">
                 <a v-isPermitted="'device:control'" @click="handleAction(1, record)">温湿度</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isSettableSceneSocketSwitch(record.device_child_type)">
+              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isSettableSceneSocketSwitch(record.deviceChildType)">
                 <a v-isPermitted="'device:control'" @click="handleAction(2, record)">设置</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isSimpleLed(record.device_child_type)">
+              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isSimpleLed(record.deviceChildType)">
                 <a v-isPermitted="'device:control'" @click="handleAction(3, record)">灯控</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isPluginPowerSensors(record.device_child_type)">
+              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)">
                 <a-popconfirm title="确认停用？请谨慎操作！" @confirm="() => handleStopService(record)">
                   <a v-isPermitted="'device:control'">停用</a>
                 </a-popconfirm>
@@ -129,7 +129,7 @@
   import HumidityActionModal from './modules/HumidityActionModal'
   import PowerSwitchModal from './modules/PowerSwitchModal'
   // import { getOboxDeviceList, getAllOboxList, delDevice, stopCardPower } from '@/api/device'
-  import { getHotelDeviceList, getAllHotelOboxList, delDevice, stopCardPower } from '@/api/device'
+  import { getHotelDeviceList, getAllHotelOboxList, delHotelDevice, stopCardPower } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { Descriptor, TypeHints, LedLampEquip } from 'hardware-suit'
 
@@ -153,25 +153,25 @@
           {
             title: '序列号',
             align: 'center',
-            dataIndex: 'serialId',
+            dataIndex: 'deviceSerialId',
           },
           {
             title: '设备名称',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'deviceName',
           },
           {
             title: '设备状态',
             align: 'center',
-            dataIndex: 'state',
+            dataIndex: 'deviceState',
             customRender (status, row) {
-              return Descriptor.getStatusDescriptor(status, row.device_type, row.device_child_type)
+              return Descriptor.getStatusDescriptor(status, row.deviceType, row.deviceChildType)
             }
           },
           {
             title: '设备类型',
             align: 'center',
-            dataIndex: 'device_type',
+            dataIndex: 'deviceType',
             customRender (t) {
               return Descriptor.getTypeDescriptor(t)
             }
@@ -179,17 +179,17 @@
           {
             title: '设备子类型',
             align: 'center',
-            dataIndex: 'device_child_type',
+            dataIndex: 'deviceChildType',
             customRender (t, row) {
-              return Descriptor.getTypeDescriptor(row.device_type, t)
+              return Descriptor.getTypeDescriptor(row.deviceType, t)
             }
           },
           {
             title: '异常状态',
             align: 'center',
             customRender (row) {
-              if (TypeHints.isSimpleLed(row.device_child_type)) {
-                const ledLampEquip = new LedLampEquip(row.state, row.device_type, row.device_child_type)
+              if (TypeHints.isSimpleLed(row.deviceChildType)) {
+                const ledLampEquip = new LedLampEquip(row.state, row.deviceType, row.deviceChildType)
                 return ledLampEquip.getLampExceptionStatus()
                 // const exception = row.state.slice(14) || '00'
                 // const bits = exception.split('')
@@ -261,7 +261,7 @@
         this.loadData()
       },
       handleDelete (record) {
-        delDevice(record.serialId, record.name).then(res => {
+        delHotelDevice(record.serialId).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.loadData(1)
             this.$message.success('删除成功')

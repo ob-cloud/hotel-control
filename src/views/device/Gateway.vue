@@ -7,16 +7,16 @@
 
           <a-col :md="6" :sm="12">
             <a-form-item label="序列号">
-              <a-input placeholder="请输入序列号" v-model="queryParam.obox_serial_id"></a-input>
+              <a-input placeholder="请输入序列号" v-model="queryParam.oboxSerialId"></a-input>
 
             </a-form-item>
           </a-col>
 
           <a-col :md="6" :sm="8">
             <a-form-item label="状态">
-              <a-select placeholder="请选择状态" v-model="queryParam.obox_status" allowClear>
-                <a-select-option :value="1">在线</a-select-option>
-                <a-select-option :value="0">离线</a-select-option>
+              <a-select placeholder="请选择状态" v-model="queryParam.isOnline" allowClear>
+                <a-select-option :value="true">在线</a-select-option>
+                <a-select-option :value="false">离线</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -25,7 +25,7 @@
           <template v-if="toggleSearchStatus">
             <a-col :md="6" :sm="8">
               <a-form-item label="名称">
-                <a-input placeholder="请输入名称" v-model="queryParam.obox_name"></a-input>
+                <a-input placeholder="请输入名称" v-model="queryParam.oboxName"></a-input>
               </a-form-item>
             </a-col>
           </template>
@@ -114,17 +114,17 @@
           {
             title: '序列号',
             align: 'center',
-            dataIndex: 'obox_serial_id',
+            dataIndex: 'oboxSerialId',
           },
           {
             title: '设备名称',
             align: 'center',
-            dataIndex: 'obox_name',
+            dataIndex: 'oboxName',
           },
           {
             title: '设备状态',
             align: 'center',
-            dataIndex: 'obox_status',
+            dataIndex: 'isOnline',
             customRender (status) {
               return status ? '在线' : '离线'
             }
@@ -132,7 +132,7 @@
           {
             title: '设备版本',
             align: 'center',
-            dataIndex: 'obox_version'
+            dataIndex: 'oboxVersion'
           },
           {
             title: '操作',

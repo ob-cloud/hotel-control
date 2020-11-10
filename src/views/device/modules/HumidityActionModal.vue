@@ -103,11 +103,11 @@ export default {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
-      this.handleData(record.serialId)
-      const tempValue = +parseInt(record.state.slice(2, 4), 16).toString(10)
+      this.handleData(record.deviceSerialId)
+      const tempValue = +parseInt(record.deviceState.slice(2, 4), 16).toString(10)
       this.temperature = tempValue ? tempValue - 30 : 0
-      this.humidifier = +parseInt(record.state.slice(6, 8), 16).toString(10)
-      this.title = `${Descriptor.getTypeDescriptor(record.device_type, record.device_child_type)}(${record.serialId})`
+      this.humidifier = +parseInt(record.deviceState.slice(6, 8), 16).toString(10)
+      this.title = `${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
     },
     close () {
       this.$emit('close')

@@ -65,8 +65,8 @@ export default {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
-      this.title = `开关 - ${Descriptor.getTypeDescriptor(record.device_type, record.device_child_type)}(${record.serialId})`
-      this.serialId = this.model.serialId
+      this.title = `开关 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
+      this.serialId = this.model.deviceSerialId
       this.state = this.model.state
     },
     close () {

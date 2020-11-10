@@ -14,9 +14,9 @@
 
           <a-col :md="6" :sm="8">
             <a-form-item label="状态">
-              <a-select placeholder="请选择状态" v-model="queryParam.online" allowClear>
-                <a-select-option :value="0">在线</a-select-option>
-                <a-select-option :value="1">离线</a-select-option>
+              <a-select placeholder="请选择状态" v-model="queryParam.state" allowClear>
+                <a-select-option :value="true">在线</a-select-option>
+                <a-select-option :value="false">离线</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -25,7 +25,7 @@
           <template v-if="toggleSearchStatus">
             <a-col :md="6" :sm="8">
               <a-form-item label="设备名称">
-                <a-input placeholder="请输入设备名称" v-model="queryParam.name"></a-input>
+                <a-input placeholder="请输入设备名称" v-model="queryParam.deviceName"></a-input>
               </a-form-item>
             </a-col>
           </template>
@@ -81,13 +81,13 @@
                 <a @click="handleControl(record)">控制</a>
               </a-menu-item>
               <a-menu-item v-isPermitted="'infrared:control'">
-                <a-popconfirm :title="`确定${record.isBand === 1 ? '启用' : '停用'}吗?请谨慎操作`" @confirm="() => handleStopService(record.deviceId, record.isBand)">
+                <a-popconfirm :title="`确定${record.isBand === 1 ? '启用' : '停用'}吗?请谨慎操作`" @confirm="() => handleStopService(record.deviceSerialId, record.isBand)">
                   <a>停用</a>
                 </a-popconfirm>
               </a-menu-item>
 
               <a-menu-item v-isPermitted="'infrared:del'">
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.deviceId)">
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.deviceSerialId)">
                   <a>删除</a>
                 </a-popconfirm>
               </a-menu-item>
@@ -130,12 +130,12 @@
           {
             title: '序列号',
             align: 'center',
-            dataIndex: 'deviceId',
+            dataIndex: 'deviceSerialId',
           },
           {
             title: '设备名称',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'deviceName',
           },
           {
             title: '设备状态',
@@ -164,7 +164,7 @@
           {
             title: '设备版本',
             align: 'center',
-            dataIndex: 'version'
+            dataIndex: 'deviceVersion'
           },
           {
             title: '操作',

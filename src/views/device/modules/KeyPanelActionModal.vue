@@ -160,7 +160,7 @@ export default {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
-      this.title = `${Descriptor.getTypeDescriptor(record.device_type, record.device_child_type)}（${record.serialId}）`
+      this.title = `${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}（${record.deviceSerialId}）`
     },
     close () {
       this.$emit('close')
@@ -179,7 +179,7 @@ export default {
     },
     handleOk () {
       const params = {
-        serialId: this.model.serialId,
+        serialId: this.model.deviceSerialId,
         index: this.selectedPanelKeyIndex
       }
       const groupStatus = this.checkboxGroupList.map(item => {
@@ -216,7 +216,7 @@ export default {
     },
     getPanelGroupList () {
       this.lampGroupLoading = true
-      return getGroupListByPanelId(this.model.serialId).then(res => {
+      return getGroupListByPanelId(this.model.deviceSerialId).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.lampGroupList = res.result
         }
@@ -224,7 +224,7 @@ export default {
       })
     },
     getGrouplListPanelKey (index) {
-      getGrouplListPanelKey(this.model.serialId, index).then(res => {
+      getGrouplListPanelKey(this.model.deviceSerialId, index).then(res => {
          if (this.$isAjaxSuccess(res.code)) {
           const result = res.result
           this.keyList = result

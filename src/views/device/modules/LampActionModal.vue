@@ -93,13 +93,13 @@ export default {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
-      this.title = `灯控 - ${Descriptor.getTypeDescriptor(record.device_type, record.device_child_type)}(${record.serialId})`
+      this.title = `灯控 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
 
-      this.status = record.state
-      this.deviceType = record.device_type
-      this.deviceChildType = record.device_child_type
+      this.status = record.deviceState
+      this.deviceType = record.deviceType
+      this.deviceChildType = record.deviceChildType
 
-      const ledLampEquip = this.ledLampEquip = new LedLampEquip(record.state, record.device_type, record.device_child_type)
+      const ledLampEquip = this.ledLampEquip = new LedLampEquip(record.deviceState, record.deviceType, record.deviceChildType)
       this.isColorLamp = ledLampEquip.isBicolor()
       this.power = ledLampEquip.isPowerOn()
       this.bright = ledLampEquip.getBrightness()
@@ -136,7 +136,7 @@ export default {
     //   this.setSwtich(status)
     // },
     setSwtich (status) {
-      editSwitchStatus(this.model.serialId, status).then(res => {
+      editSwitchStatus(this.model.deviceSerialId, status).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('成功')
           // this.getSwitchStatus()
@@ -146,7 +146,7 @@ export default {
       })
     },
     getSwitchStatus () {
-      getSwitchStatus(this.model.serialId).then(res => {
+      getSwitchStatus(this.model.deviceSerialId).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('成功')
         } else {

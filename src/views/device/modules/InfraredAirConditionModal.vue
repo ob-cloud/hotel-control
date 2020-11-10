@@ -59,7 +59,7 @@ export default {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
-      this.title = `红外控制 - ${Descriptor.getTypeDescriptor(record.type, record.device_child_type)}(${record.deviceId})`
+      this.title = `红外控制 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
     },
     close () {
       this.$emit('close')
