@@ -47,6 +47,9 @@
         :loading="loading"
         @change="handleTableChange"
       >
+        <span slot="status" slot-scope="text, record">
+          <a-badge :status="record.readFlag === '1' ? 'success' : 'default'" :text="record.readFlag === '1' ? '已读' : '未读'" />
+        </span>
 
         <span slot="action" slot-scope="text, record">
           <a @click="showAnnouncement(record)">查看</a>
@@ -123,9 +126,7 @@
             title: '阅读状态',
             align: 'center',
             dataIndex: 'readFlag',
-            customRender(t) {
-              return t === '1' ? '已读' : '未读'
-            }
+            scopedSlots: { customRender: 'status' },
           },
           {
             title: '操作',

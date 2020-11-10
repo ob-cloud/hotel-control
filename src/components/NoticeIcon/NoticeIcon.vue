@@ -100,16 +100,24 @@ export default {
     loadData () {
       getAnnouncementListByUser().then(res => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.notice = res.result.deviceList
+          this.notice = this.filterList(res.result.deviceList)
           this.noticeCount = res.result.deviceCount || 0
           this.noticeTitle = `设备(${this.noticeCount})`
-          this.sysMsg = res.result.arrearsList
+          this.sysMsg = this.filterList(res.result.arrearsList)
           this.sysMsgCount = res.result.arrearsCount || 0
           this.sysMsgTitle = `欠费(${this.sysMsgCount})`
         }
       }).catch(err => {
         console.log(err)
       })
+    },
+    filterList (list, count = 5) {
+      if (!list) return []
+      const sortList = list.sort((l1, l2) => {
+        if (l1.date > l2.date) return -1
+        return 1
+      })
+      return sortList.slice(0, count)
     },
     fetchNotice () {
       if (this.loading) {

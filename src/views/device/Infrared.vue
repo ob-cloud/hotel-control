@@ -178,6 +178,9 @@
         TypeHints,
       }
     },
+    mounted () {
+      this.$bus.$on('obox-state', () => this.loadData())
+    },
     methods: {
       loadData (arg) {
         this.getDeviceList(arg)
