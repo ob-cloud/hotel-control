@@ -15,8 +15,8 @@
           <a-col :md="6" :sm="8">
             <a-form-item label="状态">
               <a-select placeholder="请选择状态" v-model="queryParam.state" allowClear>
-                <a-select-option :value="true">在线</a-select-option>
-                <a-select-option :value="false">离线</a-select-option>
+                <a-select-option :value="1">在线</a-select-option>
+                <a-select-option :value="0">离线</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
