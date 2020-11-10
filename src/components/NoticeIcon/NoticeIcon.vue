@@ -17,7 +17,7 @@
               <a-list-item v-for="(record, index) in notice" :key="index">
                 <div style="margin-left: 5%; width: 80%">
                   <p><a @click="showAnnouncement(record)">标题：{{ record.title }}</a></p>
-                  <p style="color: rgba(0,0,0,.45);margin-bottom: 0px">{{ record.date | dayjs('YYYY-MM-DD HH:mm:ss') }} 发布</p>
+                  <p style="color: rgba(0,0,0,.45);margin-bottom: 0px">{{ record.date | dayjs('YYYY-MM-DD HH:mm:ss') }} 上报</p>
                 </div>
                 <div style="text-align: right">
                   <a-tag @click="showAnnouncement(record)" v-if="record.type === 1" color="orange">离线</a-tag>
@@ -37,7 +37,7 @@
               <a-list-item v-for="(record, index) in sysMsg" :key="index">
                 <div style="margin-left: 5%; width: 80%">
                   <p><a @click="showAnnouncement(record)">标题：{{ record.title }}</a></p>
-                  <p style="color: rgba(0,0,0,.45); margin-bottom: 0px">{{ record.date | dayjs('YYYY-MM-DD HH:mm:ss') }} 发布</p>
+                  <p style="color: rgba(0,0,0,.45); margin-bottom: 0px">{{ record.date | dayjs('YYYY-MM-DD HH:mm:ss') }} 上报</p>
                 </div>
                 <div style="text-align: right">
                   <a-tag @click="showAnnouncement(record)" color="red">欠费</a-tag>
