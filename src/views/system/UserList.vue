@@ -266,7 +266,6 @@
           }
         ],
         url: {
-          // imgServer: window._CONFIG['domianURL'] + '/sys/common/view',
           syncUser: '/process/extActProcess/doSyncUser',
           list: '/sys/user/list',
           delete: '/sys/user/delete',
@@ -278,7 +277,7 @@
     },
     computed: {
       importExcelUrl (){
-        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
+        return `/${this.url.importExcelUrl}`
       }
     },
     methods: {

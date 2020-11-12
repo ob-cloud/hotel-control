@@ -120,9 +120,9 @@
           {
             title: '上报时间',
             align: 'center',
-            sorter: true,
+            // sorter: true,
             // sortOrder: 'descend',
-            // dataIndex: 'date'
+            dataIndex: 'date'
           },
           {
             title: '阅读状态',

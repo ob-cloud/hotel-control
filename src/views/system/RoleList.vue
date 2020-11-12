@@ -181,7 +181,7 @@
     },
     computed: {
       importExcelUrl () {
-        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
+        return `/${this.url.importExcelUrl}`
       }
     },
     methods: {

@@ -146,6 +146,7 @@ name: 'SimpleLogin',
   width: 100%;
   height: 100vh;
   position: relative;
+  background-color: #3a4257;
   background-size: cover;
   background-position: center;
 }
@@ -199,7 +200,7 @@ name: 'SimpleLogin',
   background: #fff;
   box-shadow: 0 0 50px rgba(0, 0, 0, .4);
   border-radius: 5px;
-  padding: 10% 10%;
+  padding: 12% 10%;
 }
 
 .pages-user-index-header {
@@ -214,8 +215,7 @@ name: 'SimpleLogin',
 
 @media (min-width: 0px) and (max-width:1400px) {
   .pages-user-index-box {
-    // width: 340px;
-    width: 310px;
+    width: 340px;
   }
   .pages-user-index-abstract-title {
     // width: 400px;

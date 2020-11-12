@@ -193,8 +193,8 @@
         form: this.$form.createForm(this),
         picUrl: '',
         url: {
-          fileUpload: window._CONFIG['domianURL'] + '/sys/common/upload',
-          imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
+          fileUpload: '/sys/common/upload',
+          imgerver: '/sys/common/view',
           userId: '/sys/user/generateUserId', // 引入生成添加用户情况下的url
         },
       }

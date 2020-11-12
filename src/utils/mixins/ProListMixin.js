@@ -221,7 +221,7 @@ export const ProListMixin = {
     /* 导出 */
     handleExportXls2 () {
       let paramsStr = encodeURI(JSON.stringify(this.getQueryParams()))
-      let url = `${window._CONFIG['domianURL']}/${this.url.exportXlsUrl}?paramsStr=${paramsStr}`
+      let url = `/${this.url.exportXlsUrl}?paramsStr=${paramsStr}`
       window.location.href = url
     },
     handleExportXls (fileName) {
@@ -276,7 +276,7 @@ export const ProListMixin = {
       if (text && text.indexOf(',') > 0) {
         text = text.substring(0, text.indexOf(','))
       }
-      return window._CONFIG['imgDomainURL'] + '/' + text
+      return '/' + text
     },
     /* 文件下载 */
     downloadFile (text) {
@@ -287,7 +287,7 @@ export const ProListMixin = {
       if (text.indexOf(',') > 0) {
         text = text.substring(0, text.indexOf(','))
       }
-      window.open(window._CONFIG['domianURL'] + '/sys/common/download/' + text)
+      window.open('/sys/common/download/' + text)
     },
     calculateContentHeight () {
       this.contentHeight = document.body.clientHeight - 64 - 40 - 85/* search */ - 48/* margin */ - 48/* padding */
