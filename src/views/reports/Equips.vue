@@ -40,18 +40,18 @@
             </a-row>
           </a-form>
           <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-            <a-row :gutter="16">
-              <a-col :span="6">
-                <a-statistic title="设备总数" :value="statistic.deviceTotal" style="margin-right: 50px"></a-statistic>
+            <a-row :gutter="{ xs: 10, sm: 16, md: 24}">
+              <a-col :xs="12" :sm="6" :md="6" :lg="5">
+                <a-statistic title="设备总数" :value="statistic.deviceTotal" style="margin-top: 10px"></a-statistic>
               </a-col>
-              <a-col :span="6">
-                <a-statistic title="离线总数" :value="statistic.oboxLine + statistic.irLine"></a-statistic>
+              <a-col :xs="12" :sm="6" :md="6" :lg="5">
+                <a-statistic title="离线总数" :value="`${(statistic.oboxLine || 0) + (statistic.irLine || 0)}`" style="margin-top: 10px"></a-statistic>
               </a-col>
-              <a-col :span="6">
-                <a-statistic title="网关离线率" :value="statistic.oboxRate" style="margin-right: 50px"><template #suffix>%</template></a-statistic>
+              <a-col :xs="12" :sm="6" :md="6" :lg="5">
+                <a-statistic title="网关离线率" :value="statistic.oboxRate" style="margin-top: 10px"><template #suffix>%</template></a-statistic>
               </a-col>
-              <a-col :span="6">
-                <a-statistic title="红外离线率" :value="statistic.irRate" style="margin-right: 50px"><template #suffix>%</template></a-statistic>
+              <a-col :xs="12" :sm="6" :md="6" :lg="5">
+                <a-statistic title="红外离线率" :value="statistic.irRate" style="margin-top: 10px"><template #suffix>%</template></a-statistic>
               </a-col>
             </a-row>
           </div>

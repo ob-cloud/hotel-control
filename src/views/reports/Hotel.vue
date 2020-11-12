@@ -39,15 +39,15 @@
             </a-row>
           </a-form>
           <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-            <a-row :gutter="16">
-              <a-col :span="8">
-                <a-statistic title="租金总额" :value="statistic.totalPrice" style="margin-right: 50px"><template #suffix>RMB</template></a-statistic>
+            <a-row :gutter="{ xs: 10, sm: 16, md: 24}">
+              <a-col :xs="12" :sm="6" :md="6" :lg="5">
+                <a-statistic title="租金总额" :value="statistic.totalPrice" style="margin-top: 10px"><template #suffix>RMB</template></a-statistic>
               </a-col>
-              <a-col :span="8">
-                <a-statistic title="使用率" :value="statistic.utilizationRate"><template #suffix>%</template></a-statistic>
+              <a-col :xs="12" :sm="6" :md="6" :lg="5">
+                <a-statistic title="使用率" :value="statistic.utilizationRate" style="margin-top: 10px"><template #suffix>%</template></a-statistic>
               </a-col>
-              <a-col :span="6">
-                <a-statistic title="租金" :value="statistic.averPrice" style="margin-right: 50px"><template #suffix>RMB</template></a-statistic>
+              <a-col :xs="12" :sm="6" :md="6" :lg="5">
+                <a-statistic title="租金" :value="statistic.averPrice" style="margin-top: 10px"><template #suffix>RMB</template></a-statistic>
               </a-col>
               <!-- <a-col :span="8">
                 <a-statistic title="欠费总额" :value="93"><template #suffix>RMB</template></a-statistic>

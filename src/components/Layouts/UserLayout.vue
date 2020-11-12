@@ -72,15 +72,21 @@ export default {
     }
   },
   render () {
+    const _background = config.pageOptions.custom ? {'background-image': `url(${background})`} : ''
     return (
-      <div id="userLayout" class={['user-layout-wrapper', this.device]} style={{'background-image': `url(${background})`}}>
-        <div class="container">
-          {this.renderHeader()}
-          <route-view></route-view>
-          {
-            config.pageOptions.footer && this.renderFooter()
-          }
-        </div>
+      // <div id="userLayout" class={['user-layout-wrapper', this.device]} style={{'background-image': `url(${background})`}}>
+      <div id="userLayout" class={['user-layout-wrapper', this.device]} style={{_background}}>
+        {
+          config.pageOptions.custom ? (
+            <div class="container">
+              {this.renderHeader()}
+              <route-view></route-view>
+              {
+                config.pageOptions.footer && this.renderFooter()
+              }
+            </div>
+          ) : (<route-view></route-view>)
+        }
       </div>
     )
   }

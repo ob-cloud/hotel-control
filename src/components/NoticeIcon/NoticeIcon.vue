@@ -15,7 +15,7 @@
           <a-tab-pane :tab="noticeTitle" key="1">
             <a-list>
               <a-list-item v-for="(record, index) in notice" :key="index">
-                <div style="margin-left: 5%; width: 80%">
+                <div style="margin-left: 5%; width: 76%">
                   <p><a @click="showAnnouncement(record)">标题：{{ record.title }}</a></p>
                   <p style="color: rgba(0,0,0,.45);margin-bottom: 0px">{{ record.date | dayjs('YYYY-MM-DD HH:mm:ss') }} 上报</p>
                 </div>
@@ -35,7 +35,7 @@
           <a-tab-pane :tab="sysMsgTitle" key="2">
             <a-list>
               <a-list-item v-for="(record, index) in sysMsg" :key="index">
-                <div style="margin-left: 5%; width: 80%">
+                <div style="margin-left: 5%; width: 76%">
                   <p><a @click="showAnnouncement(record)">标题：{{ record.title }}</a></p>
                   <p style="color: rgba(0,0,0,.45); margin-bottom: 0px">{{ record.date | dayjs('YYYY-MM-DD HH:mm:ss') }} 上报</p>
                 </div>
