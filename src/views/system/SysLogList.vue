@@ -5,14 +5,13 @@
       <a-form layout="inline" @submit.prevent="searchQuery">
         <a-row :gutter="24">
 
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="执行人">
               <a-input placeholder="请输入执行人" v-model="queryParam.operator"></a-input>
-
             </a-form-item>
           </a-col>
 
-          <a-col :md="6" :sm="8">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="操作行为">
               <a-input placeholder="请输入操作行为" v-model="queryParam.content"></a-input>
             </a-form-item>
@@ -20,7 +19,7 @@
 
 
           <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
+            <a-col :sm="12" :md="6" :lg="5">
               <a-form-item label="日志类型">
                 <a-select placeholder="请日志类型" v-model="queryParam.type" allowClear>
                   <!-- <a-select-option :value="-1">在线</a-select-option> -->
@@ -33,7 +32,7 @@
             </a-col>
           </template>
 
-          <a-col :md="6" :sm="8">
+          <a-col :sm="12" :md="6" :lg="5">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>

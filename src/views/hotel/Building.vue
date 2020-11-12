@@ -1,12 +1,22 @@
 <template>
   <div class="building ui-container">
     <a-card>
-      <div slot="title" class="search-bar">
-        <div class="caption">
-          <a-input allowClear class="caption-item" @keyup.enter.native="handleSearch" v-model="queryParam.name" placeholder="请输入楼栋名称"></a-input>
-          <a-button type="primary" @click="handleSearch" icon="search">查询</a-button>
-          <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-        </div>
+      <div slot="title" class="table-page-search-wrapper">
+        <a-form layout="inline" @submit.prevent="handleSearch">
+          <a-row :gutter="24">
+            <a-col :sm="12" :md="6" :lg="5">
+              <a-form-item label="楼栋">
+                <a-input allowClear @keyup.enter.native="handleSearch" v-model="queryParam.name" placeholder="请输入楼栋名称"></a-input>
+              </a-form-item>
+            </a-col>
+            <a-col :sm="12" :md="6" :lg="5">
+              <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+                <a-button type="primary" @click="handleSearch" icon="search">查询</a-button>
+                <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              </span>
+            </a-col>
+          </a-row>
+        </a-form>
       </div>
       <div slot="extra">
         <a-button-group>

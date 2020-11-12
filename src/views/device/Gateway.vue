@@ -4,15 +4,13 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @submit.prevent="searchQuery">
         <a-row :gutter="24">
-
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="序列号">
               <a-input placeholder="请输入序列号" v-model="queryParam.oboxSerialId"></a-input>
-
             </a-form-item>
           </a-col>
 
-          <a-col :md="6" :sm="8">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="状态">
               <a-select placeholder="请选择状态" v-model="queryParam.isOnline" allowClear>
                 <a-select-option :value="1">在线</a-select-option>
@@ -23,14 +21,14 @@
 
 
           <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
+            <a-col :sm="12" :md="6" :lg="5">
               <a-form-item label="名称">
                 <a-input placeholder="请输入名称" v-model="queryParam.oboxName"></a-input>
               </a-form-item>
             </a-col>
           </template>
 
-          <a-col :md="6" :sm="8">
+          <a-col :sm="12" :md="6" :lg="5">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>

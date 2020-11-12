@@ -25,12 +25,12 @@
           <a-form layout="inline" @submit.prevent="searchQuery" v-if="toggleSearchStatus">
             <a-row :gutter="24">
 
-              <a-col :md="6" :sm="12">
+              <a-col :sm="12" :md="5" :lg="5">
                 <a-form-item label="异常事件">
                   <a-input placeholder="请输入异常事件" v-model="queryParam.deviceId"></a-input>
                 </a-form-item>
               </a-col>
-              <a-col :md="6" :sm="12">
+              <a-col :sm="12" :md="5" :lg="5">
                 <a-form-item label="事件类型">
                   <a-select v-model="queryParam.type" placeholder="请选择事件类型">
                     <a-select-option value="0">欠费</a-select-option>
@@ -39,7 +39,7 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :md="6" :sm="8">
+              <a-col :sm="12" :md="5" :lg="5">
                 <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
                   <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
                   <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>

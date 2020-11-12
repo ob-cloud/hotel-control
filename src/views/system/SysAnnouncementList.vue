@@ -5,12 +5,12 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="24">
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="标题">
               <a-input placeholder="请输入标题" v-model="queryParam.title" allowClear></a-input>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="消息类型">
               <a-select v-model="queryParam.type" placeholder="请选择消息类型" allowClear>
                 <a-select-option :value="0">酒店欠费</a-select-option>
@@ -20,7 +20,7 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="6" :lg="5">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>

@@ -5,13 +5,13 @@
       <a-form layout="inline" @submit.prevent="searchQuery">
         <a-row :gutter="24">
 
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="5" :lg="5">
             <a-form-item label="账号">
               <a-input placeholder="请输入账号查询" v-model="queryParam.username"></a-input>
             </a-form-item>
           </a-col>
 
-          <a-col :md="6" :sm="8">
+          <a-col :sm="12" :md="5" :lg="5">
             <a-form-item label="性别">
               <a-select v-model="queryParam.sex" placeholder="请选择性别查询">
                 <a-select-option value="">请选择性别查询</a-select-option>
@@ -22,19 +22,19 @@
           </a-col>
 
           <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
+            <a-col :sm="12" :md="5" :lg="5">
               <a-form-item label="邮箱">
                 <a-input placeholder="请输入邮箱查询" v-model="queryParam.email"></a-input>
               </a-form-item>
             </a-col>
 
-            <a-col :md="6" :sm="8">
+            <a-col :sm="12" :md="5" :lg="5">
               <a-form-item label="手机号码">
                 <a-input placeholder="请输入手机号码查询" v-model="queryParam.phone"></a-input>
               </a-form-item>
             </a-col>
 
-            <a-col :md="6" :sm="8">
+            <a-col :sm="12" :md="5" :lg="5">
               <a-form-item label="状态">
                 <a-select v-model="queryParam.status" placeholder="请选择用户状态查询">
                   <a-select-option value="">请选择用户状态</a-select-option>
@@ -45,7 +45,7 @@
             </a-col>
           </template>
 
-          <a-col :md="6" :sm="8">
+          <a-col :sm="12" :md="5" :lg="5">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>

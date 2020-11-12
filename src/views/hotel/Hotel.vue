@@ -5,10 +5,9 @@
       <a-form layout="inline" @submit.prevent="searchQuery">
         <a-row :gutter="24">
 
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="酒店名称">
               <a-input placeholder="请输入酒店名称" v-model="queryParam.name"></a-input>
-
             </a-form-item>
           </a-col>
 
@@ -20,7 +19,7 @@
               </a-select>
             </a-form-item>
           </a-col> -->
-          <a-col :md="6" :sm="8">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="所属公司">
               <!-- <a-input placeholder="请输入所属公司名称" v-model="queryParam.company"></a-input> -->
               <a-select placeholder="请输入所属公司名称" v-model="queryParam.companyId" allowClear>
@@ -36,14 +35,14 @@
                 <a-input placeholder="请输入所属公司名称" v-model="queryParam.company"></a-input>
               </a-form-item>
             </a-col> -->
-            <a-col :md="6" :sm="8">
+            <a-col :sm="12" :md="6" :lg="5">
               <a-form-item label="业务员">
                 <a-input placeholder="请输入业务员" v-model="queryParam.saleName" allowClear></a-input>
               </a-form-item>
             </a-col>
           </template>
 
-          <a-col :md="6" :sm="8">
+          <a-col :sm="12" :md="6" :lg="5">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>

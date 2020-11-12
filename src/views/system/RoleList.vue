@@ -6,12 +6,12 @@
       <!-- 搜索区域 -->
       <a-form layout="inline">
         <a-row :gutter="24">
-          <a-col :md="6" :sm="8">
+          <a-col :sm="12" :md="5" :lg="5">
             <a-form-item label="名称" :labelCol="{span: 5}" :wrapperCol="{span: 18, offset: 1}">
               <a-input placeholder="请输入名称查询" v-model="queryParam.roleName"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :md="10" :sm="12">
+          <a-col :sm="12" :md="10" :lg="10">
             <a-form-item label="创建时间" :labelCol="{span: 5}" :wrapperCol="{span: 18, offset: 1}">
               <pro-date v-model="queryParam.createTime_begin" :showTime="true" format="YYYY-MM-DD HH:mm:ss" style="width:45%" placeholder="请选择开始时间" />
               <span style="width: 10px;">~</span>
@@ -19,7 +19,7 @@
             </a-form-item>
           </a-col>
           <span style="float: left; overflow: hidden;" class="table-page-search-submitButtons">
-            <a-col :md="6" :sm="24">
+            <a-col :sm="12" :md="5" :lg="5">
               <a-button type="primary" @click="searchQuery">查询</a-button>
               <a-button style="margin-left: 8px" @click="searchReset">重置</a-button>
             </a-col>

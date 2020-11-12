@@ -4,13 +4,13 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @submit.prevent="searchQuery">
         <a-row :gutter="24">
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="序列号">
               <a-input placeholder="请输入设备序列号" v-model="queryParam.serialId"></a-input>
             </a-form-item>
           </a-col>
 
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="网关">
               <a-select placeholder="请选择网关" v-model="queryParam.oboxSerialId" allowClear>
                 <a-select-option v-for="item in oboxList" :key="item.oboxSerialId" :value="item.oboxSerialId">
@@ -21,14 +21,14 @@
           </a-col>
 
           <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="12">
+            <a-col :sm="12" :md="6" :lg="5">
               <a-form-item label="设备名称">
                 <a-input placeholder="请输入设备名称" v-model="queryParam.deviceName"></a-input>
               </a-form-item>
             </a-col>
           </template>
 
-          <a-col :md="6" :sm="12">
+          <a-col :sm="12" :md="6" :lg="5">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
