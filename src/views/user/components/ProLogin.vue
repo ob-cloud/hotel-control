@@ -7,14 +7,14 @@
     <div class="pages-user-index-box">
       <div class="pages-user-index-content">
         <div class="pages-user-index-header">用户登录</div>
-        <a-form style="margin-top: 20px;" id="formLogin" ref="formLogin" :form="LoginForm" @submit="handleSubmit">
+        <a-form style="margin-top: 25px;" id="formLogin" ref="formLogin" :form="LoginForm" @submit="handleSubmit">
           <a-form-item>
-            <a-input size="large" type="text" placeholder="输入登录账户" v-decorator="LoginRules.username">
+            <a-input size="large" type="text" placeholder="输入登录账户" v-decorator="LoginRules.username" allowClear>
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
           <a-form-item>
-            <a-input size="large" type="password" autocomplete="false" placeholder="输入用户密码" v-decorator="LoginRules.password">
+            <a-input size="large" type="password" autocomplete="false" placeholder="输入用户密码" v-decorator="LoginRules.password" allowClear>
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
@@ -199,7 +199,7 @@ name: 'SimpleLogin',
   background: #fff;
   box-shadow: 0 0 50px rgba(0, 0, 0, .4);
   border-radius: 5px;
-  padding: 10%;
+  padding: 10% 10%;
 }
 
 .pages-user-index-header {
