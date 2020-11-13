@@ -74,25 +74,25 @@
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType)">
-                <a v-isPermitted="'device:control'" @click="handleAction(0, record)">开关</a>
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType)">
+                <a @click="handleAction(0, record)">开关</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isHumidifierSensors(record.deviceChildType)">
-                <a v-isPermitted="'device:control'" @click="handleAction(1, record)">温湿度</a>
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isHumidifierSensors(record.deviceChildType)">
+                <a @click="handleAction(1, record)">温湿度</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isSettableSceneSocketSwitch(record.deviceChildType)">
-                <a v-isPermitted="'device:control'" @click="handleAction(2, record)">设置</a>
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isSettableSceneSocketSwitch(record.deviceChildType)">
+                <a @click="handleAction(2, record)">设置</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isSimpleLed(record.deviceChildType)">
-                <a v-isPermitted="'device:control'" @click="handleAction(3, record)">灯控</a>
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isSimpleLed(record.deviceChildType)">
+                <a @click="handleAction(3, record)">灯控</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:normal:control'" v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)">
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)">
                 <a-popconfirm title="确认停用？请谨慎操作！" @confirm="() => handleStopService(record)">
-                  <a v-isPermitted="'device:control'">停用</a>
+                  <a>停用</a>
                 </a-popconfirm>
               </a-menu-item>
 
