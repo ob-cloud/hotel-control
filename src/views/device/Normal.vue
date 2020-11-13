@@ -186,7 +186,7 @@
             align: 'center',
             customRender (row) {
               if (TypeHints.isSimpleLed(row.deviceChildType)) {
-                const ledLampEquip = new LedLampEquip(row.state, row.deviceType, row.deviceChildType)
+                const ledLampEquip = new LedLampEquip(row.deviceState, row.deviceType, row.deviceChildType)
                 return ledLampEquip.getLampExceptionStatus()
                 // const exception = row.state.slice(14) || '00'
                 // const bits = exception.split('')
