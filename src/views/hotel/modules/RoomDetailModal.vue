@@ -82,18 +82,18 @@
       <a-tab-pane key="1" tab="网关设备">
         <a-table bordered size="small" rowKey="serialId" :columns="deviceColumns" :dataSource="deviceList" :loading="loading" :pagination="ipagination" @change="handleTableChange">
           <span slot="action" slot-scope="text, record">
-            <a v-if="TypeHints.isXkeySocketSwitch(record.device_child_type)" @click="handleAction(0, record)">开关</a>
-            <a v-if="TypeHints.isSettableSceneSocketSwitch(record.device_child_type)" @click="handleAction(2, record)">设置</a>
-            <a v-if="TypeHints.isHumidifierSensors(record.device_child_type)" @click="handleAction(1, record)">温湿度</a>
-            <a v-if="TypeHints.isSimpleLed(record.device_child_type)" @click="handleAction(3, record)">灯控</a>
-            <a v-if="TypeHints.isPluginPowerSensors(record.device_child_type)" @click="handleAction(3, record)">停用</a>
+            <a v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType)" @click="handleAction(0, record)">开关</a>
+            <a v-if="TypeHints.isSettableSceneSocketSwitch(record.deviceChildType)" @click="handleAction(2, record)">设置</a>
+            <a v-if="TypeHints.isHumidifierSensors(record.deviceChildType)" @click="handleAction(1, record)">温湿度</a>
+            <a v-if="TypeHints.isSimpleLed(record.deviceChildType)" @click="handleAction(3, record)">灯控</a>
+            <a v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)" @click="handleAction(3, record)">停用</a>
           </span>
         </a-table>
       </a-tab-pane>
       <a-tab-pane key="2" tab="红外设备" force-render>
         <a-table bordered size="small" rowKey="deviceId" :columns="infraredColumns" :dataSource="irDeviceList" :loading="loading">
           <span slot="action" slot-scope="text, record">
-            <a v-if="TypeHints.isInfrared(record.type)" @click="handleAction(5, record)">控制</a>
+            <a v-if="TypeHints.isInfrared(record.deviceType)" @click="handleAction(5, record)">控制</a>
           </span>
         </a-table>
       </a-tab-pane>
@@ -137,17 +137,17 @@ const deviceColumns = [
   {
     title: '序列号',
     align: 'center',
-    dataIndex: 'serialId'
+    dataIndex: 'deviceSerialId'
   },
   {
     title: '设备名称',
     align: 'center',
-    dataIndex: 'name'
+    dataIndex: 'deviceName'
   },
   {
     title: '设备状态',
     align: 'center',
-    dataIndex: 'state',
+    dataIndex: 'deviceState',
     customRender (status, row) {
       return Descriptor.getStatusDescriptor(status, row.deviceType, row.deviceChildType)
     }
@@ -180,17 +180,17 @@ const infraredColumns = [
   {
     title: '序列号',
     align: 'center',
-    dataIndex: 'serialId',
+    dataIndex: 'deviceSerialId',
   },
   {
     title: '设备名称',
     align: 'center',
-    dataIndex: 'name',
+    dataIndex: 'deviceName',
   },
   {
     title: '设备状态',
     align: 'center',
-    dataIndex: 'state',
+    dataIndex: 'deviceState',
     customRender (status) {
       return status === 0 ? '在线' : '离线'
     }
@@ -198,7 +198,7 @@ const infraredColumns = [
   {
     title: '设备版本',
     align: 'center',
-    dataIndex: 'version'
+    dataIndex: 'deviceVersion'
   },
   {
     title: '操作',
