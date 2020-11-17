@@ -124,7 +124,7 @@ export default {
       this.loading = true
       getHotelReportList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.dataSource = res.result.records
+          this.dataSource = res.result.tableHotelResponseList
           this.ipagination.total = res.result.total || 0
         } else {
           this.$message.warning(res.message)

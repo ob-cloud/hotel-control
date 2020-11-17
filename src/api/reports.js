@@ -15,7 +15,7 @@ const getMineReportStatistic = (type = 3) => getAction('/table/getAgentTotal', {
 
 // 设备
 const getEquipsReportList = ({hotelId, type = 3, pageNo, pageSize}) => getAction('/table/getDeviceDetails', {hotelId, type, pageNo, pageSize})
-const getEquipsReportStatistic = (hotelId, type) => getAction('/table/getDeviceTotal', {hotelId, type})
+const getEquipsReportStatistic = (hotelId, type = 3) => getAction('/table/getDeviceTotal', {hotelId, type})
 
 // 异常
 const getExceptionReportList = ({hotelId, type, title, msgContent, pageNo, pageSize}) => getAction('/table/getExceptionList', {hotelId, type, title, msgContent, pageNo, pageSize})
