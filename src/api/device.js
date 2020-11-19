@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-30 17:28:07
+ * @Last Modified time: 2020-11-19 16:07:32
  */
 
 // import {request} from '@/common/request'
@@ -12,8 +12,9 @@ import { getAction, postFormAction, deleteAction, postAction, putAction } from '
 const getHotelDeviceList = ({hotelId, oboxSerialId, deviceName = undefined, pageNo, pageSize}) => getAction('/device/getDevice', {hotelId, oboxSerialId, deviceName, pageNo, pageSize})
 const delHotelDevice = (deviceSerialId) => deleteAction('/device/delDevice', {deviceSerialId})
 const scanHotelDevice = ({hotelId, oboxSerialId, isElectric = undefined}) => getAction('/device/obox/scanDevice', {hotelId, serialId: oboxSerialId, isElectric})
-const editHotelDevice = (deviceSerialId, deviceName) => putAction('/device/reDeviceName', {deviceSerialId, deviceName})
-const stopHotelDevice = (deviceSerialId, isStop) => postAction('/device/stopDevice', {deviceSerialId, isStop})
+const editHotelDevice = (deviceSerialId, deviceName) => putAction(`/device/reDeviceName`, { deviceSerialId, deviceName })
+// const stopHotelDevice = (deviceSerialId, isStop) => postAction('/device/stopDevice', {deviceSerialId, isStop})
+const stopHotelDevice = (deviceSerialId, isStop) => postAction(`/device/stopDevice`, { deviceSerialId, isStop })
 
 // hotel infrared
 const getHotelIrList = ({hotelId, serialId, state, deviceName, pageNo, pageSize}) => getAction('/device/getHotelIr', {hotelId, serialId, state, deviceName, pageNo, pageSize})
@@ -56,7 +57,7 @@ const editDevice = (serialId, name) => getAction('/common', {
  */
 const scanAndSaveDevicesToObox = ({hotelId, serialId, isElectric}) => postAction('device/obox/scanDevice', {hotelId, serialId, isElectric})
 const pauseScanDevices = (oboxSerialId) => deleteAction(`/facade/scan/${oboxSerialId}`)
-const stopCardPower = (id) => postAction(`/common/stopCardPower`, { id })
+const stopCardPower = (deviceSerialId, isStop) => postAction(`/device/stopDevice?deviceSerialId=${deviceSerialId}&isStop=${isStop}`)
 
 // OBOX
 const getOboxList = (params) => getAction('/common/obox/list', {

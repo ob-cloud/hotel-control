@@ -84,7 +84,10 @@ const columns = [{
 },{
   title: '在用使用率',
   align:"center",
-  dataIndex: 'utilizationRate'
+  dataIndex: 'utilizationRate',
+  customRender (rate) {
+    return rate ? `${rate}%` : 0
+  }
 },{
   title: '租金',
   align:"center",

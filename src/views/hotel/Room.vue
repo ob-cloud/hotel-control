@@ -48,16 +48,17 @@
       <div class="block-list" :style="{height: contentHeight + 'px', 'overflow-y': 'auto'}">
         <a-spin :spinning="loading">
           <template v-if="roomList.length">
-            <div class="block-item" :class="{'active': item.lightState}" v-for="item in roomList" :key="item.id">
+            <div class="block-item" :class="{'active': item.elec}" v-for="item in roomList" :key="item.id">
               <div class="toolbar left" v-if="item.temperature">
                 <span title="温度"><i class="obicon obicon-temperature" style="color: #f66c32;"></i>{{ item.temperature }}℃</span>
               </div>
               <div class="toolbar">
                 <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
                 <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-equip" title="关联设备" @click="(e) => handleDeviceModal(item, e)"></i> -->
-                <a-popconfirm :title="`${item.elec ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleLamp(item, e)">
-                  <i v-isPermitted="'room:control'" class="icon obicon obicon-room-card" :class="{active: item.lightState}" style="font-weight: 600;" title="插卡取电"></i>
-                </a-popconfirm>
+                <!-- <a-popconfirm :title="`${item.elec ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleControl(item, e)">
+                  <i v-isPermitted="'room:control'" class="icon obicon obicon-room-card" :class="{active: item.elec}" style="font-weight: 600;" title="插卡取电"></i>
+                </a-popconfirm> -->
+                <i v-isPermitted="'room:control'" class="icon obicon obicon-room-card" :class="{active: item.elec}" style="font-weight: 600; cursor: default;" title="插卡取电"></i>
                 <a-icon v-isPermitted="'room:edit'" class="icon" type="edit" title="编辑" @click="(e) => { handleEdit(item) }" />
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
                   <a-icon v-isPermitted="'room:del'" class="icon" type="delete" />
@@ -83,7 +84,8 @@
 </template>
 
 <script>
-import { getRoomList, delRoom, handleLampPower } from '@/api/hotel'
+import { getRoomList, delRoom } from '@/api/hotel'
+import { stopHotelDevice } from '@/api/device'
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 import { Empty } from 'ant-design-vue'
 import RoomModal from './modules/RoomModal'
@@ -144,12 +146,8 @@ export default {
     handleSearch () {
       this.loadData(1)
     },
-    handleLamp (item) {
-      const params = {
-        roomId: item.id,
-        deviceType: item.elec ? 2 : 1
-      }
-      handleLampPower(params).then(res => {
+    handleControl (item) {
+      stopHotelDevice(item.deviceSerialId, !item.elec).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
         } else this.$message.error(res.message)

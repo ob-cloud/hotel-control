@@ -80,18 +80,18 @@
 
     <a-tabs default-active-key="1" style="padding: 10px 24px;" :animated="{tabPane: false}">
       <a-tab-pane key="1" tab="网关设备">
-        <a-table bordered size="small" rowKey="serialId" :columns="deviceColumns" :dataSource="deviceList" :loading="loading" :pagination="ipagination" @change="handleTableChange">
+        <a-table bordered size="small" rowKey="id" :columns="deviceColumns" :dataSource="deviceList" :loading="loading" :pagination="ipagination" @change="handleTableChange">
           <span slot="action" slot-scope="text, record">
-            <a v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType)" @click="handleAction(0, record)">开关</a>
+            <a v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)" @click="handleAction(0, record)">开关</a>
             <a v-if="TypeHints.isSettableSceneSocketSwitch(record.deviceChildType)" @click="handleAction(2, record)">设置</a>
             <a v-if="TypeHints.isHumidifierSensors(record.deviceChildType)" @click="handleAction(1, record)">温湿度</a>
             <a v-if="TypeHints.isSimpleLed(record.deviceChildType)" @click="handleAction(3, record)">灯控</a>
-            <a v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)" @click="handleAction(3, record)">停用</a>
+            <a v-if="TypeHints.isPluginPowerSensors(record.deviceChildType, record.deviceType)" @click="handleAction(4, record)">停用</a>
           </span>
         </a-table>
       </a-tab-pane>
       <a-tab-pane key="2" tab="红外设备" force-render>
-        <a-table bordered size="small" rowKey="deviceId" :columns="infraredColumns" :dataSource="irDeviceList" :loading="loading">
+        <a-table bordered size="small" rowKey="deviceSerialId" :columns="infraredColumns" :dataSource="irDeviceList" :loading="loading">
           <span slot="action" slot-scope="text, record">
             <a v-if="TypeHints.isInfrared(record.deviceType)" @click="handleAction(5, record)">控制</a>
           </span>
@@ -123,6 +123,7 @@ import {
   unbindRoomGateway,
   unbindRoomInfrared
 } from '@/api/hotel'
+import { stopHotelDevice } from '@/api/device'
 import RoomBindOboxModal from './RoomBindOboxModal'
 import RoomBindInfraredModal from './RoomBindInfraredModal'
 import LampActionModal from '@views/device/modules/LampActionModal'
@@ -351,12 +352,25 @@ export default {
       this.tabActiveKey = key
     },
     handleAction (type, record) {
-      type === 0 && this.$refs.powerModal.show(record)
-      type === 1 && this.$refs.humidityModal.show(record)
-      type === 2 && this.$refs.keypanelModal.show(record)
-      type === 3 && this.$refs.lampModal.show(record)
-      type === 5 && this.$refs.airModal.show(record)
-    }
+      stopHotelDevice
+      const ActoinMap = {
+        '0': 'powerModal',
+        '1': 'humidityModal',
+        '2': 'keypanelModal',
+        '3': 'lampModal',
+        '5': 'airModal'
+      }
+      const ref = ActoinMap[type]
+      if (ref) this.$refs[ref].show(record)
+      if (type === 4) this.handleStopCardPower(record)
+    },
+    handleStopCardPower (item) {
+      stopHotelDevice(item.deviceSerialId, !item.elec).then(res => {
+        if (this.$isAjaxSuccess(res.code)) {
+          this.$message.success('操作成功')
+        } else this.$message.error(res.message)
+      })
+    },
   },
 }
 </script>

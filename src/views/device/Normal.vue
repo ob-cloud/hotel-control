@@ -74,7 +74,7 @@
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType)">
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)">
                 <a @click="handleAction(0, record)">开关</a>
               </a-menu-item>
 
@@ -86,13 +86,13 @@
                 <a @click="handleAction(2, record)">设置</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isSimpleLed(record.deviceChildType)">
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isSimpleLed(record.deviceChildType, record.deviceType)">
                 <a @click="handleAction(3, record)">灯控</a>
               </a-menu-item>
 
               <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)">
-                <a-popconfirm title="确认停用？请谨慎操作！" @confirm="() => handleStopService(record)">
-                  <a>停用</a>
+                <a-popconfirm :title="`确认${record.isOnline ? '停用' : '启用'}？请谨慎操作！`" @confirm="() => handleStopService(record)">
+                  <a>{{ record.isOnline ? '停用' : '启用' }}</a>
                 </a-popconfirm>
               </a-menu-item>
 
@@ -125,8 +125,7 @@
   import KeypanelActionModal from './modules/KeyPanelActionModal'
   import HumidityActionModal from './modules/HumidityActionModal'
   import PowerSwitchModal from './modules/PowerSwitchModal'
-  // import { getOboxDeviceList, getAllOboxList, delDevice, stopCardPower } from '@/api/device'
-  import { getHotelDeviceList, getAllHotelOboxList, delHotelDevice, stopCardPower } from '@/api/device'
+  import { getHotelDeviceList, getAllHotelOboxList, delHotelDevice, stopHotelDevice } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { Descriptor, TypeHints, LedLampEquip } from 'hardware-suit'
 
@@ -185,7 +184,7 @@
             title: '异常状态',
             align: 'center',
             customRender (row) {
-              if (TypeHints.isSimpleLed(row.deviceChildType)) {
+              if (TypeHints.isSimpleLed(row.deviceChildType, row.deviceType)) {
                 const ledLampEquip = new LedLampEquip(row.deviceState, row.deviceType, row.deviceChildType)
                 return ledLampEquip.getLampExceptionStatus()
                 // const exception = row.state.slice(14) || '00'
@@ -248,7 +247,7 @@
       },
       handleStopService (record) {
         this.loading = true
-        stopCardPower(record.id).then(res => {
+        stopHotelDevice(record.deviceSerialId, !record.isOnline).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.$message.success('操作成功')
           }else this.$message.error(res.message || '操作失败')

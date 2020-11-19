@@ -136,7 +136,7 @@ export default {
       this.loading = true
       getExceptionReportList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.dataSource = res.result.records
+          this.dataSource = res.result.list
           this.ipagination.total = res.result.total || 0
         } else {
           this.$message.warning(res.message)
@@ -145,6 +145,7 @@ export default {
     },
     handleAction (record) {
       this.loading = true
+      record.isOper = !record.isOper
       handleException(record).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')

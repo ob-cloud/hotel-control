@@ -1,4 +1,4 @@
-import { getAction, postAction } from '@/utils/ajax'
+import { getAction, putAction } from '@/utils/ajax'
 
 // 集团
 const getEnterpriseReportList = ({type = 3, price = 'asc', pageNo, pageSize}) => getAction('/table/getAgentDetails', {type, price, pageNo, pageSize})
@@ -20,7 +20,7 @@ const getEquipsReportStatistic = (hotelId, type = 3) => getAction('/table/getDev
 // 异常
 const getExceptionReportList = ({hotelId, type, title, msgContent, pageNo, pageSize}) => getAction('/table/getExceptionList', {hotelId, type, title, msgContent, pageNo, pageSize})
 
-const handleException = (id, isOper) => postAction('/table/editException', {id, isOper})
+const handleException = ({id, isOper}) => putAction('/table/editException', {id, isOper})
 
 export {
   getEnterpriseReportList,

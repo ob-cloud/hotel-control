@@ -86,7 +86,10 @@ const columns = [{
 },{
   title: '在用使用率',
   align:"center",
-  dataIndex: 'utilizationRate'
+  dataIndex: 'utilizationRate',
+  customRender (rate) {
+    return rate ? `${rate}%` : 0
+  }
 },{
   title: '租金',
   align:"center",
@@ -128,7 +131,7 @@ export default {
       this.loading = true
       getMineReportList(params).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.dataSource = res.result.records
+          this.dataSource = res.result.tableHotelResponseList
           this.ipagination.total = res.result.total || 0
         } else {
           this.$message.warning(res.message)

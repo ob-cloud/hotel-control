@@ -100,14 +100,14 @@ const columns = [{
     align: 'center',
     dataIndex: 'oboxRate',
     customRender (rate) {
-      return rate ? `${rate}%` : ''
+      return rate ? `${rate}%` : 0
     }
   }, {
     title: '红外',
     align: 'center',
     dataIndex: 'irRate',
     customRender (rate) {
-      return rate ? `${rate}%` : ''
+      return rate ? `${rate}%` : 0
     }
   }]
 }]
