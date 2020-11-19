@@ -352,7 +352,6 @@ export default {
       this.tabActiveKey = key
     },
     handleAction (type, record) {
-      stopHotelDevice
       const ActoinMap = {
         '0': 'powerModal',
         '1': 'humidityModal',
@@ -365,11 +364,13 @@ export default {
       if (type === 4) this.handleStopCardPower(record)
     },
     handleStopCardPower (item) {
+      this.loading = true
       stopHotelDevice(item.deviceSerialId, !item.elec).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
+          this.getDeviceList()
         } else this.$message.error(res.message)
-      })
+      }).finally(() => this.loading = false)
     },
   },
 }
