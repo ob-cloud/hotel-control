@@ -150,7 +150,7 @@ export default {
     },
     searchPause () {
       if (!this.oboxSerialId) return
-      return pauseScanDevices(this.oboxSerialId).then(res => {
+      return pauseScanDevices(this.$store.getters.hotelId, this.oboxSerialId).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('已停止扫描')
         } else {

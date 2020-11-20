@@ -155,8 +155,7 @@ export default {
     },
     handleAction (record) {
       this.loading = true
-      record.isOper = !record.isOper
-      handleException(record).then(res => {
+      handleException(record.id, !record.isOper).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
           this.loadData()

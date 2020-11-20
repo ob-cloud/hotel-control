@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-11-20 14:49:36
+ * @Last Modified time: 2020-11-20 15:50:08
  */
 
 import { getAction, postFormAction, deleteAction, postAction, putAction } from '@/utils/ajax'
@@ -14,8 +14,8 @@ const editHotelDevice = (deviceSerialId, deviceName) => putAction(`/device/reDev
 // const stopHotelDevice = (deviceSerialId, isStop) => postAction('/device/stopDevice', {deviceSerialId, isStop})
 const stopHotelDevice = (deviceSerialId, isStop) => postAction(`/device/stopDevice`, { deviceSerialId, isStop })
 
-const scanHotelDevice = ({hotelId, oboxSerialId, isElectric = undefined}) => postAction('/device/obox/scanDevice', {hotelId, serialId: oboxSerialId, isElectric})
-const pauseScanDevices = (oboxSerialId) => deleteAction(`/facade/scan/${oboxSerialId}`)
+const scanHotelDevice = ({hotelId, oboxSerialId, electric = undefined}) => postAction('/device/obox/scanDevice', {hotelId, oboxSerialId, electric})
+const pauseScanDevices = (hotelId, oboxSerialId) => postAction(`/device/stopScanDevice`, {hotelId, oboxSerialId})
 
 // hotel infrared
 const getHotelIrList = ({hotelId, serialId, state, deviceName, pageNo, pageSize}) => getAction('/device/getHotelIr', {hotelId, serialId, state, deviceName, pageNo, pageSize})
