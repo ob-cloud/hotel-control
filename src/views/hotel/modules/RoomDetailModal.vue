@@ -1,6 +1,5 @@
 <template>
   <a-drawer
-    :title="title"
     :maskClosable="true"
     :width="drawerWidth"
     placement="right"
@@ -8,6 +7,15 @@
     @close="handleCancel"
     :visible="visible"
   >
+    <template slot="title">
+      <div style="width: 100%;">
+        <span>{{ title }}</span>
+        <span style="display:inline-block;width:calc(100% - 90px); padding-right: 10px; text-align: right">
+          <a-button @click="toggleScreen" :icon="modaltoggleFlag ? 'fullscreen' : 'fullscreen-exit'" style="height:20px;width:20px;border:0px"></a-button>
+        </span>
+      </div>
+    </template>
+
     <a-page-header
       :title="`${model.name}`"
       :breadcrumb="{ props: { routes } }"
@@ -221,6 +229,7 @@ export default {
   data() {
     return {
       title: '房间详情',
+      modaltoggleFlag: true,
       drawerWidth: '60%',
       visible: false,
       loading: false,
@@ -366,6 +375,10 @@ export default {
           this.getDeviceList()
         } else this.$message.error(res.message)
       }).finally(() => this.loading = false)
+    },
+    toggleScreen () {
+      this.drawerWidth = this.modaltoggleFlag ? window.innerWidth : '60%'
+      this.modaltoggleFlag = !this.modaltoggleFlag
     },
   },
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="pages-user-index-login" :style="{'background-image': `url(${background})`}">
     <div class="pages-user-index-bg"></div>
-    <div class="pages-user-index-abstract-title">酒店客控系统
+    <div class="pages-user-index-abstract-title">{{ title }}
       <!-- <div class="pages-user-index-abstract-description">智能控制</div> -->
     </div>
     <div class="pages-user-index-box">
@@ -24,32 +24,6 @@
         </a-form>
       </div>
     </div>
-
-
-
-    <!-- <div class="pages-user-index-login">
-      <div class="pages-user-index-bg"></div>
-      <div class="pages-user-index-abstract-title">酒店客控系统
-        <div class="pages-user-index-abstract-description">
-        </div>
-      </div>
-      <div class="pages-user-index-box">
-        <div class="pages-user-index-content">
-          <div class="pages-user-index-header">用户登录</div>
-          <div class="pages-user-index-item">
-            <div class="pages-user-index-userLabel">用户名</div>
-            <input type="text" value="" style="border-style: none none solid;">
-          </div>
-          <div class="pages-user-index-item">
-            <div class="pages-user-index-userLabel">
-              密<span style="margin-left: 1em;"></span>码
-            </div>
-            <input type="password" value="" style="border-style: none none solid;">
-          </div>
-          <input class="pages-user-index-btn" type="button" name="登录" value="登录">
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -58,7 +32,7 @@ import md5 from 'md5'
 import { mapActions } from 'vuex'
 import { timeFix, isAjaxSuccess } from '@/utils/util'
 import { isEmail } from '@/utils/validator'
-// import config from '@/config/defaultSettings'
+import config from '@/config/defaultSettings'
 const background = require('@/assets/images/background.svg')
 export default {
 name: 'SimpleLogin',
@@ -75,6 +49,11 @@ name: 'SimpleLogin',
         loginType: 0
       },
       background
+    }
+  },
+  computed: {
+    title () {
+      return config.pageOptions.title || '管理系统'
     }
   },
   methods: {
@@ -171,6 +150,7 @@ name: 'SimpleLogin',
   top: 0;
   bottom: 0;
   margin: auto;
+  user-select: none;
 }
 
 .pages-user-index-abstract-description {

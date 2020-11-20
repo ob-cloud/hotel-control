@@ -35,7 +35,7 @@ export default {
   // TODO Delete
   pageOptions: {
     logo: 'logo.png',   // 系统统一logo
-    title: '酒店客控系统',  // 系统统一标题
+    title: '智慧客控系统',  // 系统统一标题
     // description: 'On-Bright Admin Pro',
     logLogo: 'logLogo.png',  // 登录页Logo，没有默认使用logo
     footer: false, // footer 为 true 时， 下面脚注配置生效
