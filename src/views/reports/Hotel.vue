@@ -54,7 +54,7 @@
               </a-col> -->
             </a-row>
           </div>
-          <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="id" :columns="columns" :pagination="ipagination" @change="handleTableChange">
+          <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="time" :columns="columns" :pagination="ipagination" @change="handleTableChange">
           </a-table>
         </div>
       </div>

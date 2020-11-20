@@ -106,8 +106,7 @@
 <script>
   import InfraredModal from './modules/InfraredModal'
   import InfraredAirConditionModal from './modules/InfraredAirConditionModal'
-  // import { getInfratedDeviceList, delInfratedDevice, stopInfrared } from '@/api/device'
-  import { getHotelIrList, delInfratedDevice, stopHotelInfrared } from '@/api/device'
+  import { getHotelIrList, delHotelInfrared, stopHotelInfrared } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { TypeHints } from 'hardware-suit'
 
@@ -218,7 +217,7 @@
         this.loadData()
       },
       handleDelete (id) {
-        delInfratedDevice(id).then(res => {
+        delHotelInfrared(id).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.loadData(1)
             this.$message.success('删除成功')

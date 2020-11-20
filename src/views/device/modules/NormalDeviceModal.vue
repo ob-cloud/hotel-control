@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { scanAndSaveDevicesToObox, pauseScanDevices, getAllHotelOboxList } from '@/api/device'
+import { scanHotelDevice, pauseScanDevices, getAllHotelOboxList } from '@/api/device'
 import { Descriptor } from 'hardware-suit'
 export default {
   data () {
@@ -113,7 +113,8 @@ export default {
           that.confirmLoading = true
           let formData = Object.assign(that.model, values)
           that.oboxSerialId = formData.oboxSerialId
-          scanAndSaveDevicesToObox(formData.oboxSerialId, formData).then(res => {
+          const oboxSerialId = that.oboxSerialId
+          scanHotelDevice({hotelId: this.$store.getters.hotelId, oboxSerialId }).then(res => {
             if (this.$isAjaxSuccess(res.code)) {
               // console.log('scan  ', res)
               // that.$message.success(`设备已扫描并添加到OBox(${that.oboxSerialId})中`)

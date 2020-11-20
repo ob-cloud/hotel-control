@@ -6,10 +6,11 @@
           <!-- <a>今日</a>
           <a>本月</a>
           <a>本年</a> -->
-          <a-radio-group :defaultValue="3" v-model="queryParam.type" @change="searchQuery">
-            <a-radio-button :value="3">今日</a-radio-button>
-            <a-radio-button :value="2">本月</a-radio-button>
-            <a-radio-button :value="1">本年</a-radio-button>
+          <a-radio-group :defaultValue="undefined" v-model="queryParam.type" @change="searchQuery">
+            <a-radio-button :value="0">欠费</a-radio-button>
+            <a-radio-button :value="1">掉线</a-radio-button>
+            <a-radio-button :value="2">异常</a-radio-button>
+            <a-radio-button :value="undefined">全部</a-radio-button>
           </a-radio-group>
           <a @click="handleToggleSearch" style="">
             <!-- <a-tag>
@@ -27,10 +28,10 @@
 
               <a-col :sm="12" :md="5" :lg="5">
                 <a-form-item label="异常事件">
-                  <a-input placeholder="请输入异常事件" v-model="queryParam.deviceId"></a-input>
+                  <a-input placeholder="请输入异常事件" v-model="queryParam.title" allowClear></a-input>
                 </a-form-item>
               </a-col>
-              <a-col :sm="12" :md="5" :lg="5">
+              <!-- <a-col :sm="12" :md="5" :lg="5">
                 <a-form-item label="事件类型">
                   <a-select v-model="queryParam.type" placeholder="请选择事件类型">
                     <a-select-option value="0">欠费</a-select-option>
@@ -38,7 +39,7 @@
                     <a-select-option value="2">异常</a-select-option>
                   </a-select>
                 </a-form-item>
-              </a-col>
+              </a-col> -->
               <a-col :sm="12" :md="5" :lg="5">
                 <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
                   <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -48,6 +49,9 @@
             </a-row>
           </a-form>
           <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="id" :columns="columns" :pagination="ipagination" @change="handleTableChange">
+            <span slot="status" slot-scope="text, record">
+              <a-badge :status="record.isOper ? 'success' : 'error'" :text="record.isOper ? '已处理' : '未处理'" />
+            </span>
             <span slot="action" slot-scope="text, record">
               <!-- <a @click="handleEdit(record)">操作</a> -->
               <a style="font-size: 12px;" :style="`color: ${record.isOper ? '#1890ff' : '#f5222d'}`" @click="handleAction(record)">
@@ -71,11 +75,16 @@ const columns = [{
   align:"center",
   dataIndex: 'title'
 }, {
+  title: '事件详情',
+  align:"center",
+  ellipsis: true,
+  dataIndex: 'msgContent'
+}, {
   title: '事件类型',
   align:"center",
   dataIndex: 'type',
   customRender (type) {
-    return type === 0 ? '酒店欠费' :  type === 1 ? '掉线' : '异常'
+    return type === 0 ? '欠费' :  type === 1 ? '掉线' : '异常'
   }
 }, {
   title: '异常时间',
@@ -84,17 +93,18 @@ const columns = [{
   sortOrder: 'descend',
   dataIndex: 'createTime'
 }, {
-  title: '是否已处理',
+  title: '处理状态',
   align:"center",
   dataIndex: 'isOper',
-  customRender (status) {
-    return status ? '是' : '否'
-  },
+  scopedSlots: { customRender: 'status' },
+  // customRender (status) {
+  //   return status ? '已处理' : '未处理'
+  // },
   filters: [{
-    text: '是',
+    text: '已处理',
     value: 1,
   }, {
-    text: '否',
+    text: '未处理',
     value: 0,
   }],
   onFilter: (value, record) => record.isOper === value
@@ -107,7 +117,7 @@ const columns = [{
     dataIndex: 'action',
     scopedSlots: { customRender: 'action' },
     align: 'center',
-    width: 170
+    // width: 170
   }]
 export default {
   mixins: [ ProListMixin ],

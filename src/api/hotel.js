@@ -2,10 +2,10 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-10-28 15:31:35
+ * @Last Modified time: 2020-11-20 14:50:55
  */
 
-import { getAction, postFormAction, postAction, deleteAction, putAction } from '@/utils/ajax'
+import { getAction, postAction, deleteAction, putAction } from '@/utils/ajax'
 
 // 酒店
 const getHotelList = (params) => getAction('/sys/hotel/listHotel', { ...params })
@@ -29,11 +29,6 @@ const addCompany = (params) => postAction('/sys/hotel/addCompany', params)
 const delCompany = (ids) => deleteAction('/sys/hotel/deleteBatchCompany', {ids})
 
 // 房间
-const getRoomDeviceList = (params) => getAction('/common/room/devices', {
-  CMD: 'get_room_device',
-  device: JSON.stringify(params)
-})
-
 const getRoomList = ({hotelId, name, floorName, roomName, pageNo, pageSize}) => getAction('/sys/hotel/listRoom', {hotelId, name, floorName, roomName, pageNo, pageSize})
 const addRoom = ({name, floorId}) => postAction('/sys/hotel/addOrUpdateRoom', {name, floorId})
 const editRoom = ({name, floorId, id}) => postAction('/sys/hotel/addOrUpdateRoom', {name, floorId, id})
@@ -50,27 +45,6 @@ const unbindRoomInfrared = ({id, deviceSerialId, roomId}) => postAction('/room/u
 const getRoomUnbindGatewayList = ({hotelId, pageNo, pageSize}) => getAction('/room/getUnBandObox', {hotelId, pageNo, pageSize})
 const getRoomUnbindInfraredList = ({hotelId, pageNo, pageSize}) => getAction('/room/getUnBandIr', {hotelId, pageNo, pageSize})
 
-// 灯控
-const handleLampPower = (params = {}) => postFormAction('/common', {
-  CMD: 'tigger_room_device',
-  device: JSON.stringify({ ...params, deviceChildType: '01' })
-})
-// 开关
-const handleSwitchPower = (params = {}) => postFormAction('/common', {
-  CMD: 'tigger_room_device',
-  device: JSON.stringify({ ...params, deviceChildType: '0417' })
-})
-
-const getPowerStatus = () => getAction('/common', {
-  CMD: 'get_alltype'
-})
-
-// 总控
-const triggerAllPower = (deviceType) => getAction('/common', {
-  CMD: 'tigger_room_device',
-  device: JSON.stringify({deviceType})
-})
-
 // 楼栋
 const getBuildingList = ({hotelId, name, pageNo, pageSize}) => getAction('/sys/hotel/listBuilding', {hotelId, name, pageNo, pageSize})
 const getBuildingListWithoutPage = (hotelId) => getAction('/sys/hotel/listAllBuilding', {hotelId})
@@ -79,7 +53,7 @@ const addBuilding = ({hotelId, name}) => postAction('/sys/hotel/addOrUpdateBuild
 const editBuilding = ({hotelId, name, id}) => postAction('/sys/hotel/addOrUpdateBuild', {hotelId, name, id})
 const delBuilding = (ids) => deleteAction('/sys/hotel/deleteBatchBuild', {ids})
 
-// floor
+// 楼层
 const getFloorList = ({hotelId, buildName, floorName, pageNo, pageSize}) => getAction('/sys/hotel/listFloor', {hotelId, buildName, floorName, pageNo, pageSize})
 const getFloorByBuildingId = (buildId) => getAction('/sys/hotel/listAllFloor', {buildId})
 const addFloor = ({hotelId, name, buildId}) => postAction('/sys/hotel/addOrUpdateFloor', {hotelId, name, buildId})
@@ -108,7 +82,6 @@ export {
   delCompany,
 
   // 房
-  getRoomDeviceList,
   getRoomList,
   addRoom,
   editRoom,
@@ -124,11 +97,6 @@ export {
   unbindRoomInfrared,
   getRoomUnbindGatewayList,
   getRoomUnbindInfraredList,
-
-  handleLampPower,
-  handleSwitchPower,
-  getPowerStatus,
-  triggerAllPower,
 
   getBuildingList,
   getBuildingListWithoutPage,

@@ -106,7 +106,6 @@
     <!-- 设备操作 -->
     <humidity-action-modal placement="right" :drawerWidth="600" ref="humidityModal"></humidity-action-modal>
     <lamp-action-modal placement="right" :drawerWidth="600" ref="lampModal"></lamp-action-modal>
-    <keypanel-action-modal placement="right" drawerWidth="60%" ref="keypanelModal"></keypanel-action-modal>
     <power-switch-modal placement="right" :drawerWidth="600" ref="powerModal"></power-switch-modal>
 
     <infrared-air-condition-modal placement="right" :drawerWidth="600" ref="airModal"></infrared-air-condition-modal>
@@ -127,7 +126,6 @@ import { stopHotelDevice } from '@/api/device'
 import RoomBindOboxModal from './RoomBindOboxModal'
 import RoomBindInfraredModal from './RoomBindInfraredModal'
 import LampActionModal from '@views/device/modules/LampActionModal'
-import KeypanelActionModal from '@views/device/modules/KeyPanelActionModal'
 import HumidityActionModal from '@views/device/modules/HumidityActionModal'
 import PowerSwitchModal from '@views/device/modules/PowerSwitchModal'
 import InfraredAirConditionModal from '@views/device/modules/InfraredAirConditionModal'
@@ -216,7 +214,6 @@ export default {
     RoomBindOboxModal,
     RoomBindInfraredModal,
     LampActionModal,
-    KeypanelActionModal,
     HumidityActionModal,
     PowerSwitchModal,
     InfraredAirConditionModal
@@ -323,7 +320,6 @@ export default {
       type === 2 && this.$refs.bindInfraredModal.show({ roomId: this.roomId })
     },
     handleUnbind (type, record) {
-      console.log(type, record)
       let params = type === 1 ? {deviceSerialId: record.oboxSerialId} : {deviceSerialId: record.serialId}
       params = {...params, id: record.id, roomId: this.roomId}
       const obj = type === 1 ? unbindRoomGateway(params) : unbindRoomInfrared(params)
@@ -355,7 +351,6 @@ export default {
       const ActoinMap = {
         '0': 'powerModal',
         '1': 'humidityModal',
-        '2': 'keypanelModal',
         '3': 'lampModal',
         '5': 'airModal'
       }

@@ -113,7 +113,6 @@
     <normal-device-modal ref="modalDeviceForm" @ok="modalDeviceFormOk" @close="modalDeviceFormOk"></normal-device-modal>
     <humidity-action-modal ref="humidityModal" @close="actionModalClose"></humidity-action-modal>
     <lamp-action-modal ref="lampModal" @close="actionModalClose"></lamp-action-modal>
-    <keypanel-action-modal ref="keypanelModal" @ok="actionModalClose" @close="actionModalClose"></keypanel-action-modal>
     <power-switch-modal ref="powerModal" @close="actionModalClose"></power-switch-modal>
   </a-card>
 </template>
@@ -122,7 +121,6 @@
   import NormalModal from './modules/NormalModal'
   import NormalDeviceModal from './modules/NormalDeviceModal'
   import LampActionModal from './modules/LampActionModal'
-  import KeypanelActionModal from './modules/KeyPanelActionModal'
   import HumidityActionModal from './modules/HumidityActionModal'
   import PowerSwitchModal from './modules/PowerSwitchModal'
   import { getHotelDeviceList, getAllHotelOboxList, delHotelDevice, stopHotelDevice } from '@/api/device'
@@ -136,7 +134,6 @@
       NormalModal,
       NormalDeviceModal,
       LampActionModal,
-      KeypanelActionModal,
       HumidityActionModal,
       PowerSwitchModal
       // PasswordModal
