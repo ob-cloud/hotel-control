@@ -108,8 +108,8 @@
     </a-tabs>
 
     <!-- 绑定红外网关 -->
-    <room-bind-obox-modal ref="bindModal" @ok="bindModalOk"></room-bind-obox-modal>
-    <room-bind-infrared-modal ref="bindInfraredModal" @ok="bindModalOk"></room-bind-infrared-modal>
+    <room-bind-obox-modal ref="bindModal" @ok="bindGatewayModalOk"></room-bind-obox-modal>
+    <room-bind-infrared-modal ref="bindInfraredModal" @ok="bindIrModalOk"></room-bind-infrared-modal>
 
     <!-- 设备操作 -->
     <humidity-action-modal placement="right" :drawerWidth="600" ref="humidityModal"></humidity-action-modal>
@@ -268,6 +268,13 @@ export default {
         return
       }
       this.getDeviceList()
+    },
+    infraredList (list) {
+      if (!list || !list.length) {
+        this.irDeviceList = []
+        return
+      }
+      this.getIrdDeviceList()
     }
   },
   methods: {
@@ -339,7 +346,11 @@ export default {
         } else this.$message.error(res.message)
       }).catch(() => this.$message.error('服务异常'))
     },
-    bindModalOk () {
+    bindGatewayModalOk () {
+      this.getGatewayList()
+    },
+    bindIrModalOk () {
+      this.getInfraredList()
     },
     handleOk () {
       this.$emit('ok')
@@ -369,7 +380,7 @@ export default {
     },
     handleStopCardPower (item) {
       this.loading = true
-      stopHotelDevice(item.deviceSerialId, !item.elec).then(res => {
+      stopHotelDevice(item.deviceSerialId, item.elec).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
           this.getDeviceList()

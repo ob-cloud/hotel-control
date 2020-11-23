@@ -49,6 +49,9 @@
             </a-row>
           </a-form>
           <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="id" :columns="columns" :pagination="ipagination" @change="handleTableChange">
+            <span slot="type" slot-scope="text, record">
+              <a-tag :color="['volcano', 'orange', 'red'][record.type]">{{ ['欠费', '掉线', '异常'][record.type] || '异常' }}</a-tag>
+            </span>
             <span slot="status" slot-scope="text, record">
               <a-badge :status="record.isOper ? 'success' : 'error'" :text="record.isOper ? '已处理' : '未处理'" />
             </span>
@@ -83,9 +86,10 @@ const columns = [{
   title: '事件类型',
   align:"center",
   dataIndex: 'type',
-  customRender (type) {
-    return type === 0 ? '欠费' :  type === 1 ? '掉线' : '异常'
-  }
+  scopedSlots: { customRender: 'type' }
+  // customRender (type) {
+  //   return type === 0 ? '欠费' :  type === 1 ? '掉线' : '异常'
+  // }
 }, {
   title: '异常时间',
   align:"center",

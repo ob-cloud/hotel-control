@@ -147,7 +147,7 @@ export default {
       this.loadData(1)
     },
     handleControl (item) {
-      stopHotelDevice(item.deviceSerialId, !item.elec).then(res => {
+      stopHotelDevice(item.deviceSerialId, item.elec).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
         } else this.$message.error(res.message)

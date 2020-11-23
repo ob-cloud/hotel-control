@@ -244,7 +244,8 @@
       },
       handleStopService (record) {
         this.loading = true
-        stopHotelDevice(record.deviceSerialId, !record.isOnline).then(res => {
+        const stopElectric = record.isOnline
+        stopHotelDevice(record.deviceSerialId, stopElectric).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.$message.success('操作成功')
           }else this.$message.error(res.message || '操作失败')

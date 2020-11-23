@@ -64,7 +64,7 @@
           {
             title: '设备版本',
             align: 'center',
-            dataIndex: 'version'
+            dataIndex: 'deviceVersion'
           },
           {
             title: '操作',

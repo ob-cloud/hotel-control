@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-11-20 14:50:55
+ * @Last Modified time: 2020-11-23 15:22:18
  */
 
 import { getAction, postAction, deleteAction, putAction } from '@/utils/ajax'
@@ -16,7 +16,7 @@ const delHotel = (ids) => deleteAction('/sys/hotel/deleteBatchHotel', {ids})
 const getUserListByHotel = ({hotelId, type = 1, pageNo, pageSize}) => getAction('/sys/user/pageBindHotel', {hotelId, type, pageNo, pageSize})
 const getUserPageByHotel = ({pageNo, pageSize, type = 1}) => getAction('/sys/user/pageByType', {pageNo, pageSize, type})
 const bindHotelUser = (hotelId, userIds) => postAction('/sys/hotel/bindHotel', { hotelId, userIds })
-const unbindHotelUser = (hotelId) => postAction('/sys/hotel/bindHotel', { hotelId })
+const unbindHotelUser = (hotelId, userIds) => postAction('/sys/hotel/unbindHotel', { hotelId, userIds })
 const getHotelSetting = (hotelId) => getAction('/sys/hotel/listHotelSetting', {hotelId})
 const addHotelSetting = ({checkTime, exitTime, hotelId, startTime, endTime, overTime, price}) => postAction('/sys/hotel/addOrUpdateHotelSetting', {checkTime, exitTime, hotelId, startTime, endTime, overTime, price})
 const editHotelSetting = ({id, checkTime, exitTime, hotelId, startTime, endTime, overTime, price}) => putAction('/sys/hotel/addOrUpdateHotelSetting', {id, checkTime, exitTime, hotelId, startTime, endTime, overTime, price})

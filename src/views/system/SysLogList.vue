@@ -87,10 +87,20 @@ export default {
       },
       columns: [
         {
-          title: '编号',
+          title: '#',
+          dataIndex: '',
+          key: 'rowIndex',
+          width: 60,
           align: 'center',
-          dataIndex: 'id',
+          customRender (t, r, index) {
+            return parseInt(index) + 1
+          }
         },
+        // {
+        //   title: '编号',
+        //   align: 'center',
+        //   dataIndex: 'id',
+        // },
         {
           title: '类型',
           align: 'center',

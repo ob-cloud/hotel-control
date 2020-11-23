@@ -1,5 +1,5 @@
 <template>
-  <a-modal :title="title" :width="900" :visible="visible" @ok="handleOk" @cancel="handleCancel" cancelText="关闭">
+  <a-modal :title="title" :width="900" :visible="visible" @cancel="handleCancel" :footer="null">
     <div class="table-page-search-wrapper">
       <a-form :form="form" layout="inline">
         <a-row :gutter="24">
