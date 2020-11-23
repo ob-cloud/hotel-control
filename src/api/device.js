@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-11-20 15:50:08
+ * @Last Modified time: 2020-11-23 09:51:41
  */
 
 import { getAction, postFormAction, deleteAction, postAction, putAction } from '@/utils/ajax'
@@ -27,7 +27,7 @@ const stopHotelInfrared = (serialId, state) => putAction('/device/editIr', {seri
 // hotel obox
 const getHotelOboxList = ({hotelId, serialId, state, oboxName, pageNo, pageSize}) => getAction('/device/getHotelObox', {hotelId, serialId, state, oboxName, pageNo, pageSize})
 const getAllHotelOboxList = (hotelId) => getAction('/device/getOboxList', {hotelId})
-const editHotelObox = (serialId, oboxName) => postAction('/device/editObox', {serialId, oboxName})
+const editHotelObox = (oboxSerialId, oboxName) => putAction('/device/editObox', {oboxSerialId, oboxName})
 const delHotelObox = (oboxSerialId) => postAction('/device/delObox', {oboxSerialId})
 
 // 开关
