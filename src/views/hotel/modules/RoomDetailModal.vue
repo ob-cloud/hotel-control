@@ -101,7 +101,8 @@
       <a-tab-pane key="2" tab="红外设备" force-render>
         <a-table bordered size="small" rowKey="deviceSerialId" :columns="infraredColumns" :dataSource="irDeviceList" :loading="loading">
           <span slot="action" slot-scope="text, record">
-            <a v-if="TypeHints.isInfrared(record.deviceType)" @click="handleAction(5, record)">控制</a>
+            <!--  v-if="TypeHints.isInfrared(record.deviceType)" -->
+            <a @click="handleAction(5, record)">控制</a>
           </span>
         </a-table>
       </a-tab-pane>
@@ -187,25 +188,30 @@ const infraredColumns = [
   {
     title: '序列号',
     align: 'center',
-    dataIndex: 'deviceSerialId',
+    dataIndex: 'serialId',
   },
   {
     title: '设备名称',
     align: 'center',
-    dataIndex: 'deviceName',
+    dataIndex: 'name',
   },
+  // {
+  //   title: '设备状态',
+  //   align: 'center',
+  //   dataIndex: 'deviceState',
+  //   customRender (status) {
+  //     return status === 0 ? '在线' : '离线'
+  //   }
+  // },
   {
-    title: '设备状态',
+    title: '键值',
     align: 'center',
-    dataIndex: 'deviceState',
-    customRender (status) {
-      return status === 0 ? '在线' : '离线'
-    }
+    dataIndex: 'keyValue'
   },
   {
     title: '设备版本',
     align: 'center',
-    dataIndex: 'deviceVersion'
+    dataIndex: 'version'
   },
   {
     title: '操作',
