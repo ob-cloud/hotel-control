@@ -6,13 +6,13 @@
         <a-row :gutter="24">
           <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="序列号">
-              <a-input placeholder="请输入序列号" v-model="queryParam.oboxSerialId"></a-input>
+              <a-input placeholder="请输入序列号" v-model="queryParam.serialId" allowClear></a-input>
             </a-form-item>
           </a-col>
 
           <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="状态">
-              <a-select placeholder="请选择状态" v-model="queryParam.isOnline" allowClear>
+              <a-select placeholder="请选择状态" v-model="queryParam.state" allowClear>
                 <a-select-option :value="1">在线</a-select-option>
                 <a-select-option :value="0">离线</a-select-option>
               </a-select>
@@ -23,7 +23,7 @@
           <template v-if="toggleSearchStatus">
             <a-col :sm="12" :md="6" :lg="5">
               <a-form-item label="名称">
-                <a-input placeholder="请输入名称" v-model="queryParam.oboxName"></a-input>
+                <a-input placeholder="请输入名称" v-model="queryParam.oboxName" allowClear></a-input>
               </a-form-item>
             </a-col>
           </template>

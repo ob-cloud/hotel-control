@@ -11,13 +11,16 @@
     :destroyOnClose="true"
     :bodyStyle="{height: 'calc(100% - 60px)'}"
   >
-    <air-condition @change="handleChange"></air-condition>
+    <a-spin :spinning="loading">
+      <air-condition @change="handleChange" :equip="equip"></air-condition>
+    </a-spin>
   </a-drawer>
 </template>
 
 <script>
-import { Descriptor } from 'hardware-suit'
-import AirCondition from '@/components/IoT/AirCondition'
+import { Descriptor, AirConditionEquip } from 'hardware-suit'
+import AirCondition from '@/components/IoT/AirCondition2'
+import { controlHotelIrDevice } from '@/api/device'
 export default {
   components: { AirCondition },
   props: {
@@ -47,6 +50,8 @@ export default {
       status: '',
       deviceType: '',
       deviceChildType: '',
+      equip: {},
+      loading: false
     }
   },
   mounted () {
@@ -59,7 +64,16 @@ export default {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
-      this.title = `红外控制 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
+      this.title = `红外控制 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType) || record.name}(${record.deviceSerialId})`
+      this.equip = new AirConditionEquip('', record.deviceType, '', record)
+      // if (record.serialId) {
+      //   getHotelInfraredKeys(record.serialId, this.$store.getters.hotelId).then(res => {
+      //     if (this.$isAjaxSuccess(res.code)) {
+      //       const air = res.result.find(item => item.index === record.indexOsm)
+      //       this.equip = new AirConditionEquip('', air.deviceType, '', air)
+      //     }
+      //   })
+      // }
     },
     close () {
       this.$emit('close')
@@ -72,6 +86,15 @@ export default {
     },
     handleChange (status) {
       console.log('-=-=-=-= ', status)
+      this.model.indexOsm = this.model.indexOsm + ''
+      this.model.key = status
+      this.model.hotelId = this.$store.getters.hotelId
+      this.loading = true
+      controlHotelIrDevice(this.model).then(res => {
+        if (this.$isAjaxSuccess(res.code)) {
+          this.$message.success('操作成功')
+        } else this.$message.error(res.message || '操作失败')
+      }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
     }
   },
 }

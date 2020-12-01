@@ -5,12 +5,13 @@
       <p>温度</p>
     </div>
     <div class="mode">
-      <div class="fans"><span>{{ speedValue }}</span> 风速</div>
-      <div class="imode"><span>{{ modeValue }}</span> 模式</div>
+      <div :class="`${hasWing ? 'col-3' : 'col-5'}`"><span>{{ speedValue }}</span> 风速</div>
+      <div :class="`${hasWing ? 'col-3' : 'col-5'}`"><span>{{ modeValue }}</span> 模式</div>
+      <div :class="`${hasWing ? 'col-3' : 'col-5'}`" v-if="hasWing"><span>{{ wingValue }}</span> 风向</div>
     </div>
     <div class="toolbar">
-      <div class="key" :class="{disabled: !isSpeedSettable}">
-        <i class="obicon obicon-wing-o" @click="handleFan()"></i>
+      <div class="key" :class="{disabled: !speedEnable}">
+        <i class="obicon obicon-wing-o" @click="handleFan(!speedEnable)"></i>
         <p>风扇</p>
       </div>
       <div class="key" :class="{on: isPowerOn, off: !isPowerOn}">
@@ -22,7 +23,17 @@
         <p>模式</p>
       </div>
     </div>
-    <div class="toolbar temp" :class="{disabled: !isTempSettable}">
+    <div class="toolbar" style="margin-top: 0;" v-if="hasWing">
+      <div class="key pad0" :class="{disabled: !wingEanble}">
+        <i class="sm obicon obicon-swing-v" @click="handleSwingV(!wingEanble)"></i>
+        <p>上下摆风</p>
+      </div>
+      <div class="key pad0" :class="{disabled: !wingEanble}">
+        <i class="sm obicon obicon-swing-h" @click="handleSwingH(!wingEanble)"></i>
+        <p>左右摆风</p>
+      </div>
+    </div>
+    <div class="toolbar temp" :class="{disabled: !tempEnable}">
       <i class="obicon obicon-minus" @click="hadnleTemp(-1)"></i>
       <p>温度</p>
       <i class="obicon obicon-plus" @click="hadnleTemp(1)"></i>
@@ -34,7 +45,7 @@
 import { AirConditionEquip } from 'hardware-suit'
 export default {
   props: {
-    airEquip: {
+    equip: {
       type: Object,
       default: () => {}
     }
@@ -45,9 +56,13 @@ export default {
       speed: 0,
       mode: 0,
       power: 0,
+      // airEquip: {}
     }
   },
   computed: {
+    airEquip () {
+      return this.equip && Object.keys(this.equip).length ? this.equip : new AirConditionEquip()
+    },
     isPowerOn () {
       return this.airEquip.isPowerOn()
     },
@@ -58,50 +73,81 @@ export default {
       return this.airEquip.getSpeedText()
     },
     modeValue () {
-      return this.airEquip.getSpeedText()
+      return this.airEquip.getModeText()
     },
-    isTempSettable () {
+    wingValue () {
+      return this.airEquip.getWingText()
+    },
+    tempEnable () {
       return this.airEquip.isTemperatureValid()
     },
-    isSpeedSettable () {
+    speedEnable () {
       return this.airEquip.isFanSpeedValid()
     },
+    hWingEnable () {
+      return this.airEquip.hasHorizontalSwing()
+    },
+    vWingEnable () {
+      return this.airEquip.hasVerticalSwing()
+    },
+    hasWing () {
+      return this.hWingEnable && this.vWingEnable
+    },
+    wingEanble () {
+      return this.airEquip.isWingValid()
+    }
   },
   mounted () {
   },
-  beforeCreate () {
-    if (!Object.keys(this.airEquip).length) this.airEquip = new AirConditionEquip()
+  created () {
+    // this.airEquip = this.equip && Object.keys(this.equip).length ? this.equip : new AirConditionEquip()
   },
   methods: {
     handlePower () {
       this.airEquip.setPower(!this.airEquip.getPowerStatus())
-      // { powerOnly: true, status: this.airEquip.getPowerBytes() }
-      this.emitEvent({ powerOnly: true })
+      this.emitEvent(true)
     },
-    handleFan () {
-      if (!this.isPowerOn) return
-      this.airEquip.setSpeed(this.airEquip.getSpeedValue() + 1)
+    handleFan (unclickable) {
+      if (!this.isPowerOn || unclickable) return
+      const fan = this.airEquip.getSpeed()
+      this.airEquip.setSpeed(1 + +fan)
       this.emitEvent()
     },
     handleMode () {
       if (!this.isPowerOn) return
-      const mode = this.airEquip.getModeValue()
-      this.airEquip.setMode(mode + 1)
+      const mode = this.airEquip.getMode()
+      this.airEquip.setMode(1 + +mode)
+      this.emitEvent()
+    },
+    handleSwingV (unclickable) {
+      if (!this.isPowerOn || unclickable) return
+      const v = this.airEquip.getVerticalWing()
+      this.airEquip.setVerticalWing(1 + +v)
+      this.emitEvent()
+    },
+    handleSwingH (unclickable) {
+      if (!this.isPowerOn || unclickable) return
+      const v = this.airEquip.getHorizontalWing()
+      this.airEquip.setHorizontalWing(1 + +v)
       this.emitEvent()
     },
     hadnleTemp (val) {
       if (!this.isPowerOn) return
       const temperature = this.airEquip.getTemperature()
-      this.airEquip.setTemperature(temperature + val)
+      this.airEquip.setTemperature(val + +temperature)
       this.emitEvent()
     },
-    emitEvent ({ powerOnly }) {
+    emitEvent (powerOnly = false) {
+      // TODO
+      // if (this.hasWing) {
+      //   this.airEquip.setVerticalWing(0).setHorizontalWing(0)
+      // }
       const status = powerOnly ? this.airEquip.getPowerBytes() : this.airEquip.getBytes()
       this.$emit('change', status)
     }
   },
   destroyed () {
-    this.isPowerOn = false
+    // this.isPowerOn = false
     this.templure = 26
     this.speed = 0
     this.mode = 0
@@ -111,6 +157,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.pad0{
+  padding: 0!important;
+}
+.obicon.sm{
+  font-size: 20px!important;
+  color: #666!important;
+}
 p{
   margin-bottom: 0;
 }
@@ -152,9 +205,15 @@ p{
 
     div {
       display: inline-block;
-      width: 50%;
+      // width: 50%;
       padding: 30px;
     }
+  }
+  .col-3 {
+    width: 33%;
+  }
+  .col-5 {
+    width: 50%;
   }
 
   .toolbar {
@@ -195,6 +254,10 @@ p{
     }
   }
 
+  .toolbar .key.disabled i,
+  .toolbar.temp.disabled i {
+    cursor: no-drop;
+  }
   .key {
     i {
       font-size: 26px;
@@ -208,7 +271,7 @@ p{
     }
 
     p {
-      margin-top: 14px !important;
+      margin-top: 14px;
     }
 
     &.off i {

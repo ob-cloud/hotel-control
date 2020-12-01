@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-11-23 09:58:40
+ * @Last Modified time: 2020-11-30 16:35:01
  */
 
 import { getAction, postFormAction, deleteAction, postAction, putAction } from '@/utils/ajax'
@@ -23,6 +23,7 @@ const editHotelIr = (serialId, deviceName) => putAction('/device/editIr', {seria
 const delHotelInfrared = (serialId) => deleteAction('/device/delIr', {serialId})
 const controlHotelIrDevice = ({hotelId, serialId, indexOsm, key}) => postAction('/device/wifi/controlIr', {hotelId, serialId, indexOsm, key})
 const stopHotelInfrared = (serialId, state) => putAction('/device/editIr', {serialId, state})
+const getHotelInfraredKeys = (serialId, hotelId) => getAction('/device/queryIrRemote', {serialId, hotelId})
 
 // hotel obox
 const getHotelOboxList = ({hotelId, serialId, state, oboxName, pageNo, pageSize}) => getAction('/device/getHotelObox', {hotelId, serialId, state, oboxName, pageNo, pageSize})
@@ -66,6 +67,7 @@ export {
   delHotelInfrared,
   controlHotelIrDevice,
   stopHotelInfrared,
+  getHotelInfraredKeys,
 
   getHotelOboxList,
   getAllHotelOboxList,

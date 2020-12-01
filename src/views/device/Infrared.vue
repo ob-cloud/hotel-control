@@ -7,7 +7,7 @@
 
           <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="序列号">
-              <a-input placeholder="请输入设备序列号" v-model="queryParam.deviceId"></a-input>
+              <a-input placeholder="请输入设备序列号" v-model="queryParam.serialId" allowClear></a-input>
             </a-form-item>
           </a-col>
 
@@ -24,7 +24,7 @@
           <template v-if="toggleSearchStatus">
             <a-col :sm="12" :md="6" :lg="5">
               <a-form-item label="设备名称">
-                <a-input placeholder="请输入设备名称" v-model="queryParam.deviceName"></a-input>
+                <a-input placeholder="请输入设备名称" v-model="queryParam.deviceName" allowClear></a-input>
               </a-form-item>
             </a-col>
           </template>
@@ -59,7 +59,7 @@
         ref="table"
         bordered
         size="middle"
-        rowKey="deviceId"
+        rowKey="deviceSerialId"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -76,12 +76,12 @@
             </a>
             <a-menu slot="overlay">
               <!--  v-if="TypeHints.isInfrared(record.type)"  -->
-              <a-menu-item v-isPermitted="'infrared:control'">
+              <!-- <a-menu-item v-isPermitted="'infrared:control'">
                 <a @click="handleControl(record)">控制</a>
-              </a-menu-item>
+              </a-menu-item> -->
               <a-menu-item v-isPermitted="'infrared:control'">
-                <a-popconfirm :title="`确定${record.isBand === 1 ? '启用' : '停用'}吗?请谨慎操作`" @confirm="() => handleStopService(record.deviceSerialId, record.isBand)">
-                  <a>停用</a>
+                <a-popconfirm :title="`确定${record.isBand ? '启用' : '停用'}吗?请谨慎操作`" @confirm="() => handleStopService(record.deviceSerialId, record.isBand)">
+                  <a>{{ record.isBand ? '启用' : '停用' }}</a>
                 </a-popconfirm>
               </a-menu-item>
 
@@ -208,6 +208,7 @@
         stopHotelInfrared(id, 1 - +state).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.$message.success('操作成功')
+            this.loadData()
           }else this.$message.error(res.message || '操作失败')
         }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
       },

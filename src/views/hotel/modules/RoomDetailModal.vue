@@ -99,7 +99,7 @@
         </a-table>
       </a-tab-pane>
       <a-tab-pane key="2" tab="红外设备" force-render>
-        <a-table bordered size="small" rowKey="deviceSerialId" :columns="infraredColumns" :dataSource="irDeviceList" :loading="loading">
+        <a-table bordered size="small" rowKey="indexOsm" :columns="infraredColumns" :dataSource="irDeviceList" :loading="loading">
           <span slot="action" slot-scope="text, record">
             <!--  v-if="TypeHints.isInfrared(record.deviceType)" -->
             <a @click="handleAction(5, record)">控制</a>
@@ -117,7 +117,7 @@
     <lamp-action-modal placement="right" :drawerWidth="600" ref="lampModal"></lamp-action-modal>
     <power-switch-modal placement="right" :drawerWidth="600" ref="powerModal"></power-switch-modal>
 
-    <infrared-air-condition-modal placement="right" :drawerWidth="600" ref="airModal"></infrared-air-condition-modal>
+    <infrared-air-condition-modal placement="right" :drawerWidth="600" ref="airModal" @close="getIrdDeviceList()"></infrared-air-condition-modal>
   </a-drawer>
 </template>
 
@@ -380,6 +380,7 @@ export default {
         '3': 'lampModal',
         '5': 'airModal'
       }
+      !record.deviceSerialId && (record.deviceSerialId = record.serialId)
       const ref = ActoinMap[type]
       if (ref) this.$refs[ref].show(record)
       if (type === 4) this.handleStopCardPower(record)
