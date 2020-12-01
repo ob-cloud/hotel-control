@@ -85,7 +85,6 @@ export default {
     handleOk () {
     },
     handleChange (status) {
-      console.log('-=-=-=-= ', status)
       this.model.indexOsm = this.model.indexOsm + ''
       this.model.key = status
       this.model.hotelId = this.$store.getters.hotelId
