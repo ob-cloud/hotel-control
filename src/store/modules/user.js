@@ -92,6 +92,7 @@ const user = {
         commit('SET_PERMISSIONLIST', [])
         // 退出重置酒店信息，避免同个客户端不同账户重复登录
         commit('SET_HOTELLIST', [])
+        commit('SET_HOTELID', '')
         Vue.ls.remove(ACCESS_TOKEN)
         logout(token).then(() => {
           resolve()
