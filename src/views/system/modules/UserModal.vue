@@ -42,7 +42,6 @@
 
         <a-form-item label="角色分配" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="!roleDisabled">
           <a-select
-            mode="multiple"
             style="width: 100%"
             placeholder="请选择用户角色"
             optionFilterProp="children"

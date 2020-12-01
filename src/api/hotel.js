@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-11-23 15:22:18
+ * @Last Modified time: 2020-12-01 14:58:15
  */
 
 import { getAction, postAction, deleteAction, putAction } from '@/utils/ajax'
@@ -11,7 +11,7 @@ import { getAction, postAction, deleteAction, putAction } from '@/utils/ajax'
 const getHotelList = (params) => getAction('/sys/hotel/listHotel', { ...params })
 const getHotelListAll = () => getAction('/sys/hotel/listAllHotel')
 const editHotel = ({address, companyId, hotelName, contact, contactPhone, id, saleManId, telephone, description}) => putAction('/sys/hotel/editHotel', {address, companyId, hotelName, id, saleManId, contact, contactPhone, telephone, description})
-const addHotel = ({address, companyId, hotelName, saleManId, telephone, description}) => postAction('/sys/hotel/addHotel', {address, companyId, hotelName, saleManId, telephone, description})
+const addHotel = ({address, companyId, hotelName, contact, contactPhone, saleManId, telephone, description}) => postAction('/sys/hotel/addHotel', {address, companyId, hotelName, contact, contactPhone, saleManId, telephone, description})
 const delHotel = (ids) => deleteAction('/sys/hotel/deleteBatchHotel', {ids})
 const getUserListByHotel = ({hotelId, type = 1, pageNo, pageSize}) => getAction('/sys/user/pageBindHotel', {hotelId, type, pageNo, pageSize})
 const getUserPageByHotel = ({pageNo, pageSize, type = 1}) => getAction('/sys/user/pageByType', {pageNo, pageSize, type})
