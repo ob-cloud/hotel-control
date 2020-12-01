@@ -54,10 +54,13 @@
         </a-form-item>
 
         <a-form-item label="用户类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-select v-decorator="[ 'type', { initialValue: 0 }]" placeholder="请选择用户类型">
-            <a-select-option :value="0">集团用户</a-select-option>
+          <a-select v-decorator="[ 'type', { initialValue: undefined, rules: [{ required: true, message: '请选择用户类型!' }] }]" placeholder="请选择用户类型">
+            <a-select-option v-for="user in userTypeList" :key="user.id" :value="user.type">
+              {{ user.name }}
+            </a-select-option>
+            <!-- <a-select-option :value="0">集团用户</a-select-option>
             <a-select-option :value="1">酒店用户</a-select-option>
-            <a-select-option :value="2">超级用户</a-select-option>
+            <a-select-option :value="2">超级用户</a-select-option> -->
           </a-select>
         </a-form-item>
 
@@ -119,7 +122,7 @@
   import moment from 'moment'
   import Vue from 'vue'
   import { ACCESS_TOKEN } from '@/store/mutation-types'
-  import { addUser, editUser, queryUserRole, queryAllRole } from '@/api/system'
+  import { addUser, editUser, queryUserRole, queryAllRole, queryUserType } from '@/api/system'
   // import { disabledAuthFilter } from "@/utils/authFilter"
   // import { duplicateCheck } from '@/api/system'
   import { isEmail } from '@/utils/validator'
@@ -176,6 +179,7 @@
         visible: false,
         model: {},
         roleList: [],
+        userTypeList: [],
         // selectedRole: [],
         labelCol: {
           xs: { span: 24 },
@@ -218,6 +222,11 @@
         this.modalWidth = this.modaltoggleFlag ? window.innerWidth : 800
         this.modaltoggleFlag = !this.modaltoggleFlag;
       },
+      initialUserTypeList () {
+        queryUserType().then(res => {
+          if (this.$isAjaxSuccess(res.code)) this.userTypeList = res.result
+        })
+      },
       initialRoleList () {
         queryAllRole({
           column: '',
@@ -253,6 +262,7 @@
       edit (record) {
         this.resetScreenSize() // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
         this.initialRoleList()
+        this.initialUserTypeList()
         this.form.resetFields()
         if (record.hasOwnProperty('id')) {
           this.loadUserRoles(record.id)

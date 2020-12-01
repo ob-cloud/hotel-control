@@ -35,6 +35,9 @@ const updatePassword = (params) => putAction('/sys/user/updatePassword', params)
 // 获取用户菜单、按钮权限
 const getUserPermissionList = (params) => getAction('/sys/permission/getUserPermission', params)
 
+// 获取用户类型
+const queryUserType = () => getAction('/sys/user/queryUserType')
+
 ///// Role
 const addRole = (params) => postAction('/sys/role/add', params)
 const editRole = (params) => putAction('/sys/role/edit', params)
@@ -138,6 +141,7 @@ export {
   getUserListByType,
   frozenBatch,
   getUserPermissionList,
+  queryUserType,
   changePassword,
   updatePassword,
 
