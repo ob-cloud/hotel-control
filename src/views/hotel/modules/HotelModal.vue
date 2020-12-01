@@ -57,8 +57,7 @@
             style="width: 100%"
             placeholder="请选择绑定业务员"
             optionFilterProp="children"
-            v-decorator="[ 'saleManId', { initialValue: undefined, rules: [{required: true, message: '业务员不能为空!'}]}]"
-            v-model="selectedUser"
+            v-decorator="[ 'saleManId', { rules: [{required: true, message: '业务员不能为空!'}]}]"
             :disabled="disableSubmit"
           >
             <a-select-option v-for="(user, userIndex) in userList" :key="userIndex.toString()" :value="user.id">
@@ -144,7 +143,7 @@
         model: {},
         userList: [],
         companyList: [],
-        selectedUser: undefined,
+        // selectedUser: undefined,
         labelCol: {
           xs: { span: 24 },
           sm: { span: 5 },
@@ -204,7 +203,7 @@
         this.visible = true
         this.model = Object.assign({}, record)
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'hotelName', 'companyId', 'contact', 'contactPhone', 'telephone', 'salemanId', 'address'))
+          this.form.setFieldsValue(pick(this.model, 'hotelName', 'companyId', 'contact', 'contactPhone', 'telephone', 'saleManId', 'address'))
         })
         if (record.detail) this.initHotelSetting()
       },
@@ -212,7 +211,7 @@
         this.$emit('close')
         this.visible = false
         this.disableSubmit = false
-        this.selectedUser = ''
+        // this.selectedUser = ''
       },
       handleSubmit () {
         const that = this
@@ -221,7 +220,7 @@
           if (!err) {
             that.confirmLoading = true
             let formData = Object.assign(this.model, values)
-            formData.salesmanId = this.selectedUser || ''
+            // formData.salesmanId = this.selectedUser || ''
 
             if (!this.model.id) {
               formData.id = this.hotelId

@@ -179,11 +179,11 @@
           //     return status ? '是' : '否'
           //   }
           // },
-          {
-            title: '有效时间',
-            align: 'center',
-            dataIndex: 'createAt'
-          },
+          // {
+          //   title: '有效时间',
+          //   align: 'center',
+          //   dataIndex: 'createAt'
+          // },
           {
             title: '操作',
             dataIndex: 'action',
