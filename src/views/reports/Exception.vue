@@ -12,12 +12,10 @@
             <a-radio-button :value="2">异常</a-radio-button>
             <a-radio-button :value="undefined">全部</a-radio-button>
           </a-radio-group>
-          <a @click="handleToggleSearch" style="">
-            <!-- <a-tag>
-            </a-tag> -->
+          <!-- <a @click="handleToggleSearch" style="">
             {{ toggleSearchStatus ? '收起' : '更多' }}
             <a-icon :type="toggleSearchStatus ? 'up' : 'down'" />
-          </a>
+          </a> -->
         </div>
         <!-- <a-range-picker :style="{width: '256px'}" /> -->
       </div>
@@ -29,6 +27,14 @@
               <a-col :sm="12" :md="5" :lg="5">
                 <a-form-item label="异常事件">
                   <a-input placeholder="请输入异常事件" v-model="queryParam.title" allowClear></a-input>
+                </a-form-item>
+                <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="筛选日期">
+                  <a-range-picker
+                    v-model="queryParam.date"
+                    format="YYYY-MM-DD"
+                    valueFormat="YYYY-MM-DD"
+                    :placeholder="['开始日期', '结束日期']"
+                  />
                 </a-form-item>
               </a-col>
               <!-- <a-col :sm="12" :md="5" :lg="5">
@@ -134,6 +140,14 @@ export default {
       },
       dataSource: [],
       columns: columns,
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      }
     }
   },
   methods: {

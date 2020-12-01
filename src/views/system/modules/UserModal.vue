@@ -45,7 +45,7 @@
             style="width: 100%"
             placeholder="请选择用户角色"
             optionFilterProp="children"
-            v-model="selectedRole"
+            v-decorator="[ 'selectedroles', {initialValue: undefined, rules: [{ required: true, message: '请选择用户角色!' }]}]"
           >
             <a-select-option v-for="(role,roleindex) in roleList" :key="roleindex.toString()" :value="role.id">
               {{ role.roleName }}
@@ -89,7 +89,7 @@
         </a-form-item>
 
         <a-form-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-select v-decorator="[ 'sex', {}]" placeholder="请选择性别">
+          <a-select v-decorator="[ 'sex', {initialValue: undefined}]" placeholder="请选择性别">
             <a-select-option :value="1">男</a-select-option>
             <a-select-option :value="2">女</a-select-option>
           </a-select>
@@ -102,7 +102,6 @@
         <a-form-item label="手机号码" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input placeholder="请输入手机号码" :disabled="isDisabledAuth('user:form:phone')" v-decorator="[ 'phone', validatorRules.phone]" />
         </a-form-item>
-
       </a-form>
     </a-spin>
 
@@ -177,7 +176,7 @@
         visible: false,
         model: {},
         roleList: [],
-        selectedRole: [],
+        // selectedRole: [],
         labelCol: {
           xs: { span: 24 },
           sm: { span: 5 },
@@ -236,7 +235,8 @@
           userid: userid
         }).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
-            this.selectedRole = res.result
+            // this.selectedRole = res.result
+            this.form.setFieldsValue({selectedroles: res.result})
           } else {
             console.log(res.message)
           }
@@ -282,7 +282,7 @@
             values.birthday = values.birthday ? values.birthday.format(this.dateFormat) : ''
             let formData = Object.assign(this.model, values)
             // formData.avatar = avatar
-            formData.selectedroles = this.selectedRole.length > 0 ? this.selectedRole.join(',') : ''
+            // formData.selectedroles = this.selectedRole.length > 0 ? this.selectedRole.join(',') : ''
 
             if (!this.model.id) {
               formData.id = this.userId

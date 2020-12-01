@@ -6,34 +6,43 @@
           <!-- <a>今日</a>
           <a>本月</a>
           <a>本年</a> -->
-          <a-radio-group :defaultValue="3" v-model="queryParam.type" @change="searchQuery">
+          <a-radio-group :defaultValue="undefined" v-model="queryParam.type" @change="query">
             <a-radio-button :value="3">今日</a-radio-button>
             <a-radio-button :value="2">本月</a-radio-button>
             <a-radio-button :value="1">本年</a-radio-button>
+            <a-radio-button :value="undefined">全部</a-radio-button>
           </a-radio-group>
-          <!-- <a @click="handleToggleSearch" style="">
-            <a-tag>
-              {{ toggleSearchStatus ? '收起条件' : '更多条件' }}
-              <a-icon :type="toggleSearchStatus ? 'up' : 'down'" />
-            </a-tag>
-          </a> -->
+          <a @click="handleToggleSearch" style="">
+            {{ toggleSearchStatus ? '收起' : '更多' }}
+            <a-icon :type="toggleSearchStatus ? 'up' : 'down'" />
+          </a>
         </div>
         <!-- <a-range-picker :style="{width: '256px'}" /> -->
       </div>
       <div class="content">
         <div class="table-page-search-wrapper">
-          <a-form layout="inline" @submit.prevent="searchQuery" v-if="toggleSearchStatus">
+          <a-form layout="inline" @submit.prevent="query()" v-if="toggleSearchStatus">
             <a-row :gutter="24">
 
               <a-col :md="6" :sm="12">
                 <a-form-item label="序列号">
                   <a-input placeholder="请输入设备序列号" v-model="queryParam.deviceId"></a-input>
-
                 </a-form-item>
               </a-col>
+              <a-col :md="6" :sm="12">
+                <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="日期">
+                  <a-range-picker
+                    v-model="queryParam.date"
+                    format="YYYY-MM-DD"
+                    valueFormat="YYYY-MM-DD"
+                    :placeholder="['开始日期', '结束日期']"
+                  />
+                </a-form-item>
+              </a-col>
+
               <a-col :md="6" :sm="8">
                 <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-                  <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+                  <a-button type="primary" @click="query()" icon="search">查询</a-button>
                   <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
                 </span>
               </a-col>
@@ -67,6 +76,7 @@
 import { ProListMixin } from '@/utils/mixins/ProListMixin'
 // import { getMineReportList } from '@/api/reports'
 import { getMineReportList, getMineReportStatistic } from '@/api/reports'
+import { ReportMixin } from './ReportMixin'
 const columns = [{
   title: '营业日',
   align:"center",
@@ -98,7 +108,7 @@ const columns = [{
   dataIndex: 'price'
 }]
 export default {
-  mixins: [ ProListMixin ],
+  mixins: [ ProListMixin, ReportMixin ],
   data () {
     return {
       queryParam: {
@@ -107,6 +117,14 @@ export default {
       },
       dataSource: [],
       columns: columns,
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      }
     }
   },
   methods: {
