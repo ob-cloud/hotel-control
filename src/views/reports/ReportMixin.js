@@ -11,13 +11,11 @@ export const ReportMixin =  {
       this.searchReset()
     },
     query (type) {
-      console.log('==== ', type)
       this.setParamDateString(!!type)
       this.searchQuery()
     },
     setParamDateString (bool) {
       let startTime, endTime
-      console.log(this.queryParam.date)
       if (bool && this.queryParam.type) {
         const type = this.queryParam.type
         const typeMap = {

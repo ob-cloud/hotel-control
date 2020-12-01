@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     loadStatistic () {
-      getHotelReportStatistic(this.$store.getters.hotelId, this.queryParam.type).then(res => {
+      getHotelReportStatistic(this.$store.getters.hotelId, this.queryParam.startTime, this.queryParam.endTime).then(res => {
         if (this.$isAjaxSuccess(res.code)) this.statistic = res.result || {}
       })
     },

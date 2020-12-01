@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     loadStatistic () {
-      getMineReportStatistic(this.queryParam.type).then(res => {
+      getMineReportStatistic(this.queryParam.startTime, this.queryParam.endTime).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.statistic = res.result || {}
         }

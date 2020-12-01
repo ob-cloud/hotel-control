@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     loadStatistic () {
-      getEquipsReportStatistic(this.$store.getters.hotelId, this.queryParam.type).then(res => {
+      getEquipsReportStatistic(this.$store.getters.hotelId, this.queryParam.startTime, this.queryParam.endTime).then(res => {
         if (this.$isAjaxSuccess(res.code)) this.statistic = res.result || {}
       })
     },
