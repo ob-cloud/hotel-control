@@ -255,7 +255,7 @@
         this.loadData()
       },
       handleDelete (record) {
-        delHotelDevice(record.serialId).then(res => {
+        delHotelDevice(record.deviceSerialId).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.loadData(1)
             this.$message.success('删除成功')
