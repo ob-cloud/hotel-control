@@ -140,6 +140,7 @@ export default {
       this.visible = visible
     },
     onWebSocketMessage (e) {
+      console.log('socket message ', e)
       const data = eval(`(${e.data})`)
       if (data.cmd !== 'heartcheck') {
         this.loadData()
