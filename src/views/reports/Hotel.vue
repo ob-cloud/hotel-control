@@ -99,7 +99,7 @@ const columns = [{
   align:"center",
   sorter: true,
   sortOrder: 'descend',
-  dataIndex: 'price'
+  dataIndex: 'totalPrice'
 }]
 export default {
   mixins: [ ProListMixin, ReportMixin ],
