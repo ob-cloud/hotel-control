@@ -291,12 +291,14 @@ export default {
       this.loadingGateway = true
       getRoomGatewayList({...this.oboxListParams, roomId: this.roomId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) this.oboxList = res.result.records
+        else this.oboxList = []
       }).finally(() => this.loadingGateway = false)
     },
     getInfraredList () {
       this.loadingInfrared = true
       getRoomInfraredList({...this.irListParams, roomId: this.roomId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) this.infraredList = res.result.records
+        else this.infraredList = []
       }).finally(() => this.loadingInfrared = false)
     },
     loadData () {
@@ -351,7 +353,7 @@ export default {
       obj.then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('解绑成功')
-          this.getRoomGatewayList()
+          type === 1 ? this.getGatewayList() : this.getInfraredList()
         } else this.$message.error(res.message)
       }).catch(() => this.$message.error('服务异常'))
     },
