@@ -91,8 +91,8 @@
               </a-menu-item>
 
               <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)">
-                <a-popconfirm :title="`确认${record.isOnline ? '停用' : '启用'}？请谨慎操作！`" @confirm="() => handleStopService(record)">
-                  <a>{{ record.isOnline ? '停用' : '启用' }}</a>
+                <a-popconfirm :title="`确认${getCardActionStatus(record.deviceState) === 0 ? '停用' : '启用'}？请谨慎操作！`" @confirm="() => handleStopService(record)">
+                  <a>{{ getCardActionStatus(record.deviceState) === 0 ? '停用' : '启用' }}</a>
                 </a-popconfirm>
               </a-menu-item>
 
@@ -125,7 +125,7 @@
   import PowerSwitchModal from './modules/PowerSwitchModal'
   import { getHotelDeviceList, getAllHotelOboxList, delHotelDevice, stopHotelDevice } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
-  import { Descriptor, TypeHints, LedLampEquip } from 'hardware-suit'
+  import { Descriptor, TypeHints, CardPowerEquip } from 'hardware-suit'
 
   export default {
     name: 'UserList',
@@ -177,21 +177,21 @@
               return Descriptor.getTypeDescriptor(row.deviceType, t)
             }
           },
-          {
-            title: '异常状态',
-            align: 'center',
-            customRender (row) {
-              if (TypeHints.isSimpleLed(row.deviceChildType, row.deviceType)) {
-                const ledLampEquip = new LedLampEquip(row.deviceState, row.deviceType, row.deviceChildType)
-                return ledLampEquip.getLampExceptionStatus()
-                // const exception = row.state.slice(14) || '00'
-                // const bits = exception.split('')
-                // if (!bits || !bits.length) return '无异常'
-                // return bits[0] === '1' ? '开路' : bits[1] === '1' ? '短路' : '无异常'
-              }
-              return '-'
-            }
-          },
+          // {
+          //   title: '异常状态',
+          //   align: 'center',
+          //   customRender (row) {
+          //     if (TypeHints.isSimpleLed(row.deviceChildType, row.deviceType)) {
+          //       const ledLampEquip = new LedLampEquip(row.deviceState, row.deviceType, row.deviceChildType)
+          //       return ledLampEquip.getLampExceptionStatus()
+          //       // const exception = row.state.slice(14) || '00'
+          //       // const bits = exception.split('')
+          //       // if (!bits || !bits.length) return '无异常'
+          //       // return bits[0] === '1' ? '开路' : bits[1] === '1' ? '短路' : '无异常'
+          //     }
+          //     return '-'
+          //   }
+          // },
           {
             title: '操作',
             dataIndex: 'action',
@@ -209,6 +209,9 @@
       this.$bus.$on('state', () => this.loadData())
     },
     methods: {
+      getCardActionStatus (status) {
+        return new CardPowerEquip(status).getActionStatus()
+      },
       loadData (arg) {
         this.getDeviceList(arg)
       },
@@ -244,7 +247,7 @@
       },
       handleStopService (record) {
         this.loading = true
-        const stopElectric = record.isOnline
+        const stopElectric = this.getCardActionStatus(record.deviceState) === 0
         stopHotelDevice(record.deviceSerialId, stopElectric).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.$message.success('操作成功')

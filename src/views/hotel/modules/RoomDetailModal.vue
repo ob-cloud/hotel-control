@@ -94,7 +94,7 @@
             <a v-if="TypeHints.isSettableSceneSocketSwitch(record.deviceChildType)" @click="handleAction(2, record)">设置</a>
             <a v-if="TypeHints.isHumidifierSensors(record.deviceChildType)" @click="handleAction(1, record)">温湿度</a>
             <a v-if="TypeHints.isSimpleLed(record.deviceChildType)" @click="handleAction(3, record)">灯控</a>
-            <a v-if="TypeHints.isPluginPowerSensors(record.deviceChildType, record.deviceType)" @click="handleAction(4, record)">停用</a>
+            <a v-if="TypeHints.isPluginPowerSensors(record.deviceChildType, record.deviceType)" @click="handleAction(4, record)">{{ getCardActionStatus(record.deviceState) === 0 ? '停用' : '启用' }}</a>
           </span>
         </a-table>
       </a-tab-pane>
@@ -139,7 +139,7 @@ import HumidityActionModal from '@views/device/modules/HumidityActionModal'
 import PowerSwitchModal from '@views/device/modules/PowerSwitchModal'
 import InfraredAirConditionModal from '@views/device/modules/InfraredAirConditionModal'
 
-import { Descriptor, TypeHints } from 'hardware-suit'
+import { Descriptor, TypeHints, CardPowerEquip } from 'hardware-suit'
 
 const deviceColumns = [
   {
@@ -284,6 +284,9 @@ export default {
     }
   },
   methods: {
+    getCardActionStatus (status) {
+      return new CardPowerEquip(status).getActionStatus()
+    },
     getGatewayList () {
       this.loadingGateway = true
       getRoomGatewayList({...this.oboxListParams, roomId: this.roomId}).then(res => {
@@ -387,7 +390,8 @@ export default {
     },
     handleStopCardPower (item) {
       this.loading = true
-      stopHotelDevice(item.deviceSerialId, item.elec).then(res => {
+      // item.elec
+      stopHotelDevice(item.deviceSerialId, this.getCardActionStatus(item.deviceState) === 0).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
           this.getDeviceList()
