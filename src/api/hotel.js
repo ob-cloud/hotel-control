@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-12-01 14:58:15
+ * @Last Modified time: 2020-12-03 09:58:25
  */
 
 import { getAction, postAction, deleteAction, putAction } from '@/utils/ajax'
@@ -19,7 +19,7 @@ const bindHotelUser = (hotelId, userIds) => postAction('/sys/hotel/bindHotel', {
 const unbindHotelUser = (hotelId, userIds) => postAction('/sys/hotel/unbindHotel', { hotelId, userIds })
 const getHotelSetting = (hotelId) => getAction('/sys/hotel/listHotelSetting', {hotelId})
 const addHotelSetting = ({checkTime, exitTime, hotelId, startTime, endTime, overTime, price}) => postAction('/sys/hotel/addOrUpdateHotelSetting', {checkTime, exitTime, hotelId, startTime, endTime, overTime, price})
-const editHotelSetting = ({id, checkTime, exitTime, hotelId, startTime, endTime, overTime, price}) => putAction('/sys/hotel/addOrUpdateHotelSetting', {id, checkTime, exitTime, hotelId, startTime, endTime, overTime, price})
+const editHotelSetting = ({id, checkTime, exitTime, hotelId, startTime, endTime, overTime, price}) => postAction('/sys/hotel/addOrUpdateHotelSetting', {id, checkTime, exitTime, hotelId, startTime, endTime, overTime, price})
 
 // 企业
 const getCompanyList = (params) => getAction('/sys/hotel/listCompany', params)
