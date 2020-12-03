@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="异常记录" class="ant-card-slim" :class="{ 'anty-list-cust':true }" :bordered="false" :style="{ marginTop: '24px' }">
+    <a-card title="状态记录" class="ant-card-slim" :class="{ 'anty-list-cust':true }" :bordered="false" :style="{ marginTop: '24px' }">
       <div class="extra-wrapper" slot="extra">
         <div class="extra-item">
           <!-- <a>今日</a>
@@ -10,6 +10,7 @@
             <a-radio-button :value="0">欠费</a-radio-button>
             <a-radio-button :value="1">掉线</a-radio-button>
             <a-radio-button :value="2">异常</a-radio-button>
+            <a-radio-button :value="3">上线</a-radio-button>
             <a-radio-button :value="undefined">全部</a-radio-button>
           </a-radio-group>
           <!-- <a @click="handleToggleSearch" style="">
@@ -56,7 +57,7 @@
           </a-form>
           <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="id" :columns="columns" :pagination="ipagination" @change="handleTableChange">
             <span slot="type" slot-scope="text, record">
-              <a-tag :color="['volcano', 'orange', 'red'][record.type]">{{ ['欠费', '掉线', '异常'][record.type] || '异常' }}</a-tag>
+              <a-tag :color="['volcano', 'orange', 'red', 'green'][record.type]">{{ ['欠费', '掉线', '异常', '上线'][record.type] || '异常' }}</a-tag>
             </span>
             <span slot="status" slot-scope="text, record">
               <a-badge :status="record.isOper ? 'success' : 'error'" :text="record.isOper ? '已处理' : '未处理'" />
