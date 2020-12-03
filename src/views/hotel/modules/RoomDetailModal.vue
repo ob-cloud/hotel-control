@@ -372,6 +372,10 @@ export default {
     close () {
       this.$emit('close')
       this.visible = false
+      this.oboxList = []
+      this.deviceList = []
+      this.infraredList = []
+      this.irDeviceList = []
     },
     handleTabChange (key) {
       this.tabActiveKey = key
