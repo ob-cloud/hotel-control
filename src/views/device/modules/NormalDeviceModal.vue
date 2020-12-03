@@ -123,6 +123,7 @@ export default {
               that.clearScanLoading()
             } else {
               that.$message.warning(res.message)
+              that.confirmLoading = false
             }
           }).catch(() => that.confirmLoading = false)
           // .finally(() => {
