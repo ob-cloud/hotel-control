@@ -111,6 +111,7 @@
         bindRoomGateway({...params, roomId: this.roomId}).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
             this.loading = false
+            this.loadData(1)
             this.$emit('ok', record.id, record.oboxSerialId)
             this.$message.success('绑定成功')
           }else this.$message.error(res.message)
