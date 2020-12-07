@@ -1,5 +1,5 @@
 <template>
-  <a-select :default-value="value" :placeholder="placeholder" @change="handleItemChange" style="width: 120px">
+  <a-select v-model="value" :placeholder="placeholder" @change="handleItemChange" style="width: 120px">
     <div slot="dropdownRender" slot-scope="menu">
       <v-nodes :vnodes="menu" />
       <a-divider v-if="hasMore" style="margin: 4px 0;" />
@@ -62,8 +62,8 @@ export default {
     },
   },
   watch: {
-    value (val) {
-      console.log('[ConserveSelect] ', val)
+    value (val, old) {
+      console.log('[ConserveSelect] ', val, ' [old]', old)
     }
   },
   computed: {
