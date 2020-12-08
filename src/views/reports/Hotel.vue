@@ -56,7 +56,7 @@
                 <a-statistic title="使用率" :value="statistic.utilizationRate" style="margin-top: 10px"><template #suffix>%</template></a-statistic>
               </a-col>
               <a-col :xs="12" :sm="8" :md="8" :lg="8">
-                <a-statistic title="租金" :value="statistic.averPrice" style="margin-top: 10px"><template #suffix>RMB</template></a-statistic>
+                <a-statistic title="平均租金" :value="statistic.averPrice" style="margin-top: 10px"><template #suffix>RMB</template></a-statistic>
               </a-col>
               <!-- <a-col :span="8">
                 <a-statistic title="欠费总额" :value="93"><template #suffix>RMB</template></a-statistic>
