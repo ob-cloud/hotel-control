@@ -97,7 +97,7 @@ const columns = [{
   title: '租金',
   align:"center",
   sorter: true,
-  sortOrder: 'descend',
+  order: '',
   dataIndex: 'totalPrice'
 }]
 export default {
@@ -144,8 +144,9 @@ export default {
       const params = {...this.queryParam}
       params.pageNo = this.ipagination.current
       params.pageSize = this.ipagination.pageSize
+      const sort = this.isorter.order ? 'asc' : 'desc'
       this.loading = true
-      getEnterpriseReportList(params).then((res) => {
+      getEnterpriseReportList({...params, price: sort}).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataSource = res.result.tableHotelResponseList
           this.ipagination.total = res.result.total || 0
