@@ -45,7 +45,7 @@
       <div style="text-align: center;" v-if="!confirmLoading && !scanDeviceListFromWebsocket.length">暂无设备</div>
       <a-spin :spinning="confirmLoading" :tip="scanTips">
         <a-card class="box" size="small" v-for="(item, index) in scanDeviceListFromWebsocket" :key="index">
-          <p>{{ `${item.deviceName}(${deviceSerialId})` }}</p>
+          <p>{{ `${item.deviceName}(${item.deviceSerialId})` }}</p>
           <p>{{ Descriptor.getTypeDescriptor(item.deviceType) }}</p>
           <p>{{ Descriptor.getTypeDescriptor(item.deviceType, item.deviceChildType) }}</p>
         </a-card>
