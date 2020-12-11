@@ -108,17 +108,14 @@ const columns = [{
   align:"center",
   dataIndex: 'isOper',
   scopedSlots: { customRender: 'status' },
-  // customRender (status) {
-  //   return status ? '已处理' : '未处理'
-  // },
-  filters: [{
-    text: '已处理',
-    value: 1,
-  }, {
-    text: '未处理',
-    value: 0,
-  }],
-  onFilter: (value, record) => record.isOper === value
+  // filters: [{
+  //   text: '已处理',
+  //   value: 1,
+  // }, {
+  //   text: '未处理',
+  //   value: 0,
+  // }],
+  // onFilter: (value, record) => record.isOper === value
 }, {
   title: '操作人',
   align:"center",
