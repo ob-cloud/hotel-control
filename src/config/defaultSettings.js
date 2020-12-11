@@ -34,7 +34,7 @@ export default {
   ///// 此下面配置忽略
   // TODO Delete
   pageOptions: {
-    logo: 'logo.png',   // 系统统一logo
+    logo: 'logo.svg',   // 系统统一logo
     title: '智慧客控系统',  // 系统统一标题
     // description: 'On-Bright Admin Pro',
     logLogo: 'logLogo.png',  // 登录页Logo，没有默认使用logo
