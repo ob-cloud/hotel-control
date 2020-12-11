@@ -100,8 +100,8 @@ const columns = [{
 }, {
   title: '异常时间',
   align:"center",
-  sorter: true,
-  sortOrder: 'descend',
+  // sorter: true,
+  // sortOrder: 'descend',
   dataIndex: 'createTime'
 }, {
   title: '处理状态',
