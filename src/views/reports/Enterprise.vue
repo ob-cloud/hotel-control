@@ -73,6 +73,8 @@ import { ReportMixin } from './ReportMixin'
 const columns = [{
   title: '营业日',
   align:"center",
+  sorter: true,
+  order: '',
   dataIndex: 'time'
 },{
   title: '酒店总数',
@@ -141,12 +143,9 @@ export default {
       if (arg === 1) {
         this.ipagination.current = 1
       }
-      const params = {...this.queryParam}
-      params.pageNo = this.ipagination.current
-      params.pageSize = this.ipagination.pageSize
-      const sort = this.isorter.order ? 'asc' : 'desc'
+      const params = this.getQueryParams()
       this.loading = true
-      getEnterpriseReportList({...params, price: sort}).then((res) => {
+      getEnterpriseReportList({...params}).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataSource = res.result.tableHotelResponseList
           this.ipagination.total = res.result.total || 0

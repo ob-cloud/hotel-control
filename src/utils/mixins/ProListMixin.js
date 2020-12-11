@@ -33,7 +33,7 @@ export const ProListMixin = {
       },
       /* 排序参数 */
       isorter: {
-        column: 'createTime',
+        column: '',
         order: false, // true -asc, false - desc
       },
       /* 筛选参数 */
