@@ -21,13 +21,30 @@
       :breadcrumb="{ props: { routes } }"
       :sub-title="`${model.buildName}${model.floorName}`"
     />
-    <a-descriptions style="padding: 10px 24px;">
+    <a-descriptions style="padding: 10px 24px;" :column="4">
       <a-descriptions-item label="室内温度"><i v-if="model.temperature" class="obicon obicon-temperature" style="color: #fa8c16;"></i>{{ model.temperature ? `${model.temperature}℃` : '--' }}</a-descriptions-item>
       <a-descriptions-item label="插卡取电">
         <a-badge style="margin-left: 10px" :status="model.elec ? 'processing' : 'default'" :text="`${model.elec ? '取电中' : '未使用'}`" />
       </a-descriptions-item>
       <a-descriptions-item label="在住状态">
         <a-badge style="margin-left: 10px" :status="model.elec ? 'success' : 'default'" :text="`${model.elec ? '在住' : '空闲'}`" />
+      </a-descriptions-item>
+      <a-descriptions-item label="语音控制">
+        <a-space>
+          <a-badge dot><a-icon type="notification" /></a-badge>
+          <a style="font-size: 12px; text-decoration: underline;" @click="handleBindVoice">绑定</a>
+        </a-space>
+        <!-- <a-popconfirm ok-text="绑定" cancel-text="解绑" @confirm="handleVoiceOk" @cancel="handleVoiceOk" :visible="confirmVisible">
+          <span slot="icon"></span>
+          <div slot="title">
+            <a-form :form="form" layout="inline">
+              <a-form-item label="序列号">
+                <a-input placeholder="请输入序列号" v-decorator="[ 'serialId', { rules: [{ required: true, message: '请输入序列号!' }] }]" />
+              </a-form-item>
+            </a-form>
+          </div>
+          <a style="font-size: 12px; text-decoration: underline;">绑定</a>
+        </a-popconfirm> -->
       </a-descriptions-item>
     </a-descriptions>
 
@@ -111,6 +128,7 @@
     <!-- 绑定红外网关 -->
     <room-bind-obox-modal ref="bindModal" @ok="bindGatewayModalOk"></room-bind-obox-modal>
     <room-bind-infrared-modal ref="bindInfraredModal" @ok="bindIrModalOk"></room-bind-infrared-modal>
+    <room-bind-voice-modal ref="bindVoiceModal" @ok="bindVoiceModalOk"></room-bind-voice-modal>
 
     <!-- 设备操作 -->
     <humidity-action-modal placement="right" :drawerWidth="600" ref="humidityModal"></humidity-action-modal>
@@ -134,6 +152,7 @@ import {
 import { stopHotelDevice } from '@/api/device'
 import RoomBindOboxModal from './RoomBindOboxModal'
 import RoomBindInfraredModal from './RoomBindInfraredModal'
+import RoomBindVoiceModal from './RoomBindVoiceModal'
 import LampActionModal from '@views/device/modules/LampActionModal'
 import HumidityActionModal from '@views/device/modules/HumidityActionModal'
 import PowerSwitchModal from '@views/device/modules/PowerSwitchModal'
@@ -227,6 +246,7 @@ export default {
   components: {
     RoomBindOboxModal,
     RoomBindInfraredModal,
+    RoomBindVoiceModal,
     LampActionModal,
     HumidityActionModal,
     PowerSwitchModal,
@@ -254,7 +274,10 @@ export default {
       infraredList: [],
       irDeviceList: [],
       queryirParam: {pageNo: 1, pageSize: 10},
-      TypeHints
+      TypeHints,
+
+      form: this.$form.createForm(this),
+      confirmVisible: false
     }
   },
   computed: {
@@ -347,7 +370,7 @@ export default {
       type === 2 && this.$refs.bindInfraredModal.show({ roomId: this.roomId })
     },
     handleUnbind (type, record) {
-      let params = type === 1 ? {deviceSerialId: record.oboxSerialId} : {deviceSerialId: record.serialId}
+      let params = type === 1 ? {deviceSerialId: record.oboxSerialId} : {deviceSerialId: record.deviceSerialId}
       params = {...params, id: record.id, roomId: this.roomId}
       const obj = type === 1 ? unbindRoomGateway(params) : unbindRoomInfrared(params)
       obj.then(res => {
@@ -362,6 +385,36 @@ export default {
     },
     bindIrModalOk () {
       this.getInfraredList()
+    },
+    handleBindVoice () {
+      this.$refs.bindVoiceModal.edit({ roomId: this.roomId, serialId: 'sssss', id: '1111' })
+    },
+    bindVoiceModalOk (voice) {
+      const {id, serialId} = voice
+      console.log(id, serialId)
+    },
+    handleVoiceOk () {
+      // const that = this
+      // // 触发表单验证
+      // this.form.validateFields((err, values) => {
+      //   if (!err) {
+      //     // that.confirmLoading = true
+      //     // let formData = Object.assign(this.model, values)
+      //     // formData = {...formData, hotelId: this.hotelId}
+      //     // let obj = !this.model.id ? bindRoomVoiceDevice(formData) : unbindRoomVoiceDevice(formData)
+      //     // obj.then((res) => {
+      //     //   if (that.$isAjaxSuccess(res.code)) {
+      //     //     that.$message.success(res.message)
+      //     //     that.$emit('ok', { id: that.model.id || res.result.id, serialId: formData.serialId })
+      //     //   } else {
+      //     //     that.$message.warning(res.message)
+      //     //   }
+      //     // }).finally(() => {
+      //     //   that.confirmLoading = false
+      //     //   that.close()
+      //     // })
+      //   }
+      // })
     },
     handleOk () {
       this.$emit('ok')
