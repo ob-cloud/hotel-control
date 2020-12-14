@@ -14,7 +14,7 @@
             <a-form-item label="网关">
               <a-select placeholder="请选择网关" v-model="queryParam.oboxSerialId" allowClear>
                 <a-select-option v-for="item in oboxList" :key="item.oboxSerialId" :value="item.oboxSerialId">
-                  {{ item.oboxName }}（{{ item.isOnline === 1 ? '在线' : '离线' }}）
+                  {{ item.oboxName }}（{{ item.isOnline ? '在线' : '离线' }}）
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -90,6 +90,10 @@
                 <a @click="handleAction(3, record)">灯控</a>
               </a-menu-item>
 
+              <a-menu-item v-isPermitted="'device:control'">
+                <a @click="handleAction(4, record)">按键</a>
+              </a-menu-item>
+
               <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)">
                 <a-popconfirm :title="`确认${getCardActionStatus(record.deviceState) === 0 ? '停用' : '启用'}？请谨慎操作！`" @confirm="() => handleStopService(record)">
                   <a>{{ getCardActionStatus(record.deviceState) === 0 ? '停用' : '启用' }}</a>
@@ -114,6 +118,7 @@
     <humidity-action-modal ref="humidityModal" @close="actionModalClose"></humidity-action-modal>
     <lamp-action-modal ref="lampModal" @close="actionModalClose"></lamp-action-modal>
     <power-switch-modal ref="powerModal" @close="actionModalClose"></power-switch-modal>
+    <panel-key-name-modal ref="panelKeyModal"></panel-key-name-modal>
   </a-card>
 </template>
 
@@ -123,6 +128,7 @@
   import LampActionModal from './modules/LampActionModal'
   import HumidityActionModal from './modules/HumidityActionModal'
   import PowerSwitchModal from './modules/PowerSwitchModal'
+  import PanelKeyNameModal from './modules/PanelKeyNameModal'
   import { getHotelDeviceList, getAllHotelOboxList, delHotelDevice, stopHotelDevice } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { Descriptor, TypeHints, CardPowerEquip } from 'hardware-suit'
@@ -135,7 +141,8 @@
       NormalDeviceModal,
       LampActionModal,
       HumidityActionModal,
-      PowerSwitchModal
+      PowerSwitchModal,
+      PanelKeyNameModal
       // PasswordModal
     },
     data() {
@@ -244,6 +251,7 @@
         type === 1 && this.$refs.humidityModal.show(record)
         type === 2 && this.$refs.keypanelModal.show(record)
         type === 3 && this.$refs.lampModal.show(record)
+        type === 4 && this.$refs.panelKeyModal.show(record)
       },
       handleStopService (record) {
         this.loading = true
