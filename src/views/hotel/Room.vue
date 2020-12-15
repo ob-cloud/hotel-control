@@ -58,7 +58,7 @@
                 <!-- <a-popconfirm :title="`${item.elec ? '停' : '启'}用插卡取电?`" @confirm="(e) => handleControl(item, e)">
                   <i v-isPermitted="'room:control'" class="icon obicon obicon-room-card" :class="{active: item.elec}" style="font-weight: 600;" title="插卡取电"></i>
                 </a-popconfirm> -->
-                <i v-isPermitted="'room:control'" class="icon obicon obicon-room-card" :class="{active: item.elec}" style="font-weight: 600; cursor: default;" title="插卡取电"></i>
+                <i v-isPermitted="'room:control'" class="icon obicon obicon-equip" :class="{active: item.isOnline}" style="font-weight: 600; cursor: default;" title="obox"></i>
                 <a-icon v-isPermitted="'room:edit'" class="icon" type="edit" title="编辑" @click="(e) => { handleEdit(item) }" />
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleRemove(item.id)">
                   <a-icon v-isPermitted="'room:del'" class="icon" type="delete" />
