@@ -158,7 +158,7 @@ export default {
       getFloorList({...this.queryParam, hotelId: this.$store.getters.hotelId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataList = res.result.records
-          this.total = res.result.total
+          this.ipagination.total = res.result.total
         }
       }).finally(() => this.loading = false)
     },
