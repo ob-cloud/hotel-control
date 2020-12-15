@@ -169,6 +169,14 @@
             }
           },
           {
+            title: '使能状态',
+            align: 'center',
+            dataIndex: '',
+            customRender (status, row) {
+              return new CardPowerEquip(row.deviceState).getActionStatus() === 0 ? '启用' : '停用'
+            }
+          },
+          {
             title: '设备类型',
             align: 'center',
             dataIndex: 'deviceType',

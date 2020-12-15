@@ -49,8 +49,8 @@
         <a-spin :spinning="loading">
           <template v-if="roomList.length">
             <div class="block-item" :class="{'active': item.elec}" v-for="item in roomList" :key="item.id">
-              <div class="toolbar left" v-if="item.temperature">
-                <span title="温度"><i class="obicon obicon-temperature" style="color: #f66c32;"></i>{{ item.temperature }}℃</span>
+              <div class="toolbar left">
+                <span title="温度"><i class="obicon obicon-temperature" style="color: #f66c32;"></i>{{ item.temperature ? item.temperature + '℃' : '--' }}</span>
               </div>
               <div class="toolbar">
                 <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->

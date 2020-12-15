@@ -23,16 +23,16 @@
         <p>模式</p>
       </div>
     </div>
-    <div class="toolbar" style="margin-top: 0;" v-if="hasWing">
-      <div class="key pad0" :class="{disabled: !wingEanble}">
+    <!-- <div class="toolbar" style="margin-top: 0;">
+      <div class="key pad0" :class="{disabled: !wingEanble}" v-if="vWingEnable">
         <i class="sm obicon obicon-swing-v" @click="handleSwingV(!wingEanble)"></i>
         <p>上下摆风</p>
       </div>
-      <div class="key pad0" :class="{disabled: !wingEanble}">
+      <div class="key pad0" :class="{disabled: !wingEanble}" v-if="hWingEnable">
         <i class="sm obicon obicon-swing-h" @click="handleSwingH(!wingEanble)"></i>
         <p>左右摆风</p>
       </div>
-    </div>
+    </div> -->
     <div class="toolbar temp" :class="{disabled: !tempEnable}">
       <i class="obicon obicon-minus" @click="hadnleTemp(-1)"></i>
       <p>温度</p>
@@ -91,7 +91,7 @@ export default {
       return this.airEquip.hasVerticalSwing()
     },
     hasWing () {
-      return this.hWingEnable && this.vWingEnable
+      return false // this.hWingEnable && this.vWingEnable
     },
     wingEanble () {
       return this.airEquip.isWingValid()
@@ -133,7 +133,7 @@ export default {
     },
     hadnleTemp (val) {
       if (!this.isPowerOn) return
-      const temperature = this.airEquip.getTemperature()
+      const temperature = +this.airEquip.getTemperature() || AirConditionEquip.defaultTemp
       this.airEquip.setTemperature(val + +temperature)
       this.emitEvent()
     },
