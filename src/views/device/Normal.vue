@@ -90,7 +90,7 @@
                 <a @click="handleAction(3, record)">灯控</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:control'" TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)>
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)">
                 <a @click="handleAction(4, record)">按键</a>
               </a-menu-item>
 
