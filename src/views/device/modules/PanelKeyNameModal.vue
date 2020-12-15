@@ -11,13 +11,13 @@
     :destroyOnClose="true"
     :bodyStyle="{height: 'calc(100% - 60px)'}"
   >
-    <panel-key typeIndex="4"></panel-key>
+    <panel-key typeIndex="4" @check="handleCheck" @cancel="handleDelete"></panel-key>
   </a-drawer>
 </template>
 
 
 <script>
-// import { editSwitchStatus, getSwitchStatus } from '@/api/device'
+import { editPanelKeyName, getPanelKeysList } from '@/api/device'
 import { Descriptor } from 'hardware-suit'
 import PanelKey from '@/components/IoT/PanelKey'
 export default {
@@ -50,14 +50,18 @@ export default {
 
       confirmLoading: false,
       form: this.$form.createForm(this),
-
-      ledLampEquip: null,
+      dataSource: []
     }
   },
   mounted () {
 
   },
   methods: {
+    initKeyList (deviceSerialId) {
+      getPanelKeysList(deviceSerialId).then(res => {
+        if (this.$isAjaxSuccess(res.code)) this.dataSource = res.result || []
+      })
+    },
     add () {
       this.edit({})
     },
@@ -65,11 +69,27 @@ export default {
       this.model = Object.assign({}, record)
       this.visible = true
       this.title = `面板按键 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
+      if (record.deviceSerialId) {
+        this.initKeyList(record.deviceSerialId)
+      }
     },
     close () {
       this.$emit('close')
       this.disableSubmit = false
       this.visible = false
+    },
+    handleCheck (item, index) {
+      const id = item.id || index
+      const name = item.v
+      const deviceSerialId = item.pid
+      editPanelKeyName(id, deviceSerialId, name).then(res => {
+        if (this.$isAjaxSuccess(res.code)) {
+          this.$message.success('操作成功')
+        } else this.$message.error(res.message || '操作失败')
+      })
+    },
+    handleDelete () {
+
     },
     handleCancel () {
       this.close()

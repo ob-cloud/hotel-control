@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-12-07 15:16:16
+ * @Last Modified time: 2020-12-15 11:03:16
  */
 
 import { getAction, postFormAction, deleteAction, postAction, putAction } from '@/utils/ajax'
@@ -16,6 +16,9 @@ const stopHotelDevice = (deviceSerialId, stop) => postAction(`/device/stopDevice
 
 const scanHotelDevice = ({hotelId, oboxSerialId, electric = undefined}) => postAction('/device/obox/scanDevice', {hotelId, oboxSerialId, electric})
 const pauseScanDevices = (hotelId, oboxSerialId) => postAction(`/device/stopScanDevice`, {hotelId, oboxSerialId})
+
+const getPanelKeysList = (deviceSerialId) => getAction('/device/getDeviceChildName', {deviceSerialId})
+const editPanelKeyName = (id, deviceSerialId, name) => putAction('/device/reDeviceChildName', {childId: id, deviceSerialId, name})
 
 // hotel infrared
 const getHotelIrList = ({hotelId, serialId, state, deviceName, pageNo, pageSize}) => getAction('/device/getHotelIr', {hotelId, serialId, state, deviceName, pageNo, pageSize})
@@ -60,6 +63,9 @@ export {
   editHotelDevice,
   stopHotelDevice,
   pauseScanDevices,
+
+  getPanelKeysList,
+  editPanelKeyName,
 
   // 红外
   getHotelIrList,
