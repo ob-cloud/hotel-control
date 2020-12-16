@@ -50,7 +50,8 @@
           <template v-if="roomList.length">
             <div class="block-item" :class="{'active': item.elec}" v-for="item in roomList" :key="item.id">
               <div class="toolbar left">
-                <span title="温度"><i class="obicon obicon-temperature" style="color: #f66c32;"></i>{{ item.temperature ? item.temperature + '℃' : '--' }}</span>
+                <!-- <i class="obicon obicon-temperature" style="color: #f66c32;"></i> -->
+                <span title="温度"><a-icon :component="iconTemperature" style="font-size: 20px; color: #f66c32;" />{{ item.temperature ? item.temperature + '℃' : '--' }}</span>
               </div>
               <div class="toolbar">
                 <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->
@@ -91,6 +92,7 @@ import { Empty } from 'ant-design-vue'
 import RoomModal from './modules/RoomModal'
 import RoomDetailModal from './modules/RoomDetailModal'
 // import RoomOboxModal from './modules/RoomOboxModal'
+import { iconTemperature } from '@/core/icons'
 
 export default {
   components: { RoomModal, RoomDetailModal },
@@ -104,7 +106,8 @@ export default {
         pageNo: 1,
         pageSize: 10
       },
-      total: 0
+      total: 0,
+      iconTemperature
     }
   },
   beforeCreate() {

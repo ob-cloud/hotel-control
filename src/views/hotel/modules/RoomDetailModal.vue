@@ -31,7 +31,7 @@
       </a-descriptions-item>
       <a-descriptions-item label="语音控制">
         <a-space>
-          <a-badge dot><a-icon type="notification" /></a-badge>
+          <a-badge dot><a-icon :component="intelAudio" /></a-badge>
           <a style="font-size: 12px; text-decoration: underline;" @click="handleBindVoice">绑定</a>
         </a-space>
         <!-- <a-popconfirm ok-text="绑定" cancel-text="解绑" @confirm="handleVoiceOk" @cancel="handleVoiceOk" :visible="confirmVisible">
@@ -128,7 +128,7 @@
     <!-- 绑定红外网关 -->
     <room-bind-obox-modal ref="bindModal" @ok="bindGatewayModalOk"></room-bind-obox-modal>
     <room-bind-infrared-modal ref="bindInfraredModal" @ok="bindIrModalOk"></room-bind-infrared-modal>
-    <room-bind-voice-modal ref="bindVoiceModal" @ok="bindVoiceModalOk"></room-bind-voice-modal>
+    <room-bind-audio-modal ref="bindVoiceModal" @ok="bindVoiceModalOk"></room-bind-audio-modal>
 
     <!-- 设备操作 -->
     <humidity-action-modal placement="right" :drawerWidth="600" ref="humidityModal"></humidity-action-modal>
@@ -152,13 +152,14 @@ import {
 import { stopHotelDevice } from '@/api/device'
 import RoomBindOboxModal from './RoomBindOboxModal'
 import RoomBindInfraredModal from './RoomBindInfraredModal'
-import RoomBindVoiceModal from './RoomBindVoiceModal'
+import RoomBindAudioModal from './RoomBindAudioModal'
 import LampActionModal from '@views/device/modules/LampActionModal'
 import HumidityActionModal from '@views/device/modules/HumidityActionModal'
 import PowerSwitchModal from '@views/device/modules/PowerSwitchModal'
 import InfraredAirConditionModal from '@views/device/modules/InfraredAirConditionModal'
 
 import { Descriptor, TypeHints, CardPowerEquip } from 'hardware-suit'
+import { intelAudio } from '@/core/icons'
 
 const deviceColumns = [
   {
@@ -254,7 +255,7 @@ export default {
   components: {
     RoomBindOboxModal,
     RoomBindInfraredModal,
-    RoomBindVoiceModal,
+    RoomBindAudioModal,
     LampActionModal,
     HumidityActionModal,
     PowerSwitchModal,
@@ -285,7 +286,9 @@ export default {
       TypeHints,
 
       form: this.$form.createForm(this),
-      confirmVisible: false
+      confirmVisible: false,
+
+      intelAudio
     }
   },
   computed: {
@@ -395,6 +398,7 @@ export default {
       this.getInfraredList()
     },
     handleBindVoice () {
+      // TODO
       this.$refs.bindVoiceModal.edit({ roomId: this.roomId, serialId: 'sssss', id: '1111' })
     },
     bindVoiceModalOk (voice) {

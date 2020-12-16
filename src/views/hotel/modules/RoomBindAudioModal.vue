@@ -9,8 +9,9 @@
     </a-spin>
 
     <template slot="footer">
+      <a-button @click="handleCancel">取消</a-button>
       <a-popconfirm title="确认解绑？请谨慎操作！" @confirm="() => handleOk()">
-        <a-button key="unbind" :loading="confirmLoading">
+        <a-button key="unbind" type="danger" :loading="confirmLoading">
           解绑
         </a-button>
       </a-popconfirm>

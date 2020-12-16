@@ -122,26 +122,15 @@ export default {
   },
   watch: {
     dataSource (v) {
-      console.log('watch  ', v)
       if (v) {
         !this.list.length && (this.list = this.initList())
         this.list = this.list.map((item, index) => {
           const s = v[index]
-          // console.log('s ', v, index, s)
           if (s) {
             return { ...item, id: s.childId, pid: s.deviceSerialId, v: s.name }
           }
           return item
         })
-        console.log('list  ', this.list)
-        // this.list = v.map(item => {
-        //   return {
-        //     id: item.childId,
-        //     pid: item.deviceSerialId,
-        //     v: item.name,
-        //     editable: false
-        //   }
-        // })
       }
     }
   },
@@ -154,7 +143,6 @@ export default {
           editable: false
         })
       }
-      console.log('tyoeList ', this.list)
       return this.list
     },
     displayEditable (item, bool = false) {
@@ -164,24 +152,20 @@ export default {
       this.selectedKey = selectedKey
       this.$emit('selected', selectedKey)
     },
-    handleClick (item, index) {
+    handleClick (item) {
       item.editable = true
-      console.log('---- ', item, index + 1)
     },
     handleChange (value, item, index) {
-      console.log('----++ ', value, item, index)
       item.v = value
       this.$emit('change', value, item, index + 1)
     },
     handleCheck (item, index) {
       this.$emit('check', item, index + 1)
       // item.editable = false
-      console.log('check ', item, index)
     },
     handleCancel (item, index) {
       item.editable = false
       this.$emit('cancel', item, index + 1)
-      console.log('---- ', item, index)
     }
   },
 }
@@ -243,8 +227,8 @@ export default {
         }
 
         & .dot{
-          width: 20px;
-          height: 20px;
+          width: 34px;
+          height: 34px;
           border: 1px solid #afacac;
           border-radius: 100%;
           margin: 12px 16px;
