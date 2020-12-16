@@ -93,6 +93,8 @@ export default {
     },
     handleItemChange (item) {
       this.$emit('select', item)
+      // console.log('-=-=-= ', item)
+      // this.$emit('input', item)
     }
   },
 }

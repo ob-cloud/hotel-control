@@ -74,6 +74,7 @@
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
+              <!--  v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)" -->
               <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)">
                 <a @click="handleAction(0, record)">开关</a>
               </a-menu-item>
@@ -117,8 +118,9 @@
     <normal-device-modal ref="modalDeviceForm" @ok="modalDeviceFormOk" @close="modalDeviceFormOk"></normal-device-modal>
     <humidity-action-modal ref="humidityModal" @close="actionModalClose"></humidity-action-modal>
     <lamp-action-modal ref="lampModal" @close="actionModalClose"></lamp-action-modal>
-    <power-switch-modal ref="powerModal" @close="actionModalClose"></power-switch-modal>
+    <!-- <power-switch-modal ref="powerModal" @close="actionModalClose"></power-switch-modal> -->
     <panel-key-name-modal ref="panelKeyModal"></panel-key-name-modal>
+    <panel-key-switch-modal ref="powerModal" @close="actionModalClose"></panel-key-switch-modal>
   </a-card>
 </template>
 
@@ -127,7 +129,8 @@
   import NormalDeviceModal from './modules/NormalDeviceModal'
   import LampActionModal from './modules/LampActionModal'
   import HumidityActionModal from './modules/HumidityActionModal'
-  import PowerSwitchModal from './modules/PowerSwitchModal'
+  // import PowerSwitchModal from './modules/PowerSwitchModal'
+  import PanelKeySwitchModal from './modules/PanelKeySwitchModal'
   import PanelKeyNameModal from './modules/PanelKeyNameModal'
   import { getHotelDeviceList, getAllHotelOboxList, delHotelDevice, stopHotelDevice } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
@@ -141,7 +144,8 @@
       NormalDeviceModal,
       LampActionModal,
       HumidityActionModal,
-      PowerSwitchModal,
+      // PowerSwitchModal,
+      PanelKeySwitchModal,
       PanelKeyNameModal
       // PasswordModal
     },

@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-05 17:32:41
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-12-15 11:03:16
+ * @Last Modified time: 2020-12-16 17:43:01
  */
 
 import { getAction, postFormAction, deleteAction, postAction, putAction } from '@/utils/ajax'
@@ -13,6 +13,8 @@ const delHotelDevice = (deviceSerialId) => deleteAction('/device/delDevice', {de
 const editHotelDevice = (deviceSerialId, deviceName) => putAction(`/device/reDeviceName`, { deviceSerialId, deviceName })
 // const stopHotelDevice = (deviceSerialId, isStop) => postAction('/device/stopDevice', {deviceSerialId, isStop})
 const stopHotelDevice = (deviceSerialId, stop) => postAction(`/device/stopDevice`, { deviceSerialId, stop })
+
+const controlHotelDevice = (deviceSerialId, state) => postAction(`/device/controlDevice`, { deviceSerialId, state })
 
 const scanHotelDevice = ({hotelId, oboxSerialId, electric = undefined}) => postAction('/device/obox/scanDevice', {hotelId, oboxSerialId, electric})
 const pauseScanDevices = (hotelId, oboxSerialId) => postAction(`/device/stopScanDevice`, {hotelId, oboxSerialId})
@@ -62,6 +64,7 @@ export {
   scanHotelDevice,
   editHotelDevice,
   stopHotelDevice,
+  controlHotelDevice,
   pauseScanDevices,
 
   getPanelKeysList,
