@@ -11,7 +11,9 @@
     :destroyOnClose="true"
     :bodyStyle="{height: 'calc(100% - 60px)'}"
   >
-    <panel-key typeIndex="4" @check="handleCheck" @cancel="handleDelete"></panel-key>
+    <a-spin :spinning="loading">
+      <panel-key ref="panelKey" :serialId="deviceSerialId" :dataSource="dataSource" typeIndex="4" @check="handleCheck" @cancel="handleDelete"></panel-key>
+    </a-spin>
   </a-drawer>
 </template>
 
@@ -47,9 +49,10 @@ export default {
         xs: { span: 24 },
         sm: { span: 16 },
       },
-
+      loading: false,
       confirmLoading: false,
       form: this.$form.createForm(this),
+      deviceSerialId: '',
       dataSource: []
     }
   },
@@ -57,10 +60,11 @@ export default {
 
   },
   methods: {
-    initKeyList (deviceSerialId) {
-      getPanelKeysList(deviceSerialId).then(res => {
+    loadData () {
+      this.loading = true
+      getPanelKeysList(this.deviceSerialId).then(res => {
         if (this.$isAjaxSuccess(res.code)) this.dataSource = res.result || []
-      })
+      }).finally(() => this.loading = false)
     },
     add () {
       this.edit({})
@@ -68,9 +72,10 @@ export default {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
-      this.title = `面板按键 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
+      this.title = `开关按键 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
       if (record.deviceSerialId) {
-        this.initKeyList(record.deviceSerialId)
+        this.deviceSerialId = record.deviceSerialId
+        this.loadData()
       }
     },
     close () {
@@ -82,11 +87,15 @@ export default {
       const id = item.id || index
       const name = item.v
       const deviceSerialId = item.pid
+      this.loading = true
       editPanelKeyName(id, deviceSerialId, name).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
+          // item.editable = false
+          this.$refs.panelKey.displayEditable(item, false)
+          // this.loadData()
         } else this.$message.error(res.message || '操作失败')
-      })
+      }).finally(() => this.loading = false)
     },
     handleDelete () {
 

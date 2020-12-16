@@ -43,7 +43,7 @@
                     style="width: 60px"
                     @change="e => handleChange(e.target.value, item)"
                   />
-                  <a-icon class="icon" type="check" title="确认" @click="hanleCheck(item, index)"></a-icon>
+                  <a-icon class="icon" type="check" title="确认" @click="handleCheck(item, index)"></a-icon>
                   <a-icon class="icon" type="delete" title="取消" @click="handleCancel(item, index)"></a-icon>
                 </div>
                 <template v-else>
@@ -77,6 +77,10 @@ export default {
     keyNum: {
       type: Number,
       default: 6
+    },
+    serialId: {
+      type: String,
+      default: ''
     },
     width: {
       type: [String, Number],
@@ -118,15 +122,26 @@ export default {
   },
   watch: {
     dataSource (v) {
+      console.log('watch  ', v)
       if (v) {
-        this.list = v.map(item => {
-          return {
-            id: item.childId,
-            pid: item.deviceSerialId,
-            v: item.name,
-            editable: false
+        !this.list.length && (this.list = this.initList())
+        this.list = this.list.map((item, index) => {
+          const s = v[index]
+          // console.log('s ', v, index, s)
+          if (s) {
+            return { ...item, id: s.childId, pid: s.deviceSerialId, v: s.name }
           }
+          return item
         })
+        console.log('list  ', this.list)
+        // this.list = v.map(item => {
+        //   return {
+        //     id: item.childId,
+        //     pid: item.deviceSerialId,
+        //     v: item.name,
+        //     editable: false
+        //   }
+        // })
       }
     }
   },
@@ -134,12 +149,16 @@ export default {
     initList () {
       for (let index = 0; index < this.keyNum; index++) {
         this.list.push({
+          pid: this.serialId,
           v: index + 1,
           editable: false
         })
       }
       console.log('tyoeList ', this.list)
       return this.list
+    },
+    displayEditable (item, bool = false) {
+      item.editable = bool
     },
     onClickKey (selectedKey) {
       this.selectedKey = selectedKey
@@ -154,7 +173,7 @@ export default {
       item.v = value
       this.$emit('change', value, item, index + 1)
     },
-    hanleCheck (item, index) {
+    handleCheck (item, index) {
       this.$emit('check', item, index + 1)
       // item.editable = false
       console.log('check ', item, index)
@@ -178,25 +197,50 @@ export default {
     .keys-wrapper{
       // width: 400px;
       margin: 10px auto;
-      padding: 20px 10px;
+      // padding: 20px 10px;
       // padding: 10px;
-      border: 1px solid #c2c2c2;
-      box-shadow: 0 0 2px 1px #eee;
-      border-radius: 6px;
+      // border: 1px solid #c2c2c2;
+      // box-shadow: 0 0 2px 1px #eee;
+      // border-radius: 6px;
 
       .keys-list{
 
+      }
+      .keys-row{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-content: center;
       }
       .keys-line{
         padding: 10px 0;
       }
       .keys-item{
+        // display: inline-block;
+        // position: relative;
+        // width: 33%;
+        // padding: 24px 0;
+        // margin: 0px 0px;
+        // // border: 1px solid #eee;
+        // width: 33%;
+        // border-right: 1px solid #eee;
+        // border-bottom: 1px solid #eee;
+
         display: inline-block;
         position: relative;
-        // cursor: pointer;
-        padding: 10px 0;
-        margin: 8px 0;
-        width: 33%;
+        background-color: #e7e7e7;
+        width: 130px;
+        height: 128px;
+        object-fit: contain;
+        /* box-shadow: inset 0 5px white, inset 0 -5px #bbb, inset 5px 0 #d7d7d7, inset -5px 0 #d7d7d7; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:nth-child(-n+3) {
+          // border-bottom: 1px solid #999;
+        }
 
         & .dot{
           width: 20px;
@@ -211,8 +255,8 @@ export default {
         & .label{
           color: #A2AAB5;
           position: absolute;
-          // bottom: 0;
-          bottom: -8px;
+          bottom: 24px;
+          // bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
           font-size: 12px;
@@ -225,6 +269,7 @@ export default {
           .icon {
             // vertical-align: middle;
             padding: 3px;
+            margin: 1px;
             cursor: pointer;
           }
         }
