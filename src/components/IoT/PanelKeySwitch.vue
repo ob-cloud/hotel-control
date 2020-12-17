@@ -1,9 +1,17 @@
 <template>
   <div class="container">
     <a-checkbox-group v-model="powers">
-      <a-checkbox v-for="(item, index) in count" :value="index" :key="index" @change="(e) => handleChange(e, {index})">
+      <template v-for="(item, index) in keyTotalCount" :value="index">
+        <a-checkbox v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})">
+          <i class="obicon obicon-power"></i>
+        </a-checkbox>
+        <a-checkbox v-else :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})">
+          <i class="obicon obicon-power"></i>
+        </a-checkbox>
+      </template>
+      <!-- <a-checkbox v-for="(item, index) in keyTotalCount" :value="index" :key="index" @change="(e) => handleChange(e, {index})">
         <i class="obicon obicon-power"></i>
-      </a-checkbox>
+      </a-checkbox> -->
     </a-checkbox-group>
   </div>
 </template>
@@ -11,21 +19,13 @@
 <script>
 export default {
   props: {
-    value: {
+    count: { // 按键数
+      type: [Number, Array],
+      default: 6
+    },
+    dataSource: {
       type: Array,
       default: () => []
-    },
-    serialId: {
-      type: String,
-      default: ''
-    },
-    state: {
-      type: String,
-      default: ''
-    },
-    count: {
-      type: Number,
-      default: 6
     }
   },
   data () {
@@ -35,31 +35,46 @@ export default {
   },
   computed: {
     status () {
-      return new Array(this.count).fill(0)
+      return this.dataSource && this.dataSource.length ? this.dataSource : new Array(this.count).fill(0)
+    },
+    keyTotalCount () {
+      if (!this.count) return 0
+      if (typeof this.count === 'number') return this.count
+      else if (this.count.length) return this.count.reduce((a, b) => +a + (+b))
+    },
+    countList () {
+      if (typeof this.count === 'number') return [this.count]
+      return this.count
     }
   },
   mounted () {
-    // if (this.isLightActive(this.state)) {
-    //   this.powers = [1]
-    // }
   },
   watch: {
-    value () {
-      // console.log('value ', val)
+    dataSource (val) {
+      console.log(val)
+      this.initPowers(val)
     }
   },
   methods: {
-    isLightActive (status) {
-      if (!status) return false
-      const state = status.slice(0, 2)
-      return state !== '00'
+    initPowers (val) { // [0, 1, 0] => [1], [1, 1, 0] => [0, 1], [0, 1, 1] => [1, 2]
+      if (!val) return
+      let curValue = val
+      if (val.length > this.count) {
+        curValue = val.slice(0, this.count)
+      }
+      const powers = []
+      curValue.forEach((item, index) => {
+        if (item) powers.push(index)
+      })
+      if (powers.length) this.powers = powers
+      // console.log('value +++ === ', val, this.powers)
     },
     handleChange (e, record) {
       const item = e.target.checked
       const index = record.index
       const oldStatus = [...this.status]
       this.$set(this.status, index, +item)
-      this.$emit('input', this.status, oldStatus)
+      this.$emit('change', this.status, oldStatus, record)
     }
   },
   destroyed () {

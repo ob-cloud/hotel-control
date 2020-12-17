@@ -12,7 +12,7 @@
     :bodyStyle="{height: 'calc(100% - 60px)'}"
   >
     <a-spin :spinning="loading">
-      <panel-key ref="panelKey" :serialId="deviceSerialId" :dataSource="dataSource" typeIndex="4" @check="handleCheck" @cancel="handleDelete"></panel-key>
+      <panel-key ref="panelKey" :serialId="deviceSerialId" :dataSource="dataSource" typeIndex="4" :keyNum="3" @check="handleCheck" @cancel="handleDelete"></panel-key>
     </a-spin>
   </a-drawer>
 </template>

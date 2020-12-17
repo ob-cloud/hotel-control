@@ -70,11 +70,11 @@ export default {
       type: [String, Number],
       default: '3'
     },
-    rowCount: {
+    rowCount: { // 行数
       type: Number,
       default: 3
     },
-    keyNum: {
+    keyNum: { // 按键数
       type: Number,
       default: 6
     },

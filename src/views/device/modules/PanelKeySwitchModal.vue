@@ -11,17 +11,17 @@
   >
 
     <a-spin :spinning="confirmLoading">
-      <panel-switch v-model="powers" :serialId="serialId" :state="state" :count="switchCount"></panel-switch>
+      <panel-key-switch :dataSource="dataSource" :count="switchCount" @change="onKeyChange"></panel-key-switch>
     </a-spin>
   </a-drawer>
 </template>
 <script>
-import PanelSwitch from '@/components/IoT/PanelKeySwitch'
+import PanelKeySwitch from '@/components/IoT/PanelKeySwitch'
 import ActionMixin from '@/utils/mixins/ActionMixin'
 import { controlHotelDevice } from '@/api/device'
-import { Descriptor, SwitchEquip } from 'hardware-suit'
+import { Descriptor, SwitchMixupEquip } from 'hardware-suit'
 export default {
-  components: { PanelSwitch },
+  components: { PanelKeySwitch },
   props: {
     placement: {
       type: String,
@@ -50,30 +50,29 @@ export default {
       },
 
       confirmLoading: false,
-      powers: [],
-      serialId: '',
-      state: '',
-      powerStatus: [0, 0, 0],
+      dataSource: [],
       switchEquip: null,
       switchCount: 3
     }
   },
   watch: {
-    powers (val, old) {
-      console.log('new ', val)
-      console.log('old ', old)
-      this.handlePower(val)
-    }
   },
   methods: {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
       this.title = `开关 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
-      this.serialId = this.model.deviceSerialId
-      this.state = this.model.state
-      this.switchEquip = new SwitchEquip('21000000', '04', '23')
+      this.switchEquip = new SwitchMixupEquip(record.deviceState, record.deviceType, record.deviceChildType)
       this.switchCount = this.switchEquip.keyCount
+      const pow = this.switchEquip.getPowerInt()
+      const count = this.switchEquip.orderCount
+      // const typeIndex = this.switchEquip.typeIndex
+      // const keyTypes = this.switchEquip.keyTypes
+      // console.log('-=-===- ', pow, count, typeIndex, keyTypes)
+      this.$nextTick(() => {
+        this.dataSource = pow
+        this.switchCount = count
+      })
     },
     close () {
       this.$emit('close')
@@ -86,13 +85,15 @@ export default {
       this.$emit('ok')
       this.handleCancel()
     },
-    handlePower (state) {
-      state.forEach((ele, index) => {
-        this.switchEquip.setPower(ele, index)
-      });
+    onKeyChange (status, oldStatus, record) {
+      this.handlePower(status, oldStatus)
+    },
+    onKeyChange (state, oldStatus, record) {
+      this.switchEquip.setPower(state[record.index], record.index, record.extra)
       console.log('bytes --==== ', this.switchEquip.getBytes())
       const status = this.switchEquip.getBytes()
-      if (!this.model.serialId) return
+      console.log('record ===== ', state, oldStatus)
+      if (!this.model.deviceSerialId) return
       this.confirmLoading = true
       controlHotelDevice(this.model.deviceSerialId, status).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
@@ -104,7 +105,7 @@ export default {
     }
   },
   destroyed () {
-    this.powers = []
+    // this.dataSource = []
   }
 }
 </script>
