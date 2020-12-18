@@ -34,9 +34,9 @@
       </div>
     </div> -->
     <div class="toolbar temp" :class="{disabled: !tempEnable}">
-      <i class="obicon obicon-minus" @click="hadnleTemp(-1)"></i>
+      <i class="obicon obicon-minus" @click="hadnleTemp(-1, !tempEnable)"></i>
       <p>温度</p>
-      <i class="obicon obicon-plus" @click="hadnleTemp(1)"></i>
+      <i class="obicon obicon-plus" @click="hadnleTemp(1, !tempEnable)"></i>
     </div>
   </div>
 </template>
@@ -131,8 +131,8 @@ export default {
       this.airEquip.setHorizontalWing(1 + +v)
       this.emitEvent()
     },
-    hadnleTemp (val) {
-      if (!this.isPowerOn) return
+    hadnleTemp (val, unclickable) {
+      if (!this.isPowerOn || unclickable) return
       const temperature = +this.airEquip.getTemperature() || AirConditionEquip.defaultTemp
       this.airEquip.setTemperature(val + +temperature)
       this.emitEvent()
