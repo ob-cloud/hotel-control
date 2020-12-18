@@ -95,6 +95,14 @@
                 <a @click="handleAction(4, record)">按键</a>
               </a-menu-item>
 
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType)">
+                <a @click="handleAction(5, record)">窗帘</a>
+              </a-menu-item>
+
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isAcWireControl(record.deviceChildType, record.deviceType)">
+                <a @click="handleAction(6, record)">空调</a>
+              </a-menu-item>
+
               <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)">
                 <a-popconfirm :title="`确认${getCardActionStatus(record.deviceState) === 0 ? '停用' : '启用'}？请谨慎操作！`" @confirm="() => handleStopService(record)">
                   <a>{{ getCardActionStatus(record.deviceState) === 0 ? '停用' : '启用' }}</a>
@@ -119,8 +127,10 @@
     <humidity-action-modal ref="humidityModal" @close="actionModalClose"></humidity-action-modal>
     <lamp-action-modal ref="lampModal" @close="actionModalClose"></lamp-action-modal>
     <!-- <power-switch-modal ref="powerModal" @close="actionModalClose"></power-switch-modal> -->
-    <panel-key-name-modal ref="panelKeyModal"></panel-key-name-modal>
+    <panel-key-name-modal ref="panelKeyModal" @close="actionModalClose"></panel-key-name-modal>
     <panel-key-switch-modal ref="powerModal" @close="actionModalClose"></panel-key-switch-modal>
+    <curtain-modal ref="curtainModal" @close="actionModalClose"></curtain-modal>
+    <wire-condition-modal ref="acModal" @close="actionModalClose"></wire-condition-modal>
   </a-card>
 </template>
 
@@ -132,6 +142,8 @@
   // import PowerSwitchModal from './modules/PowerSwitchModal'
   import PanelKeySwitchModal from './modules/PanelKeySwitchModal'
   import PanelKeyNameModal from './modules/PanelKeyNameModal'
+  import CurtainModal from './modules/CurtainModal'
+  import WireConditionModal from './modules/WireConditionModal'
   import { getHotelDeviceList, getAllHotelOboxList, delHotelDevice, stopHotelDevice } from '@/api/device'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import { Descriptor, TypeHints, CardPowerEquip } from 'hardware-suit'
@@ -146,7 +158,9 @@
       HumidityActionModal,
       // PowerSwitchModal,
       PanelKeySwitchModal,
-      PanelKeyNameModal
+      PanelKeyNameModal,
+      CurtainModal,
+      WireConditionModal
       // PasswordModal
     },
     data() {
@@ -172,14 +186,14 @@
               return Descriptor.getStatusDescriptor(status, row.deviceType, row.deviceChildType)
             }
           },
-          {
-            title: '使能状态',
-            align: 'center',
-            dataIndex: '',
-            customRender (status, row) {
-              return new CardPowerEquip(row.deviceState).getActionStatus() === 0 ? '启用' : '停用'
-            }
-          },
+          // {
+          //   title: '使能状态',
+          //   align: 'center',
+          //   dataIndex: '',
+          //   customRender (status, row) {
+          //     return new CardPowerEquip(row.deviceState).getActionStatus() === 0 ? '启用' : '停用'
+          //   }
+          // },
           {
             title: '设备类型',
             align: 'center',
@@ -259,11 +273,22 @@
         })
       },
       handleAction (type, record) {
-        type === 0 && this.$refs.powerModal.show(record)
-        type === 1 && this.$refs.humidityModal.show(record)
-        type === 2 && this.$refs.keypanelModal.show(record)
-        type === 3 && this.$refs.lampModal.show(record)
-        type === 4 && this.$refs.panelKeyModal.show(record)
+        // type === 0 && this.$refs.powerModal.show(record)
+        // type === 1 && this.$refs.humidityModal.show(record)
+        // type === 2 && this.$refs.keypanelModal.show(record)
+        // type === 3 && this.$refs.lampModal.show(record)
+        // type === 4 && this.$refs.panelKeyModal.show(record)
+        // type === 5 && this.$refs.curtainModal.show(record)
+        const ActionMap = {
+          0: 'powerModal',
+          1: 'humidityModal',
+          2: 'keypanelModal',
+          3: 'lampModal',
+          4: 'panelKeyModal',
+          5: 'curtainModal',
+          6: 'acModal'
+        }
+        this.$refs[ActionMap[type]].show(record)
       },
       handleStopService (record) {
         this.loading = true

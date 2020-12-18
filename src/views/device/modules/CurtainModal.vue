@@ -18,10 +18,8 @@
 </template>
 <script>
 import PanelKeySwitch from '@/components/IoT/PanelKeySwitch'
-import ActionMixin from '@/utils/mixins/ActionMixin'
 import { controlHotelDevice } from '@/api/device'
-// , SwitchPlugEquip, TypeHints
-import { Descriptor, SwitchMixEquip } from 'hardware-suit'
+import { Descriptor, CurtainEquip } from 'hardware-suit'
 export default {
   components: { PanelKeySwitch },
   props: {
@@ -34,7 +32,6 @@ export default {
       default: '100%'
     }
   },
-  mixins: [ ActionMixin ],
   data () {
     return {
       drawerHeight: 500,
@@ -53,7 +50,7 @@ export default {
 
       confirmLoading: false,
       dataSource: [],
-      switchEquip: null,
+      curtainEquip: null,
       switchCount: 3
     }
   },
@@ -63,24 +60,13 @@ export default {
     show (record) {
       this.model = Object.assign({}, record)
       this.visible = true
-      this.title = `开关 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
-      // if (TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)) {
-      //   this.switchEquip = new SwitchMixEquip(record.deviceState, record.deviceType, record.deviceChildType)
-      //   if (TypeHints.isPlugSocketSwitch(record.deviceChildType, record.deviceType)) {
-      //     this.switchEquip = new SwitchPlugEquip(record.deviceState, record.deviceType, record.deviceChildType)
-      //   }
-      // }
-      this.switchEquip = new SwitchMixEquip(record.deviceState, record.deviceType, record.deviceChildType)
-      this.switchCount = this.switchEquip.keyCount
-      const pow = this.switchEquip.getPowerInt()
-      const count = this.switchEquip.orderCount
-      // const typeIndex = this.switchEquip.typeIndex
-      // const keyTypes = this.switchEquip.keyTypes
-      // const status = this.switchEquip.getStatusDescriptor()
-      // console.log('-=-===- ', status)
+      this.title = `智能开关 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
+      this.curtainEquip = new CurtainEquip(record.deviceState, record.deviceType, record.deviceChildType)
+      const pow = this.curtainEquip.getPower()
+      console.log('-=-===- ', pow, this.curtainEquip.getStatusDescriptor())
       this.$nextTick(() => {
         this.dataSource = pow
-        this.switchCount = count
+        this.switchCount = [3]
       })
     },
     close () {
@@ -98,10 +84,9 @@ export default {
       this.handlePower(status, oldStatus)
     },
     onKeyChange (state, oldStatus, record) {
-      this.switchEquip.setPower(state[record.index], record.index, record.extra)
-      console.log('bytes --==== ', this.switchEquip.getBytes())
-      const status = this.switchEquip.getBytes()
-      console.log('record ===== ', state, oldStatus)
+      this.curtainEquip.setStatus(state[record.index])
+      console.log('bytes --==== ', this.curtainEquip.getBytes())
+      const status = this.curtainEquip.getBytes()
       if (!this.model.deviceSerialId) return
       this.confirmLoading = true
       controlHotelDevice(this.model.deviceSerialId, status).then(res => {
