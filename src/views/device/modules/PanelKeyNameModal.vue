@@ -12,7 +12,7 @@
     :bodyStyle="{height: 'calc(100% - 60px)'}"
   >
     <a-spin :spinning="loading">
-      <panel-key ref="panelKey" :serialId="deviceSerialId" :dataSource="dataSource" typeIndex="4" :keyNum="3" @check="handleCheck" @cancel="handleDelete"></panel-key>
+      <panel-key ref="panelKey" :serialId="deviceSerialId" :dataSource="dataSource" :keyTypes="keyTypes" :orderCount="switchCount" @check="handleCheck" @cancel="handleDelete"></panel-key>
     </a-spin>
   </a-drawer>
 </template>
@@ -20,7 +20,7 @@
 
 <script>
 import { editPanelKeyName, getPanelKeysList } from '@/api/device'
-import { Descriptor } from 'hardware-suit'
+import { Descriptor, SwitchEquip } from 'hardware-suit'
 import PanelKey from '@/components/IoT/PanelKey'
 export default {
   components: { PanelKey },
@@ -53,7 +53,9 @@ export default {
       confirmLoading: false,
       form: this.$form.createForm(this),
       deviceSerialId: '',
-      dataSource: []
+      dataSource: [],
+      switchCount: 3,
+      keyTypes: {}
     }
   },
   mounted () {
@@ -73,8 +75,15 @@ export default {
       this.model = Object.assign({}, record)
       this.visible = true
       this.title = `开关按键 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
+      const factory = new SwitchEquip(record.deviceState, record.deviceType, record.deviceChildType)
+      const switchEquip = factory.create()
+      const count = switchEquip.orderCount
+      const keyTypes = switchEquip.keyTypes
+      // console.log('key keyTypes ', switchEquip.keyTypes)
       if (record.deviceSerialId) {
         this.deviceSerialId = record.deviceSerialId
+        this.switchCount = count
+        this.keyTypes = keyTypes
         this.loadData()
       }
     },

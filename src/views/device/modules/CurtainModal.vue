@@ -80,9 +80,9 @@ export default {
       this.$emit('ok')
       this.handleCancel()
     },
-    onKeyChange (status, oldStatus, record) {
-      this.handlePower(status, oldStatus)
-    },
+    // onKeyChange (status, oldStatus, record) {
+    //   this.handlePower(status, oldStatus)
+    // },
     onKeyChange (state, oldStatus, record) {
       this.curtainEquip.setStatus(state[record.index])
       console.log('bytes --==== ', this.curtainEquip.getBytes())

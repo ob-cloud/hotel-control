@@ -6,50 +6,22 @@
     <div class="content">
       <div class="keys-wrapper" :style="`${typeof width === 'number' ? 'width: ' + width + 'px' : 'width: ' + width}`">
         <div class="keys-list">
-          <div class="keys-row" v-for="(t, idex) in typeList" :key="idex">
-            <!-- <div class="keys-line" v-for="(line, idx) in t.row" :key="line">
-              <template v-if="t.last && t.row === idx + 1">
-                <div class="keys-item" :class="{'active': item === selectedKey}" v-for="(item, index) in t.last" :key="index" @click="onClickKey(t.row + item + 1)">
-                  <span class="dot"></span>
-                  <div class="label" @click="handleLabel(t.row + item + 1)">
-                    <a-input
-                      v-if="record.editable"
-                      style="margin: -5px 0"
-                      :value="text"
-                      @change="e => handleChange(e.target.value, record.key, col)"
-                    />
-                    <template v-else>
-                      {{ t.row + item + 1 }}
-                    </template>
-                  </div>
-                </div>
-              </template>
-              <template v-else>
-                <div class="keys-item" :class="{'active': item === selectedKey}" v-for="(item, index) in rowCount" :key="index" @click="onClickKey(item)">
-                  <span class="dot"></span>
-                  <span class="label">{{ item }}</span>
-                </div>
-              </template>
-            </div> -->
-
-            <div class="keys-item" v-for="(item, index) in typeObj" :key="index">
-              <span class="dot" @click="handleClick(item, index)"></span>
-              <!-- <span class="label">{{ `按键 - ${item}` }}</span> -->
-              <div class="label" style="width: 110px;" :style="`${item.editable ? 'transform: translateX(-40%)' : 'transform: translateX(-50%)'}`">
-                <div v-if="item.editable">
-                  <a-input
-                    :value="item.v"
-                    size="small"
-                    style="width: 60px"
-                    @change="e => handleChange(e.target.value, item)"
-                  />
-                  <a-icon class="icon" type="check" title="确认" @click="handleCheck(item, index)"></a-icon>
-                  <a-icon class="icon" type="delete" title="取消" @click="handleCancel(item, index)"></a-icon>
-                </div>
-                <template v-else>
-                  {{ item.v }}
-                </template>
+          <div class="keys-item" :class="{extra: orderCount[0] < index + 1}" v-for="(item, index) in list" :key="index" :title="getKeyTips(orderCount[0] < index + 1)">
+            <span class="dot" @click="handleClick(item, index)"></span>
+            <div class="label" style="width: 110px;" :style="`${item.editable ? 'transform: translateX(-40%)' : 'transform: translateX(-50%)'}`">
+              <div v-if="item.editable">
+                <a-input
+                  :value="item.v"
+                  size="small"
+                  style="width: 60px"
+                  @change="e => handleChange(e.target.value, item)"
+                />
+                <a-icon class="icon" type="check" title="确认" @click="handleCheck(item, index, orderCount[0] < index + 1)"></a-icon>
+                <a-icon class="icon" type="delete" title="取消" @click="handleCancel(item, index, orderCount[0] < index + 1)"></a-icon>
               </div>
+              <template v-else>
+                {{ item.v }}
+              </template>
             </div>
           </div>
         </div>
@@ -59,24 +31,30 @@
 </template>
 
 <script>
+const KeyTypeEnum = {
+  SWITCH: 'switch',
+  SCENE: 'scene',
+  LINE: 'line',
+  SOCKET: 'socket',
+  RADAR: 'radar',
+}
+const KeyTypeDescriptor = {
+  [KeyTypeEnum.SWITCH]: '触摸开关',
+  [KeyTypeEnum.SCENE]: '情景开关',
+  [KeyTypeEnum.LINE]: '单线开关',
+  [KeyTypeEnum.SOCKET]: '插座开关',
+  [KeyTypeEnum.RADAR]: '雷达开关'
+}
 export default {
   name: 'KeyPanel',
   props: {
-    type: {
-      type: String,
-      default: '' // scene | mixup
+    keyTypes: { // 按键类型
+      type: Object,
+      default: () => {}
     },
-    typeIndex: { // 类型索引 3|3， 6
-      type: [String, Number],
-      default: '3'
-    },
-    rowCount: { // 行数
-      type: Number,
-      default: 3
-    },
-    keyNum: { // 按键数
-      type: Number,
-      default: 6
+    orderCount: { // 按键数
+      type: [Number, Array],
+      default: () => []
     },
     serialId: {
       type: String,
@@ -86,44 +64,31 @@ export default {
       type: [String, Number],
       default: 400
     },
-    dataSource: {
+    dataSource: { // 初始化数据源
       type: Array,
       default: () => []
     }
   },
   data () {
     return {
-      selectedKey: '',
       list: []
     }
   },
+  mounted () {
+    this.initList()
+  },
   computed: {
-    typeObj () {
-      return this.dataSource && this.dataSource.length ? this.list : this.initList()
+    totalCount () {
+      return typeof this.orderCount === 'number' ? this.orderCount : +this.orderCount.reduce((a, b) => +a + (+b))
     },
-    typeList () {
-      const typeIndex = typeof this.typeIndex === 'number' ? '' + this.typeIndex : this.typeIndex
-      const types = typeIndex.split('|')
-      const filterTypes = types.filter(type => type)
-      // ['6', '4'] ==> [{row: 2, last: 0}, {row：2， last: 1}]
-      const list = filterTypes.map(type => {
-        const r = +type / this.rowCount
-        const isInteger = r % 1 === 0
-        const row = isInteger ? r : Math.ceil(r)
-        const p = +('' + r).split('.')[0]
-        const lastItem = isInteger ? 0 : type - p * this.rowCount
-        return {
-          row,
-          last: lastItem
-        }
-      })
-      return list
+    validTypes () { //eg: ['switch', 'scene']
+      return Object.keys(this.keyTypes).filter(k => this.keyTypes[k])
     }
   },
   watch: {
     dataSource (v) {
-      if (v) {
-        !this.list.length && (this.list = this.initList())
+      if (v && v.length) {
+        !this.list.length && this.initList()
         this.list = this.list.map((item, index) => {
           const s = v[index]
           if (s) {
@@ -136,7 +101,7 @@ export default {
   },
   methods: {
     initList () {
-      for (let index = 0; index < this.keyNum; index++) {
+      for (let index = 0; index < this.totalCount; index++) {
         this.list.push({
           pid: this.serialId,
           v: index + 1,
@@ -145,12 +110,21 @@ export default {
       }
       return this.list
     },
+    getKeyTips (extra) { // 获取按键提示
+      if (!this.validTypes || !this.validTypes.length) return ''
+      if (this.validTypes.length === 1) return KeyTypeDescriptor[this.validTypes[0]]
+      if (this.validTypes.length === 2) {
+        // 情景混合开关
+        const sceneIndex = this.validTypes.indexOf(KeyTypeEnum.SCENE)
+        if (sceneIndex !== -1) {
+          const unSceneIndex = 1 - sceneIndex
+          return !extra ? KeyTypeDescriptor[KeyTypeEnum.SCENE] : KeyTypeDescriptor[this.validTypes[unSceneIndex]]
+        }
+        return ''
+      }
+    },
     displayEditable (item, bool = false) {
       item.editable = bool
-    },
-    onClickKey (selectedKey) {
-      this.selectedKey = selectedKey
-      this.$emit('selected', selectedKey)
     },
     handleClick (item) {
       item.editable = true
@@ -159,13 +133,13 @@ export default {
       item.v = value
       this.$emit('change', value, item, index + 1)
     },
-    handleCheck (item, index) {
-      this.$emit('check', item, index + 1)
+    handleCheck (item, index, extra) {
+      this.$emit('check', item, index + 1, extra)
       // item.editable = false
     },
-    handleCancel (item, index) {
+    handleCancel (item, index, extra) {
       item.editable = false
-      this.$emit('cancel', item, index + 1)
+      this.$emit('cancel', item, index + 1, extra)
     }
   },
 }
@@ -181,14 +155,17 @@ export default {
     .keys-wrapper{
       // width: 400px;
       margin: 10px auto;
-      // padding: 20px 10px;
-      // padding: 10px;
-      // border: 1px solid #c2c2c2;
-      // box-shadow: 0 0 2px 1px #eee;
-      // border-radius: 6px;
+      background: #e7e7e7;
+      overflow: hidden;
+      border: 1px solid #e7e7e7;
+      border-radius: 10px;
 
       .keys-list{
-
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-content: center;
       }
       .keys-row{
         display: flex;
@@ -225,6 +202,13 @@ export default {
         &:nth-child(-n+3) {
           // border-bottom: 1px solid #999;
         }
+        // 非主程按键
+        &.extra {
+          // background-color: #e7e7e7;
+          .dot {
+            border-color: #666;
+          }
+        }
 
         & .dot{
           width: 34px;
@@ -239,7 +223,7 @@ export default {
         & .label{
           color: #A2AAB5;
           position: absolute;
-          bottom: 24px;
+          bottom: 14px;
           // bottom: -8px;
           left: 50%;
           transform: translateX(-50%);

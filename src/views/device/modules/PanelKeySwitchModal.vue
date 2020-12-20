@@ -12,7 +12,7 @@
   >
 
     <a-spin :spinning="confirmLoading">
-      <panel-key-switch :dataSource="dataSource" :count="switchCount" @change="onKeyChange"></panel-key-switch>
+      <panel-key-switch :dataSource="dataSource" :count="switchCount" :keyTypes="keyTypes" @change="onKeyChange"></panel-key-switch>
     </a-spin>
   </a-drawer>
 </template>
@@ -20,8 +20,7 @@
 import PanelKeySwitch from '@/components/IoT/PanelKeySwitch'
 import ActionMixin from '@/utils/mixins/ActionMixin'
 import { controlHotelDevice } from '@/api/device'
-// , SwitchPlugEquip, TypeHints
-import { Descriptor, SwitchMixEquip } from 'hardware-suit'
+import { Descriptor, SwitchEquip } from 'hardware-suit'
 export default {
   components: { PanelKeySwitch },
   props: {
@@ -54,7 +53,8 @@ export default {
       confirmLoading: false,
       dataSource: [],
       switchEquip: null,
-      switchCount: 3
+      switchCount: 3,
+      keyTypes: {}
     }
   },
   watch: {
@@ -64,23 +64,16 @@ export default {
       this.model = Object.assign({}, record)
       this.visible = true
       this.title = `开关 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
-      // if (TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)) {
-      //   this.switchEquip = new SwitchMixEquip(record.deviceState, record.deviceType, record.deviceChildType)
-      //   if (TypeHints.isPlugSocketSwitch(record.deviceChildType, record.deviceType)) {
-      //     this.switchEquip = new SwitchPlugEquip(record.deviceState, record.deviceType, record.deviceChildType)
-      //   }
-      // }
-      this.switchEquip = new SwitchMixEquip(record.deviceState, record.deviceType, record.deviceChildType)
-      this.switchCount = this.switchEquip.keyCount
+      // this.switchEquip = new SwitchMixEquip(record.deviceState, record.deviceType, record.deviceChildType)
+      const factory = new SwitchEquip(record.deviceState, record.deviceType, record.deviceChildType)
+      this.switchEquip = factory.create()
       const pow = this.switchEquip.getPowerInt()
       const count = this.switchEquip.orderCount
-      // const typeIndex = this.switchEquip.typeIndex
-      // const keyTypes = this.switchEquip.keyTypes
-      // const status = this.switchEquip.getStatusDescriptor()
-      // console.log('-=-===- ', status)
+      const keyTypes = this.switchEquip.keyTypes
       this.$nextTick(() => {
         this.dataSource = pow
         this.switchCount = count
+        this.keyTypes = keyTypes
       })
     },
     close () {
@@ -94,9 +87,9 @@ export default {
       this.$emit('ok')
       this.handleCancel()
     },
-    onKeyChange (status, oldStatus, record) {
-      this.handlePower(status, oldStatus)
-    },
+    // onKeyChange (status, oldStatus, record) {
+    //   this.handlePower(status, oldStatus)
+    // },
     onKeyChange (state, oldStatus, record) {
       this.switchEquip.setPower(state[record.index], record.index, record.extra)
       console.log('bytes --==== ', this.switchEquip.getBytes())

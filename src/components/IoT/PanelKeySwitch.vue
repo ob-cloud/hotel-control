@@ -3,10 +3,10 @@
     <a-checkbox-group v-model="powers">
       <template v-for="(item, index) in keyTotalCount" :value="index">
         <a-checkbox v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})">
-          <i class="obicon obicon-power"></i>
+          <i class="obicon obicon-power" :title="getKeyTips()"></i>
         </a-checkbox>
         <a-checkbox v-else :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})">
-          <i class="obicon obicon-power"></i>
+          <i class="obicon obicon-power" :title="getKeyTips(1)"></i>
         </a-checkbox>
       </template>
       <!-- <a-checkbox v-for="(item, index) in keyTotalCount" :value="index" :key="index" @change="(e) => handleChange(e, {index})">
@@ -17,8 +17,26 @@
 </template>
 
 <script>
+const KeyTypeEnum = {
+  SWITCH: 'switch',
+  SCENE: 'scene',
+  LINE: 'line',
+  SOCKET: 'socket',
+  RADAR: 'radar',
+}
+const KeyTypeDescriptor = {
+  [KeyTypeEnum.SWITCH]: '触摸开关',
+  [KeyTypeEnum.SCENE]: '情景开关',
+  [KeyTypeEnum.LINE]: '单线开关',
+  [KeyTypeEnum.SOCKET]: '插座开关',
+  [KeyTypeEnum.RADAR]: '雷达开关'
+}
 export default {
   props: {
+    keyTypes: { // 按键类型
+      type: Object,
+      default: () => {}
+    },
     count: { // 按键数
       type: [Number, Array],
       default: 6
@@ -45,6 +63,10 @@ export default {
     countList () {
       if (typeof this.count === 'number') return [this.count]
       return this.count
+    },
+    validTypes () { //eg: ['switch', 'scene']
+      if (!this.keyTypes) return []
+      return Object.keys(this.keyTypes).filter(k => this.keyTypes[k])
     }
   },
   mounted () {
@@ -68,6 +90,19 @@ export default {
       })
       if (powers.length) this.powers = powers
       // console.log('value +++ === ', val, this.powers)
+    },
+    getKeyTips (extra) { // 获取按键提示
+      if (!this.validTypes || !this.validTypes.length) return ''
+      if (this.validTypes.length === 1) return KeyTypeDescriptor[this.validTypes[0]]
+      if (this.validTypes.length === 2) {
+        // 情景混合开关
+        const sceneIndex = this.validTypes.indexOf(KeyTypeEnum.SCENE)
+        if (sceneIndex !== -1) {
+          const unSceneIndex = 1 - sceneIndex
+          return !extra ? KeyTypeDescriptor[KeyTypeEnum.SCENE] : KeyTypeDescriptor[this.validTypes[unSceneIndex]]
+        }
+        return ''
+      }
     },
     handleChange (e, record) {
       const item = e.target.checked
