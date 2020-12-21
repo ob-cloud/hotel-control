@@ -89,12 +89,10 @@ export default {
     dataSource (v) {
       if (v && v.length) {
         !this.list.length && this.initList()
-        this.list = this.list.map((item, index) => {
-          const s = v[index]
-          if (s) {
-            return { ...item, id: s.childId, pid: s.deviceSerialId, v: s.name }
+        this.list.forEach((item, index) => {
+          if (v[index]) {
+            this.$set(this.list, v[index].childId - 1, { ...item, id: v[index].childId, pid: v[index].deviceSerialId, v: v[index].name })
           }
-          return item
         })
       }
     }
@@ -135,7 +133,6 @@ export default {
     },
     handleCheck (item, index, extra) {
       this.$emit('check', item, index + 1, extra)
-      // item.editable = false
     },
     handleCancel (item, index, extra) {
       item.editable = false
@@ -206,14 +203,14 @@ export default {
         &.extra {
           // background-color: #e7e7e7;
           .dot {
-            border-color: #666;
+            border-color: #999;
           }
         }
 
         & .dot{
           width: 34px;
           height: 34px;
-          border: 1px solid #afacac;
+          border: 2px solid #afacac;
           border-radius: 100%;
           margin: 12px 16px;
           display: inline-block;

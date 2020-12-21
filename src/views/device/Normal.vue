@@ -74,7 +74,6 @@
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
-              <!--  v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)" -->
               <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)">
                 <a @click="handleAction(0, record)">开关</a>
               </a-menu-item>
@@ -91,16 +90,18 @@
                 <a @click="handleAction(3, record)">灯控</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)">
+              <!-- 窗帘 -->
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType)">
+                <a @click="handleAction(5, record)">开关</a>
+              </a-menu-item>
+
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType) || TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType)">
                 <a @click="handleAction(4, record)">按键</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType)">
-                <a @click="handleAction(5, record)">窗帘</a>
-              </a-menu-item>
-
+              <!-- 空调 -->
               <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isAcWireControl(record.deviceChildType, record.deviceType)">
-                <a @click="handleAction(6, record)">空调</a>
+                <a @click="handleAction(6, record)">控制</a>
               </a-menu-item>
 
               <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isPluginPowerSensors(record.deviceChildType)">
@@ -273,12 +274,6 @@
         })
       },
       handleAction (type, record) {
-        // type === 0 && this.$refs.powerModal.show(record)
-        // type === 1 && this.$refs.humidityModal.show(record)
-        // type === 2 && this.$refs.keypanelModal.show(record)
-        // type === 3 && this.$refs.lampModal.show(record)
-        // type === 4 && this.$refs.panelKeyModal.show(record)
-        // type === 5 && this.$refs.curtainModal.show(record)
         const ActionMap = {
           0: 'powerModal',
           1: 'humidityModal',

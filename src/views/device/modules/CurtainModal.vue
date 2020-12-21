@@ -12,16 +12,16 @@
   >
 
     <a-spin :spinning="confirmLoading">
-      <panel-key-switch :dataSource="dataSource" :count="switchCount" @change="onKeyChange"></panel-key-switch>
+      <curtain :dataSource="dataSource" @change="onKeyChange"></curtain>
     </a-spin>
   </a-drawer>
 </template>
 <script>
-import PanelKeySwitch from '@/components/IoT/PanelKeySwitch'
+import Curtain from '@/components/IoT/Curtain'
 import { controlHotelDevice } from '@/api/device'
 import { Descriptor, CurtainEquip } from 'hardware-suit'
 export default {
-  components: { PanelKeySwitch },
+  components: { Curtain },
   props: {
     placement: {
       type: String,
@@ -51,7 +51,6 @@ export default {
       confirmLoading: false,
       dataSource: [],
       curtainEquip: null,
-      switchCount: 3
     }
   },
   watch: {
@@ -62,11 +61,9 @@ export default {
       this.visible = true
       this.title = `智能开关 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
       this.curtainEquip = new CurtainEquip(record.deviceState, record.deviceType, record.deviceChildType)
-      const pow = this.curtainEquip.getPower()
-      console.log('-=-===- ', pow, this.curtainEquip.getStatusDescriptor())
+      const pow = this.curtainEquip.curStatusInt
       this.$nextTick(() => {
-        this.dataSource = pow
-        this.switchCount = [3]
+        this.dataSource = [pow]
       })
     },
     close () {
@@ -80,12 +77,8 @@ export default {
       this.$emit('ok')
       this.handleCancel()
     },
-    // onKeyChange (status, oldStatus, record) {
-    //   this.handlePower(status, oldStatus)
-    // },
-    onKeyChange (state, oldStatus, record) {
-      this.curtainEquip.setStatus(state[record.index])
-      console.log('bytes --==== ', this.curtainEquip.getBytes())
+    onKeyChange (state, oldState) {
+      this.curtainEquip.setStatus(state)
       const status = this.curtainEquip.getBytes()
       if (!this.model.deviceSerialId) return
       this.confirmLoading = true
@@ -93,6 +86,7 @@ export default {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
         } else {
+          this.curtainEquip.setStatus(oldState)
           this.$message.error(res.message)
         }
       }).finally(() => this.confirmLoading = false)

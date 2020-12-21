@@ -3,10 +3,12 @@
     <a-checkbox-group v-model="powers">
       <template v-for="(item, index) in keyTotalCount" :value="index">
         <a-checkbox v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})">
-          <i class="obicon obicon-power" :title="getKeyTips()"></i>
+          <slot name="icon">
+            <i class="obicon obicon-power" :title="getKeyTips()"></i>
+          </slot>
         </a-checkbox>
         <a-checkbox v-else :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})">
-          <i class="obicon obicon-power" :title="getKeyTips(1)"></i>
+          <slot name="icon"><i class="obicon obicon-power" :title="getKeyTips(1)"></i></slot>
         </a-checkbox>
       </template>
       <!-- <a-checkbox v-for="(item, index) in keyTotalCount" :value="index" :key="index" @change="(e) => handleChange(e, {index})">
@@ -103,6 +105,9 @@ export default {
         }
         return ''
       }
+    },
+    reset (status) {
+      this.initPowers(status)
     },
     handleChange (e, record) {
       const item = e.target.checked

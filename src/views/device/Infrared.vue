@@ -144,7 +144,7 @@
             }
           },
           {
-            title: '使用状态',
+            title: '使能状态',
             align: 'center',
             dataIndex: 'deviceState',
             customRender (status) {

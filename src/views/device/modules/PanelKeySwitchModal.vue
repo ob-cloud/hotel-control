@@ -92,9 +92,7 @@ export default {
     // },
     onKeyChange (state, oldStatus, record) {
       this.switchEquip.setPower(state[record.index], record.index, record.extra)
-      console.log('bytes --==== ', this.switchEquip.getBytes())
       const status = this.switchEquip.getBytes()
-      console.log('record ===== ', state, oldStatus)
       if (!this.model.deviceSerialId) return
       this.confirmLoading = true
       controlHotelDevice(this.model.deviceSerialId, status).then(res => {
@@ -102,6 +100,7 @@ export default {
           this.$message.success('操作成功')
         } else {
           this.$message.error(res.message)
+          this.switchEquip.reset(oldStatus)
         }
       }).finally(() => this.confirmLoading = false)
     }

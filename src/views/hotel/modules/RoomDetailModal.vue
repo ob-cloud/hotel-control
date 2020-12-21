@@ -21,7 +21,7 @@
       :breadcrumb="{ props: { routes } }"
       :sub-title="`${model.buildName}${model.floorName}`"
     />
-    <a-descriptions style="padding: 10px 24px;" :column="4">
+    <a-descriptions style="padding: 10px 24px;" :column="3">
       <a-descriptions-item label="室内温度"><i v-if="model.temperature" class="obicon obicon-temperature" style="color: #fa8c16;"></i>{{ model.temperature ? `${model.temperature}℃` : '--' }}</a-descriptions-item>
       <a-descriptions-item label="插卡取电">
         <a-badge style="margin-left: 10px" :status="model.elec ? 'processing' : 'default'" :text="`${model.elec ? '取电中' : '未使用'}`" />
@@ -29,22 +29,30 @@
       <a-descriptions-item label="在住状态">
         <a-badge style="margin-left: 10px" :status="model.elec ? 'success' : 'default'" :text="`${model.elec ? '在住' : '空闲'}`" />
       </a-descriptions-item>
-      <a-descriptions-item label="语音控制">
-        <a-space>
+      <!-- <a-descriptions-item label="语音控制">
+        <a-space v-if="!audioEditable">
           <a-badge dot><a-icon :component="intelAudio" /></a-badge>
-          <a style="font-size: 12px; text-decoration: underline;" @click="handleBindVoice">绑定</a>
+          <a style="font-size: 12px; text-decoration: underline;" @click="audioEditable = true">绑定</a>
         </a-space>
-        <!-- <a-popconfirm ok-text="绑定" cancel-text="解绑" @confirm="handleVoiceOk" @cancel="handleVoiceOk" :visible="confirmVisible">
-          <span slot="icon"></span>
-          <div slot="title">
-            <a-form :form="form" layout="inline">
-              <a-form-item label="序列号">
-                <a-input placeholder="请输入序列号" v-decorator="[ 'serialId', { rules: [{ required: true, message: '请输入序列号!' }] }]" />
-              </a-form-item>
-            </a-form>
-          </div>
-          <a style="font-size: 12px; text-decoration: underline;">绑定</a>
-        </a-popconfirm> -->
+        <a-space v-else style="display: inline-block;">
+          <a-input style="width: 100px; " size="small" placeholder="请输入序列号" :value="audioSerialId" />
+          <a-icon class="icon" type="check" title="确认" @click="handleBindVoice()"></a-icon>
+          <a-icon class="icon" type="delete" title="取消"></a-icon>
+        </a-space>
+      </a-descriptions-item> -->
+    </a-descriptions>
+
+    <a-descriptions style="padding: 10px 24px;" :column="3">
+      <a-descriptions-item label="语音控制">
+        <a-space v-if="!audioEditable">
+          <a-badge dot><a-icon :component="intelAudio" /></a-badge>
+          <a style="font-size: 12px; text-decoration: underline;" @click="audioEditable = true">{{ audioSerialId || '绑定' }}</a>
+        </a-space>
+        <a-space v-else style="display: inline-block;">
+          <a-input style="width: 140px; " size="small" placeholder="请输入序列号" v-model="audioSerialId" />
+          <a-icon class="icon" type="check" title="确认" @click="handleAudioAction()"></a-icon>
+          <a-icon class="icon" type="delete" title="取消" @click="handleAudioCancel()"></a-icon>
+        </a-space>
       </a-descriptions-item>
     </a-descriptions>
 
@@ -108,10 +116,12 @@
         <a-table bordered size="small" rowKey="id" :columns="deviceColumns" :dataSource="deviceList" :loading="loading" :pagination="ipagination" @change="handleTableChange">
           <span slot="action" slot-scope="text, record">
             <a v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)" @click="handleAction(0, record)">开关</a>
-            <a v-if="TypeHints.isSettableSceneSocketSwitch(record.deviceChildType)" @click="handleAction(2, record)">设置</a>
-            <a v-if="TypeHints.isHumidifierSensors(record.deviceChildType)" @click="handleAction(1, record)">温湿度</a>
-            <a v-if="TypeHints.isSimpleLed(record.deviceChildType)" @click="handleAction(3, record)">灯控</a>
-            <a v-if="TypeHints.isPluginPowerSensors(record.deviceChildType, record.deviceType)" @click="handleAction(4, record)">{{ getCardActionStatus(record.deviceState) === 0 ? '停用' : '启用' }}</a>
+            <a v-if="TypeHints.isHumidifierSensors(record.deviceChildType, record.deviceType)" @click="handleAction(1, record)">温湿度</a>
+            <a v-if="TypeHints.isSettableSceneSocketSwitch(record.deviceChildType, record.deviceType)" @click="handleAction(2, record)">设置</a>
+            <a v-if="TypeHints.isSimpleLed(record.deviceChildType, record.deviceType)" @click="handleAction(3, record)">灯控</a>
+            <a v-if="TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType)" @click="handleAction(4, record)">窗帘</a>
+            <a v-if="TypeHints.isAcWireControl(record.deviceChildType, record.deviceType)" @click="handleAction(5, record)">空调</a>
+            <a v-if="TypeHints.isPluginPowerSensors(record.deviceChildType, record.deviceType)" @click="handleStopCardPower(record)">{{ getCardActionStatus(record.deviceState) === 0 ? '停用' : '启用' }}</a>
           </span>
         </a-table>
       </a-tab-pane>
@@ -119,7 +129,7 @@
         <a-table bordered size="small" rowKey="indexOsm" :columns="infraredColumns" :dataSource="irDeviceList" :loading="loading">
           <span slot="action" slot-scope="text, record">
             <!--  v-if="TypeHints.isInfrared(record.deviceType)" -->
-            <a @click="handleAction(5, record)">控制</a>
+            <a @click="handleAction(50, record)">控制</a>
           </span>
         </a-table>
       </a-tab-pane>
@@ -128,14 +138,17 @@
     <!-- 绑定红外网关 -->
     <room-bind-obox-modal ref="bindModal" @ok="bindGatewayModalOk"></room-bind-obox-modal>
     <room-bind-infrared-modal ref="bindInfraredModal" @ok="bindIrModalOk"></room-bind-infrared-modal>
-    <room-bind-audio-modal ref="bindVoiceModal" @ok="bindVoiceModalOk"></room-bind-audio-modal>
+    <!-- <room-bind-audio-modal ref="bindVoiceModal" @ok="bindVoiceModalOk"></room-bind-audio-modal> -->
 
     <!-- 设备操作 -->
     <humidity-action-modal placement="right" :drawerWidth="600" ref="humidityModal"></humidity-action-modal>
-    <lamp-action-modal placement="right" :drawerWidth="600" ref="lampModal"></lamp-action-modal>
-    <power-switch-modal placement="right" :drawerWidth="600" ref="powerModal"></power-switch-modal>
+    <lamp-action-modal placement="right" :drawerWidth="600" ref="lampModal" @close="getDeviceList()"></lamp-action-modal>
+    <!-- <power-switch-modal placement="right" :drawerWidth="600" ref="powerModal"></power-switch-modal> -->
+    <panel-key-switch-modal placement="right" :drawerWidth="600" ref="powerModal" @close="getDeviceList()"></panel-key-switch-modal>
+    <curtain-modal placement="right" :drawerWidth="600" ref="curtainModal" @close="getDeviceList()"></curtain-modal>
+    <wire-condition-modal placement="right" :drawerWidth="600" ref="wireAcModal" @close="getDeviceList()"></wire-condition-modal>
 
-    <infrared-air-condition-modal placement="right" :drawerWidth="600" ref="airModal" @close="getIrdDeviceList()"></infrared-air-condition-modal>
+    <infrared-air-condition-modal placement="right" :drawerWidth="600" ref="acModal" @close="getIrdDeviceList()"></infrared-air-condition-modal>
   </a-drawer>
 </template>
 
@@ -147,15 +160,21 @@ import {
   getRoomGatewayDeviceList,
   getRoomInfraredDeviceList,
   unbindRoomGateway,
-  unbindRoomInfrared
+  unbindRoomInfrared,
+  bindRoomVoiceDevice,
+  unbindRoomVoiceDevice
 } from '@/api/hotel'
 import { stopHotelDevice } from '@/api/device'
 import RoomBindOboxModal from './RoomBindOboxModal'
 import RoomBindInfraredModal from './RoomBindInfraredModal'
-import RoomBindAudioModal from './RoomBindAudioModal'
+// import RoomBindAudioModal from './RoomBindAudioModal'
 import LampActionModal from '@views/device/modules/LampActionModal'
 import HumidityActionModal from '@views/device/modules/HumidityActionModal'
-import PowerSwitchModal from '@views/device/modules/PowerSwitchModal'
+// import PowerSwitchModal from '@views/device/modules/PowerSwitchModal'
+import PanelKeySwitchModal from '@views/device/modules/PanelKeySwitchModal'
+import CurtainModal from '@views/device/modules/CurtainModal'
+import WireConditionModal from '@views/device/modules/WireConditionModal'
+
 import InfraredAirConditionModal from '@views/device/modules/InfraredAirConditionModal'
 
 import { Descriptor, TypeHints, CardPowerEquip } from 'hardware-suit'
@@ -180,14 +199,14 @@ const deviceColumns = [
       return Descriptor.getStatusDescriptor(status, row.deviceType, row.deviceChildType)
     }
   },
-  {
-    title: '使能状态',
-    align: 'center',
-    dataIndex: '',
-    customRender (status, row) {
-      return new CardPowerEquip(row.deviceState).getActionStatus() === 0 ? '启用' : '停用'
-    }
-  },
+  // {
+  //   title: '使能状态',
+  //   align: 'center',
+  //   dataIndex: '',
+  //   customRender (status, row) {
+  //     return new CardPowerEquip(row.deviceState).getActionStatus() === 0 ? '启用' : '停用'
+  //   }
+  // },
   {
     title: '设备类型',
     align: 'center',
@@ -255,10 +274,14 @@ export default {
   components: {
     RoomBindOboxModal,
     RoomBindInfraredModal,
-    RoomBindAudioModal,
+    // RoomBindAudioModal,
     LampActionModal,
     HumidityActionModal,
-    PowerSwitchModal,
+    // PowerSwitchModal,
+    PanelKeySwitchModal,
+    CurtainModal,
+    WireConditionModal,
+
     InfraredAirConditionModal
   },
   data() {
@@ -288,7 +311,10 @@ export default {
       form: this.$form.createForm(this),
       confirmVisible: false,
 
-      intelAudio
+      intelAudio,
+      audioSerialId: '',
+      oldAudioSerialId: '',
+      audioEditable: false
     }
   },
   computed: {
@@ -315,6 +341,9 @@ export default {
         return
       }
       this.getIrdDeviceList()
+    },
+    audioSerialId (newVal, oldVal) {
+      this.oldAudioSerialId = oldVal
     }
   },
   methods: {
@@ -397,36 +426,39 @@ export default {
     bindIrModalOk () {
       this.getInfraredList()
     },
-    handleBindVoice () {
+    handleAudioAction () {
       // TODO
-      this.$refs.bindVoiceModal.edit({ roomId: this.roomId, serialId: 'sssss', id: '1111' })
+      // this.$refs.bindVoiceModal.edit({ roomId: this.roomId, serialId: 'sssss', id: '1111' })
+      if (!this.audioSerialId && this.oldAudioSerialId) { // 解绑
+        this.$confirm({
+          content: '即将解绑语音控制设备，请确认！',
+          onOk() {
+            unbindRoomVoiceDevice({deviceSerialId: this.audioSerialId})
+            .then(res => {
+              if (this.$isAjaxSuccess(res.code)) {
+                this.$message.success('解绑')
+              } else this.$message.error('解绑失败')
+            })
+            .catch((err) => this.$message.error(err.message || '服务异常'))
+            .finally(() => {})
+          },
+          cancelText: '取消'
+        })
+      } else if (this.audioSerialId) { // 绑定
+        bindRoomVoiceDevice({deviceSerialId: this.audioSerialId, roomId: this.roomId})
+        .then(res => {
+          if (this.$isAjaxSuccess(res.code)) {
+            this.$message.success('绑定成功')
+          } else this.$message.error('绑定失败')
+        })
+        .catch((err) => this.$message.error(err.message || '服务异常'))
+        .finally(() => {})
+      }
     },
-    bindVoiceModalOk (voice) {
-      const {id, serialId} = voice
-      console.log(id, serialId)
-    },
-    handleVoiceOk () {
-      // const that = this
-      // // 触发表单验证
-      // this.form.validateFields((err, values) => {
-      //   if (!err) {
-      //     // that.confirmLoading = true
-      //     // let formData = Object.assign(this.model, values)
-      //     // formData = {...formData, hotelId: this.hotelId}
-      //     // let obj = !this.model.id ? bindRoomVoiceDevice(formData) : unbindRoomVoiceDevice(formData)
-      //     // obj.then((res) => {
-      //     //   if (that.$isAjaxSuccess(res.code)) {
-      //     //     that.$message.success(res.message)
-      //     //     that.$emit('ok', { id: that.model.id || res.result.id, serialId: formData.serialId })
-      //     //   } else {
-      //     //     that.$message.warning(res.message)
-      //     //   }
-      //     // }).finally(() => {
-      //     //   that.confirmLoading = false
-      //     //   that.close()
-      //     // })
-      //   }
-      // })
+    handleAudioCancel () {
+      this.audioEditable = false
+      // TODO
+      this.audioSerialId = this.oldAudioSerialId
     },
     handleOk () {
       this.$emit('ok')
@@ -452,12 +484,13 @@ export default {
         '0': 'powerModal',
         '1': 'humidityModal',
         '3': 'lampModal',
-        '5': 'airModal'
+        '4': 'curtainModal',
+        '5': 'wireAcModal',
+        '50': 'acModal',
       }
       !record.deviceSerialId && (record.deviceSerialId = record.serialId)
       const ref = ActoinMap[type]
       if (ref) this.$refs[ref].show(record)
-      if (type === 4) this.handleStopCardPower(record)
     },
     handleStopCardPower (item) {
       this.loading = true

@@ -20,7 +20,7 @@
 
 <script>
 import { editPanelKeyName, getPanelKeysList } from '@/api/device'
-import { Descriptor, SwitchEquip } from 'hardware-suit'
+import { Descriptor, SwitchEquip, TypeHints } from 'hardware-suit'
 import PanelKey from '@/components/IoT/PanelKey'
 export default {
   components: { PanelKey },
@@ -75,11 +75,18 @@ export default {
       this.model = Object.assign({}, record)
       this.visible = true
       this.title = `开关按键 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
-      const factory = new SwitchEquip(record.deviceState, record.deviceType, record.deviceChildType)
-      const switchEquip = factory.create()
-      const count = switchEquip.orderCount
-      const keyTypes = switchEquip.keyTypes
-      // console.log('key keyTypes ', switchEquip.keyTypes)
+      const isCurtain = TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType)
+
+      // 窗帘
+      let count = 3
+      let keyTypes = {}
+      if (!isCurtain) { // 开关
+        const factory = new SwitchEquip(record.deviceState, record.deviceType, record.deviceChildType)
+        const switchEquip = factory.create()
+        count = switchEquip.orderCount
+        keyTypes = switchEquip.keyTypes
+      }
+
       if (record.deviceSerialId) {
         this.deviceSerialId = record.deviceSerialId
         this.switchCount = count
