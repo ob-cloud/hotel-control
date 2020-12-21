@@ -95,7 +95,8 @@
                 <a @click="handleAction(5, record)">开关</a>
               </a-menu-item>
 
-              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType) || TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType)">
+              <!-- || TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType) -->
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)">
                 <a @click="handleAction(4, record)">按键</a>
               </a-menu-item>
 
