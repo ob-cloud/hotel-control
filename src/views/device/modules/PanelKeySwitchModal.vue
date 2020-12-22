@@ -99,7 +99,8 @@ export default {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
           if (this.switchEquip.isScene || this.switchEquip.isSwitchScene || this.switchEquip.isInfraredScene || this.switchEquip.isRadarScene) {
-            // this.switchEquip.setPower(oldStatus[record.index], record.index, record.extra)
+            // TODO 开关不用重置
+            !record.extra && this.switchEquip.setPower(oldStatus[record.index], record.index, record.extra)
             setTimeout(() => { // 情景操作后，重置
               this.$refs.switch.resetScene(oldStatus)
             }, 1000);
@@ -109,7 +110,13 @@ export default {
           // this.switchEquip.reset(oldStatus)
           this.$refs.switch.reset(oldStatus)
         }
-      }).finally(() => this.confirmLoading = false)
+      })
+      .catch(() => {
+        this.$message.error('请求异常')
+        // this.switchEquip.reset(oldStatus)
+        this.$refs.switch.reset(oldStatus)
+      })
+      .finally(() => this.confirmLoading = false)
     }
   },
   destroyed () {
