@@ -12,7 +12,7 @@
   >
 
     <a-spin :spinning="confirmLoading">
-      <panel-key-switch :dataSource="dataSource" :count="switchCount" :keyTypes="keyTypes" @change="onKeyChange"></panel-key-switch>
+      <panel-key-switch ref="switch" :dataSource="dataSource" :count="switchCount" :showTips="false" :keyTypes="keyTypes" @change="onKeyChange"></panel-key-switch>
     </a-spin>
   </a-drawer>
 </template>
@@ -98,9 +98,16 @@ export default {
       controlHotelDevice(this.model.deviceSerialId, status).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
+          if (this.switchEquip.isScene || this.switchEquip.isSwitchScene || this.switchEquip.isInfraredScene || this.switchEquip.isRadarScene) {
+            // this.switchEquip.setPower(oldStatus[record.index], record.index, record.extra)
+            setTimeout(() => { // 情景操作后，重置
+              this.$refs.switch.resetScene(oldStatus)
+            }, 1000);
+          }
         } else {
           this.$message.error(res.message)
-          this.switchEquip.reset(oldStatus)
+          // this.switchEquip.reset(oldStatus)
+          this.$refs.switch.reset(oldStatus)
         }
       }).finally(() => this.confirmLoading = false)
     }

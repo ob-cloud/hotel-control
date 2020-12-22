@@ -11,13 +11,15 @@
     :destroyOnClose="true"
     :bodyStyle="{height: 'calc(100% - 60px)'}"
   >
-    <bizz-lamp :siderWidth="150" :status="status" :deviceType="deviceType" :deviceChildType="deviceChildType" @change="handleLampChange"></bizz-lamp>
+    <a-spin :spinning="confirmLoading">
+      <bizz-lamp :siderWidth="150" :status="status" :deviceType="deviceType" :deviceChildType="deviceChildType" @change="handleLampChange"></bizz-lamp>
+    </a-spin>
   </a-drawer>
 </template>
 
 
 <script>
-import { editSwitchStatus, getSwitchStatus } from '@/api/device'
+import { controlHotelDevice } from '@/api/device'
 import { LedLampEquip, Descriptor } from 'hardware-suit'
 import BizzLamp from '@/components/Bizz/BizzLamp'
 export default {
@@ -49,8 +51,6 @@ export default {
       },
 
       confirmLoading: false,
-      form: this.$form.createForm(this),
-
       ledLampEquip: null,
 
       status: '',
@@ -114,47 +114,19 @@ export default {
     handleCancel () {
       this.close()
     },
-    handleOk () {
-    },
     handleLampChange (status, lampStatusInfo) {
-      // lampStatus = status; lampStatusInfo = statusInfo
       console.log('lamp ', lampStatusInfo)
-      this.setSwtich(status)
-    },
-    // onPowerChange (power) {
-    //   this.bright = !power ? 0 : 100
-    //   const status = this.ledLampEquip.setBrightness(this.bright).setColdColor(this.color).getBytes()
-    //   this.setSwtich(status)
-    // },
-    // onBrightChange (bright) {
-    //   if (bright === 0) (this.power = false)
-    //   const status = this.ledLampEquip.setBrightness(bright).getBytes()
-    //   this.setSwtich(status)
-    // },
-    // onColorChange (color) {
-    //   const status = this.ledLampEquip.setColdColor(color).getBytes()
-    //   this.setSwtich(status)
-    // },
-    setSwtich (status) {
-      editSwitchStatus(this.model.deviceSerialId, status).then(res => {
+      this.confirmLoading = true
+      controlHotelDevice(this.model.deviceSerialId, status).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('成功')
-          // this.getSwitchStatus()
+          this.confirmLoading = false
         } else {
           this.$message.error('失败')
         }
-      })
-    },
-    getSwitchStatus () {
-      getSwitchStatus(this.model.deviceSerialId).then(res => {
-        if (this.$isAjaxSuccess(res.code)) {
-          this.$message.success('成功')
-        } else {
-          this.$message.error('失败')
-        }
-      })
+      }).finally(() => this.confirmLoading = false)
     }
-  },
+  }
 }
 </script>
 

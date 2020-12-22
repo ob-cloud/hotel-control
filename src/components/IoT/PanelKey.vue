@@ -6,24 +6,27 @@
     <div class="content">
       <div class="keys-wrapper" :style="`${typeof width === 'number' ? 'width: ' + width + 'px' : 'width: ' + width}`">
         <div class="keys-list">
-          <div class="keys-item" :class="{extra: orderCount[0] < index + 1}" v-for="(item, index) in list" :key="index" :title="getKeyTips(orderCount[0] < index + 1)">
-            <span class="dot" @click="handleClick(item, index)"></span>
-            <div class="label" style="width: 110px;" :style="`${item.editable ? 'transform: translateX(-40%)' : 'transform: translateX(-50%)'}`">
-              <div v-if="item.editable">
-                <a-input
-                  :value="item.v"
-                  size="small"
-                  style="width: 60px"
-                  @change="e => handleChange(e.target.value, item)"
-                />
-                <a-icon class="icon" type="check" title="确认" @click="handleCheck(item, index, orderCount[0] < index + 1)"></a-icon>
-                <a-icon class="icon" type="delete" title="取消" @click="handleCancel(item, index, orderCount[0] < index + 1)"></a-icon>
+          <template v-for="(item, index) in list">
+            <!-- <div class="keys-item" :class="{extra: orderCount[0] < index + 1}" v-if="!(orderCount[1] && index < orderCount[1])" :key="index" :title="getKeyTips(orderCount[0] < index + 1)"> -->
+            <div class="keys-item" :class="{extra: orderCount[0] < index + 1}" :key="index" :title="getKeyTips(orderCount[0] < index + 1)">
+              <span class="dot" @click="handleClick(item, index)"></span>
+              <div class="label" style="width: 110px;" :style="`${item.editable ? 'transform: translateX(-40%)' : 'transform: translateX(-50%)'}`">
+                <div v-if="item.editable">
+                  <a-input
+                    :value="item.v"
+                    size="small"
+                    style="width: 60px"
+                    @change="e => handleChange(e.target.value, item)"
+                  />
+                  <a-icon class="icon" type="check" title="确认" @click="handleCheck(item, index, orderCount[0] < index + 1)"></a-icon>
+                  <a-icon class="icon" type="delete" title="取消" @click="handleCancel(item, index, orderCount[0] < index + 1)"></a-icon>
+                </div>
+                <template v-else>
+                  {{ item.v }}
+                </template>
               </div>
-              <template v-else>
-                {{ item.v }}
-              </template>
             </div>
-          </div>
+          </template>
         </div>
       </div>
     </div>
@@ -37,13 +40,17 @@ const KeyTypeEnum = {
   LINE: 'line',
   SOCKET: 'socket',
   RADAR: 'radar',
+  CURTAIN: 'curtain',
+  INFRARED: 'infrared'
 }
 const KeyTypeDescriptor = {
   [KeyTypeEnum.SWITCH]: '触摸开关',
   [KeyTypeEnum.SCENE]: '情景开关',
   [KeyTypeEnum.LINE]: '单线开关',
   [KeyTypeEnum.SOCKET]: '插座开关',
-  [KeyTypeEnum.RADAR]: '雷达开关'
+  [KeyTypeEnum.RADAR]: '雷达开关',
+  [KeyTypeEnum.CURTAIN]: '窗帘开关',
+  [KeyTypeEnum.INFRARED]: '红外开关',
 }
 export default {
   name: 'KeyPanel',
@@ -81,7 +88,14 @@ export default {
     totalCount () {
       return typeof this.orderCount === 'number' ? this.orderCount : +this.orderCount.reduce((a, b) => +a + (+b))
     },
-    validTypes () { //eg: ['switch', 'scene']
+    setKeyCount () { // 命名按键数量，非情景按键
+      if (typeof this.orderCount === 'number') return this.orderCount
+      if (this.orderCount.length === 1) return this.orderCount[0]
+      // [2, 0]
+      if (this.orderCount.length === 2) return this.orderCount[1] || this.orderCount[0]
+      return 0
+    },
+    validTypes () { // eg: ['switch', 'scene']
       return Object.keys(this.keyTypes).filter(k => this.keyTypes[k])
     }
   },
@@ -98,8 +112,9 @@ export default {
     }
   },
   methods: {
-    initList () {
-      for (let index = 0; index < this.totalCount; index++) {
+    initList () { // 仅保留非情景开关
+      // this.totalCount
+      for (let index = 0; index < this.setKeyCount; index++) {
         this.list.push({
           pid: this.serialId,
           v: index + 1,
@@ -111,7 +126,7 @@ export default {
     getKeyTips (extra) { // 获取按键提示
       if (!this.validTypes || !this.validTypes.length) return ''
       if (this.validTypes.length === 1) return KeyTypeDescriptor[this.validTypes[0]]
-      if (this.validTypes.length === 2) {
+      if (this.validTypes.length === 2) { // eg: ['switch', 'scene']
         // 情景混合开关
         const sceneIndex = this.validTypes.indexOf(KeyTypeEnum.SCENE)
         if (sceneIndex !== -1) {
@@ -132,9 +147,11 @@ export default {
       this.$emit('change', value, item, index + 1)
     },
     handleCheck (item, index, extra) {
+      // if (extra) index = index - this.orderCount[1] < 0 ? 0 : index - this.orderCount[1]
       this.$emit('check', item, index + 1, extra)
     },
     handleCancel (item, index, extra) {
+      // if (extra) index = index - this.orderCount[1] < 0 ? 0 : index - this.orderCount[1]
       item.editable = false
       this.$emit('cancel', item, index + 1, extra)
     }

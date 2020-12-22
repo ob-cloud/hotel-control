@@ -1,13 +1,14 @@
 <template>
   <div class="container">
+    <h4 class="key-tips" v-if="showTips">{{ keyText }}</h4>
     <a-checkbox-group v-model="powers">
       <template v-for="(item, index) in keyTotalCount" :value="index">
-        <a-checkbox v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})">
+        <a-checkbox v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})" @mouseover.native="keyText = getKeyTips()" @mouseout.native="keyText = ''">
           <slot name="icon">
             <i class="obicon obicon-power" :title="getKeyTips()"></i>
           </slot>
         </a-checkbox>
-        <a-checkbox v-else :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})">
+        <a-checkbox v-else :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})" @mouseover.native="keyText = getKeyTips(1)" @mouseout.native="keyText = ''">
           <slot name="icon"><i class="obicon obicon-power" :title="getKeyTips(1)"></i></slot>
         </a-checkbox>
       </template>
@@ -25,6 +26,7 @@ const KeyTypeEnum = {
   LINE: 'line',
   SOCKET: 'socket',
   RADAR: 'radar',
+  INFRARED: 'infrared'
 }
 const KeyTypeDescriptor = {
   [KeyTypeEnum.SWITCH]: '触摸开关',
@@ -46,16 +48,26 @@ export default {
     dataSource: {
       type: Array,
       default: () => []
+    },
+    showTips: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
     return {
-      powers: []
+      powers: [],
+      keyText: ''
     }
   },
   computed: {
     status () {
       return this.dataSource && this.dataSource.length ? this.dataSource : new Array(this.count).fill(0)
+    },
+    primaryCount () {
+      if (!this.count) return 0
+      if (typeof this.count === 'number') return this.count
+      return this.count[0]
     },
     keyTotalCount () {
       if (!this.count) return 0
@@ -83,31 +95,47 @@ export default {
     initPowers (val) { // [0, 1, 0] => [1], [1, 1, 0] => [0, 1], [0, 1, 1] => [1, 2]
       if (!val) return
       let curValue = val
-      if (val.length > this.count) {
+      if (val.length > this.keyTotalCount) {
         curValue = val.slice(0, this.count)
       }
       const powers = []
       curValue.forEach((item, index) => {
         if (item) powers.push(index)
       })
-      if (powers.length) this.powers = powers
+      // if (powers.length) this.powers = powers
       // console.log('value +++ === ', val, this.powers)
+      this.powers = powers.length ? powers : []
     },
     getKeyTips (extra) { // 获取按键提示
-      if (!this.validTypes || !this.validTypes.length) return ''
-      if (this.validTypes.length === 1) return KeyTypeDescriptor[this.validTypes[0]]
-      if (this.validTypes.length === 2) {
+      let validKeyTypes = [...this.validTypes]
+      if (!validKeyTypes || !validKeyTypes.length) return ''
+      if (validKeyTypes.length === 1) return KeyTypeDescriptor[validKeyTypes[0]]
+      if (validKeyTypes.length === 3) { // TODO 红外面板，截取前两位
+        validKeyTypes = validKeyTypes.includes(KeyTypeEnum.INFRARED) ? validKeyTypes.slice(0, validKeyTypes.indexOf(KeyTypeEnum.INFRARED)) : validKeyTypes
+      }
+      if (validKeyTypes.length === 2) { // ["switch", "scene"] ["switch", "infrared"] ["scene", "infrared"] ["switch", "scene", "infrared"]...
         // 情景混合开关
-        const sceneIndex = this.validTypes.indexOf(KeyTypeEnum.SCENE)
+        const sceneIndex = validKeyTypes.indexOf(KeyTypeEnum.SCENE)
         if (sceneIndex !== -1) {
           const unSceneIndex = 1 - sceneIndex
-          return !extra ? KeyTypeDescriptor[KeyTypeEnum.SCENE] : KeyTypeDescriptor[this.validTypes[unSceneIndex]]
+          return !extra ? KeyTypeDescriptor[KeyTypeEnum.SCENE] : KeyTypeDescriptor[validKeyTypes[unSceneIndex]]
         }
         return ''
       }
     },
+    __resetStatus (status) {
+      status.forEach((item, index) => this.$set(this.status, index, +item))
+    },
+    resetScene (status) {
+      const sceneStatus = status.filter((item, index) => index < this.primaryCount)
+      const set = sceneStatus.concat(this.status.slice(sceneStatus.length))
+      console.log('status _=_+_+_+ ', status, sceneStatus, this.status, set)
+      // this.initPowers(set)
+      this.__resetStatus(set)
+    },
     reset (status) {
-      this.initPowers(status)
+      // this.initPowers(status)
+      this.__resetStatus(status)
     },
     handleChange (e, record) {
       const item = e.target.checked
@@ -127,6 +155,20 @@ export default {
 .container {
   width: 400px;
   margin: 20px auto;
+
+  .key-tips {
+    text-align: center;
+    height: 26px;
+    font-size: 16px;
+    color: #333;
+    transition: all .3s;
+    // border: 1px solid #e7e7e7;
+    width: 30%;
+    margin: 4px auto;
+    border-radius: 10px;
+    // background: #e7e7e7;
+  }
+
   & /deep/ .ant-checkbox-group{
     display: flex;
     align-items: center;

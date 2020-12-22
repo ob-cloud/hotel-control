@@ -87,6 +87,7 @@ export default {
         keyTypes = switchEquip.keyTypes
       }
 
+      console.log('keyTypes   ', keyTypes)
       if (record.deviceSerialId) {
         this.deviceSerialId = record.deviceSerialId
         this.switchCount = count

@@ -7,7 +7,7 @@
       <a-radio :value="0">
         <a-icon type="border" style="font-size: 16px;" />
       </a-radio>
-      <a-radio :value="1" v-if="power !== 0">
+      <a-radio :value="1">
         <a-icon type="pause" />
       </a-radio>
     </a-radio-group>
