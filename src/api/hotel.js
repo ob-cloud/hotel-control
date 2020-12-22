@@ -2,7 +2,7 @@
  * @Author: eamiear
  * @Date: 2019-08-07 16:43:10
  * @Last Modified by: eamiear
- * @Last Modified time: 2020-12-14 10:35:10
+ * @Last Modified time: 2020-12-22 15:36:02
  */
 
 import { getAction, postAction, deleteAction, putAction } from '@/utils/ajax'
@@ -45,8 +45,9 @@ const unbindRoomInfrared = ({id, deviceSerialId, roomId}) => postAction('/room/u
 const getRoomUnbindGatewayList = ({hotelId, pageNo, pageSize}) => getAction('/room/getUnBandObox', {hotelId, pageNo, pageSize})
 const getRoomUnbindInfraredList = ({hotelId, pageNo, pageSize}) => getAction('/room/getUnBandIr', {hotelId, pageNo, pageSize})
 
-const bindRoomVoiceDevice = ({deviceSerialId, roomId}) => postAction('/', {deviceSerialId, roomId})
-const unbindRoomVoiceDevice = ({id}) => postAction('/', {id})
+// 绑定语音助手
+const bindRoomVoiceDevice = ({deviceSerialId, roomId}) => postAction('/room/bandDuer', {deviceSerialId, roomId})
+const unbindRoomVoiceDevice = ({deviceSerialId, roomId}) => postAction('/room/unBandDuer', {deviceSerialId, roomId})
 
 // 楼栋
 const getBuildingList = ({hotelId, name, pageNo, pageSize}) => getAction('/sys/hotel/listBuilding', {hotelId, name, pageNo, pageSize})

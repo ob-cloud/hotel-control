@@ -78,7 +78,7 @@
         <a-pagination v-if="roomList.length" simple style="position: fixed; right: 70px; bottom: 30px;" :current="queryParam.pageNo" :pageSize.sync="queryParam.pageSize" :total="total" :showSizeChanger="true" @change="handlePageChange" />
       </div>
       <room-modal ref="modalForm" @ok="modalFormOk"></room-modal>
-      <room-detail-modal ref="detailModal"></room-detail-modal>
+      <room-detail-modal ref="detailModal" @close="modalFormOk"></room-detail-modal>
       <!-- <room-obox-modal ref="deviceModal"></room-obox-modal> -->
     </a-card>
   </div>

@@ -46,11 +46,18 @@
       <a-descriptions-item label="语音控制">
         <a-space v-if="!audioEditable">
           <a-badge dot><a-icon :component="intelAudio" /></a-badge>
-          <a style="font-size: 12px; text-decoration: underline;" @click="audioEditable = true">{{ audioSerialId || '绑定' }}</a>
+          <a style="font-size: 12px; text-decoration: underline;" v-if="!audioSerialId" @click="audioEditable = true">绑定</a>
+          <div v-else>
+            {{ audioSerialId }}
+            <a-popconfirm title="确定解绑吗?" @confirm="() => handleAudioUnbind()">
+              <a style="font-size: 12px; text-decoration: underline;">解绑</a>
+            </a-popconfirm>
+          </div>
+
         </a-space>
         <a-space v-else style="display: inline-block;">
           <a-input style="width: 140px; " size="small" placeholder="请输入序列号" v-model="audioSerialId" />
-          <a-icon class="icon" type="check" title="确认" @click="handleAudioAction()"></a-icon>
+          <a-icon class="icon" type="check" title="确认" @click="handleAudioBind()"></a-icon>
           <a-icon class="icon" type="delete" title="取消" @click="handleAudioCancel()"></a-icon>
         </a-space>
       </a-descriptions-item>
@@ -400,6 +407,7 @@ export default {
     show (record) {
       this.visible = true
       this.roomId = record.id
+      this.audioSerialId = record.duerSerialId
       this.model = { ...record }
       this.getGatewayList()
       this.getInfraredList()
@@ -426,39 +434,32 @@ export default {
     bindIrModalOk () {
       this.getInfraredList()
     },
-    handleAudioAction () {
-      // TODO
-      // this.$refs.bindVoiceModal.edit({ roomId: this.roomId, serialId: 'sssss', id: '1111' })
-      if (!this.audioSerialId && this.oldAudioSerialId) { // 解绑
-        this.$confirm({
-          content: '即将解绑语音控制设备，请确认！',
-          onOk() {
-            unbindRoomVoiceDevice({deviceSerialId: this.audioSerialId})
-            .then(res => {
-              if (this.$isAjaxSuccess(res.code)) {
-                this.$message.success('解绑')
-              } else this.$message.error('解绑失败')
-            })
-            .catch((err) => this.$message.error(err.message || '服务异常'))
-            .finally(() => {})
-          },
-          cancelText: '取消'
-        })
-      } else if (this.audioSerialId) { // 绑定
-        bindRoomVoiceDevice({deviceSerialId: this.audioSerialId, roomId: this.roomId})
-        .then(res => {
-          if (this.$isAjaxSuccess(res.code)) {
-            this.$message.success('绑定成功')
-          } else this.$message.error('绑定失败')
-        })
-        .catch((err) => this.$message.error(err.message || '服务异常'))
-        .finally(() => {})
-      }
+    handleAudioBind () {
+      bindRoomVoiceDevice({deviceSerialId: this.audioSerialId, roomId: this.roomId})
+      .then(res => {
+        if (this.$isAjaxSuccess(res.code)) {
+          this.$message.success('绑定成功')
+          // this.audioEditable = false
+        } else {
+          this.$message.error(res.message || '绑定失败')
+          this.audioSerialId = ''
+        }
+      })
+      .catch((err) => this.$message.error(err.message || '服务异常'))
+      .finally(() => this.audioEditable = false)
+    },
+    handleAudioUnbind () {
+      unbindRoomVoiceDevice({deviceSerialId: this.audioSerialId, roomId: this.roomId})
+      .then(res => {
+        if (this.$isAjaxSuccess(res.code)) {
+          this.$message.success('解绑成功')
+          this.audioSerialId = ''
+        } else this.$message.error(res.message || '解绑失败')
+      })
     },
     handleAudioCancel () {
       this.audioEditable = false
-      // TODO
-      this.audioSerialId = this.oldAudioSerialId
+      this.audioSerialId = this.model.duerSerialId
     },
     handleOk () {
       this.$emit('ok')
