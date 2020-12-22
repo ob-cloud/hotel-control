@@ -62,6 +62,7 @@ export default {
       this.title = `智能开关 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
       this.curtainEquip = new CurtainEquip(record.deviceState, record.deviceType, record.deviceChildType)
       const pow = this.curtainEquip.curStatusInt
+      console.log('power   ', pow)
       this.$nextTick(() => {
         this.dataSource = [pow]
       })

@@ -12,17 +12,19 @@
   >
 
     <a-spin :spinning="confirmLoading">
-      <panel-key-switch ref="switch" :dataSource="dataSource" :count="switchCount" :showTips="false" :keyTypes="keyTypes" @change="onKeyChange"></panel-key-switch>
+      <curtain v-if="isCurtain" :dataSource="dataSource" @change="onKeyChange"></curtain>
+      <panel-key-switch v-else ref="switch" :dataSource="dataSource" :count="switchCount" :showTips="false" :keyTypes="keyTypes" @change="onKeyChange"></panel-key-switch>
     </a-spin>
   </a-drawer>
 </template>
 <script>
 import PanelKeySwitch from '@/components/IoT/PanelKeySwitch'
+import Curtain from '@/components/IoT/Curtain'
 import ActionMixin from '@/utils/mixins/ActionMixin'
 import { controlHotelDevice } from '@/api/device'
 import { Descriptor, SwitchEquip } from 'hardware-suit'
 export default {
-  components: { PanelKeySwitch },
+  components: { PanelKeySwitch, Curtain },
   props: {
     placement: {
       type: String,
@@ -54,7 +56,8 @@ export default {
       dataSource: [],
       switchEquip: null,
       switchCount: 3,
-      keyTypes: {}
+      keyTypes: {},
+      isCurtain: false
     }
   },
   watch: {
@@ -64,12 +67,13 @@ export default {
       this.model = Object.assign({}, record)
       this.visible = true
       this.title = `开关 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
-      // this.switchEquip = new SwitchMixEquip(record.deviceState, record.deviceType, record.deviceChildType)
       const factory = new SwitchEquip(record.deviceState, record.deviceType, record.deviceChildType)
       this.switchEquip = factory.create()
       const pow = this.switchEquip.getPowerInt()
       const count = this.switchEquip.orderCount
       const keyTypes = this.switchEquip.keyTypes
+      this.isCurtain = this.switchEquip.isCurtain
+      console.log('keyTypes    ', pow, count)
       this.$nextTick(() => {
         this.dataSource = pow
         this.switchCount = count
