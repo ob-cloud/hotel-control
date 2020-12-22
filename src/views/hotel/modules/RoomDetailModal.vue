@@ -435,7 +435,7 @@ export default {
       this.getInfraredList()
     },
     handleAudioBind () {
-      bindRoomVoiceDevice({deviceSerialId: this.audioSerialId, roomId: this.roomId})
+      bindRoomVoiceDevice({deviceSerialId: this.audioSerialId.trim(), roomId: this.roomId})
       .then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('绑定成功')
@@ -449,7 +449,7 @@ export default {
       .finally(() => this.audioEditable = false)
     },
     handleAudioUnbind () {
-      unbindRoomVoiceDevice({deviceSerialId: this.audioSerialId, roomId: this.roomId})
+      unbindRoomVoiceDevice({deviceSerialId: this.audioSerialId.trim(), roomId: this.roomId})
       .then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('解绑成功')
