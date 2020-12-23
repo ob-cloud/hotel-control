@@ -80,8 +80,8 @@
                 <a @click="handleControl(record)">控制</a>
               </a-menu-item> -->
               <a-menu-item v-isPermitted="'infrared:control'">
-                <a-popconfirm :title="`确定${record.deviceState === '0' ? '启用' : '停用'}吗?请谨慎操作`" @confirm="() => handleStopService(record.deviceSerialId, record.deviceState)">
-                  <a>{{ record.deviceState === '0' ? '启用' : '停用' }}</a>
+                <a-popconfirm :title="`确定${record.deviceState === '0' ? '停用' : '启用'}吗?请谨慎操作`" @confirm="() => handleStopService(record.deviceSerialId, record.deviceState)">
+                  <a>{{ record.deviceState === '0' ? '停用' : '启用' }}</a>
                 </a-popconfirm>
               </a-menu-item>
 
