@@ -102,7 +102,7 @@ export default {
     },
     hadnleTemp (val, unclickable) {
       if (!this.isPowerOn || unclickable) return
-      const temperature = +this.airEquip.getTemperature() || AirConditionEquip.defaultTemp
+      const temperature = +this.airEquip.getTemperature() || 26
       this.airEquip.setTemperature(val + +temperature)
       this.emitEvent()
     },

@@ -61,10 +61,10 @@ export default {
       this.visible = true
       this.title = `智能开关 - ${Descriptor.getTypeDescriptor(record.deviceType, record.deviceChildType)}(${record.deviceSerialId})`
       this.curtainEquip = new CurtainEquip(record.deviceState, record.deviceType, record.deviceChildType)
-      const pow = this.curtainEquip.curStatusInt
+      const pow = this.curtainEquip.getCurtainPowerInt()
       console.log('power   ', pow)
       this.$nextTick(() => {
-        this.dataSource = [pow]
+        this.dataSource = pow
       })
     },
     close () {
@@ -79,7 +79,7 @@ export default {
       this.handleCancel()
     },
     onKeyChange (state, oldState) {
-      this.curtainEquip.setStatus(state)
+      this.curtainEquip.setStatus(state[0])
       const status = this.curtainEquip.getBytes()
       if (!this.model.deviceSerialId) return
       this.confirmLoading = true
@@ -87,7 +87,7 @@ export default {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
         } else {
-          this.curtainEquip.setStatus(oldState)
+          this.curtainEquip.setStatus(oldState[0])
           this.$message.error(res.message)
         }
       }).finally(() => this.confirmLoading = false)
