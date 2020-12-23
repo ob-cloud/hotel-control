@@ -6,7 +6,7 @@
         <a-row :gutter="24">
           <a-col :sm="12" :md="6" :lg="5">
             <a-form-item label="序列号">
-              <a-input placeholder="请输入设备序列号" v-model="queryParam.serialId"></a-input>
+              <a-input placeholder="请输入设备序列号" v-model="queryParam.deviceSerialId"></a-input>
             </a-form-item>
           </a-col>
 
