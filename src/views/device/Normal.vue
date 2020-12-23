@@ -91,7 +91,7 @@
               </a-menu-item>
 
               <!-- 窗帘 -->
-              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType)">
+              <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isCurtainSmartSwitch(record.deviceChildType, record.deviceType) || TypeHints.isCurtainSmartMotor(record.deviceChildType, record.deviceType)">
                 <a @click="handleAction(5, record)">开关</a>
               </a-menu-item>
 
