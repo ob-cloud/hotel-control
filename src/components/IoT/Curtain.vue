@@ -12,7 +12,7 @@
       </a-radio>
     </a-radio-group> -->
     <template v-for="(item, index) in group">
-      <a-radio-group v-model="powers[index]" :name="`radioGroup${index}`" :key="index" @change="handleChange">
+      <a-radio-group v-model="powers[index]" :name="`radioGroup${index}`" :key="index" @change="handleChange(index)">
         <a-radio :value="2">
           <i class="obicon obicon-power"></i>
           <label>开</label>
@@ -63,8 +63,8 @@ export default {
     }
   },
   methods: {
-    handleChange () {
-      this.$emit('change', this.powers, this.oldPower, this.getIndex())
+    handleChange (row) {
+      this.$emit('change', this.powers, this.oldPower, this.getIndex(), row)
     },
     // {ON: 0, OFF: 1, PAUSE: 0} => [2]...
     parsePower (status) {
@@ -75,7 +75,6 @@ export default {
     // bits [0, 0, 0, 0, 0, 0] ---> [2, 4]
     // bit: [] --> 开、停、关 === 0, 1, 2 (索引) ===== 2、1、0 （power 值）
     getIndex () {
-      const len = this.group * 3
       const keyIndex = []
       for (let index = 0; index < this.group; index++) {
         const value = this.powers[index]

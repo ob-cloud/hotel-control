@@ -3,12 +3,12 @@
     <h4 class="key-tips" v-if="showTips">{{ keyText }}</h4>
     <a-checkbox-group v-model="powers">
       <template v-for="(item, index) in keyTotalCount" :value="index">
-        <a-checkbox v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})" @mouseover.native="keyText = getKeyTips()" @mouseout.native="keyText = ''">
+        <a-checkbox :class="{snap: keyTotalCount % 3 !== 0}" v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})" @mouseover.native="keyText = getKeyTips()" @mouseout.native="keyText = ''">
           <slot name="icon">
             <i class="obicon obicon-power" :title="getKeyTips()"></i>
           </slot>
         </a-checkbox>
-        <a-checkbox v-else :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})" @mouseover.native="keyText = getKeyTips(1)" @mouseout.native="keyText = ''">
+        <a-checkbox v-else :class="{snap: keyTotalCount % 3 !== 0}" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})" @mouseover.native="keyText = getKeyTips(1)" @mouseout.native="keyText = ''">
           <slot name="icon"><i class="obicon obicon-power" :title="getKeyTips(1)"></i></slot>
         </a-checkbox>
       </template>
@@ -182,6 +182,9 @@ export default {
   }
   & /deep/ .ant-checkbox-wrapper {
 
+    &.snap {
+      width: 140px;
+    }
     width: 120px;
     height: 100px;
     object-fit: contain;

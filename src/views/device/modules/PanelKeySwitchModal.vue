@@ -97,13 +97,16 @@ export default {
       this.$emit('ok')
       this.handleCancel()
     },
-    onCurtainKeyChange (status, oldStatus, record) {
+    onCurtainKeyChange (status, oldStatus, record, row) {
       const setStatus = (list, record) => {
         // 重置
         new Array(this.switchEquip.orderCount[0]).fill(0).forEach((item, index) => this.switchEquip.setPower(item, index))
-        list.forEach((state, index) => {
-          this.switchEquip.setPower(+!!state, record[index])
-        })
+        // list.forEach((state, index) => {
+        //   this.switchEquip.setPower(1, record[index])
+        // })
+        // list[row]
+        // 各窗帘面板互不干扰， row为对应的行（或第几个面板）
+        this.switchEquip.setPower(1, record[row])
       }
       console.log('-=== curtain  ', status.join(','), oldStatus.join(','), record)
       setStatus(status, record)
