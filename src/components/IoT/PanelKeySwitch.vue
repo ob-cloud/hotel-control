@@ -73,6 +73,7 @@ export default {
       if (!this.count) return 0
       if (typeof this.count === 'number') return this.count
       else if (this.count.length) return this.count.reduce((a, b) => +a + (+b))
+      else return 0
     },
     countList () {
       if (typeof this.count === 'number') return [this.count]
