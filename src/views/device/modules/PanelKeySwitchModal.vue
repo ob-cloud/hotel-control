@@ -102,7 +102,7 @@ export default {
         // 重置
         new Array(this.switchEquip.orderCount[0]).fill(0).forEach((item, index) => this.switchEquip.setPower(item, index))
         list.forEach((state, index) => {
-          this.switchEquip.setPower(state, record[index])
+          this.switchEquip.setPower(+!!state, record[index])
         })
       }
       console.log('-=== curtain  ', status.join(','), oldStatus.join(','), record)
