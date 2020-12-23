@@ -51,7 +51,7 @@
             <div class="block-item" :class="{'active': item.elec}" v-for="item in roomList" :key="item.id">
               <div class="toolbar left">
                 <!-- <i class="obicon obicon-temperature" style="color: #f66c32;"></i> -->
-                <span title="温度"><a-icon :component="iconTemperature" style="font-size: 20px; color: #f66c32;" />{{ item.temperature ? item.temperature + '℃' : '--' }}</span>
+                <span title="温度"><a-icon :component="iconTemperature" style="font-size: 20px; color: #f66c32; padding-right: 4px;" />{{ item.temperature ? item.temperature + '℃' : '--' }}</span>
               </div>
               <div class="toolbar">
                 <!-- <i v-isPermitted="'room:classroom:device:view'" class="icon obicon obicon-infrared" title="绑定OBOX" @click="handleDeviceModal(item)"></i> -->

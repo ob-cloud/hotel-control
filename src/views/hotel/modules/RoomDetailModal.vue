@@ -22,7 +22,7 @@
       :sub-title="`${model.buildName}${model.floorName}`"
     />
     <a-descriptions style="padding: 10px 24px;" :column="3">
-      <a-descriptions-item label="室内温度"><i v-if="model.temperature" class="obicon obicon-temperature" style="color: #fa8c16;"></i>{{ model.temperature ? `${model.temperature}℃` : '--' }}</a-descriptions-item>
+      <a-descriptions-item label="室内温度"><a-icon :component="iconTemperature" style="font-size: 20px; color: #f66c32; padding-right: 4px;" />{{ model.temperature ? `${model.temperature}℃` : '--' }}</a-descriptions-item>
       <a-descriptions-item label="插卡取电">
         <a-badge style="margin-left: 10px" :status="model.elec ? 'processing' : 'default'" :text="`${model.elec ? '取电中' : '未使用'}`" />
       </a-descriptions-item>
@@ -185,7 +185,7 @@ import WireConditionModal from '@views/device/modules/WireConditionModal'
 import InfraredAirConditionModal from '@views/device/modules/InfraredAirConditionModal'
 
 import { Descriptor, TypeHints, CardPowerEquip } from 'hardware-suit'
-import { intelAudio } from '@/core/icons'
+import { intelAudio, iconTemperature } from '@/core/icons'
 
 const deviceColumns = [
   {
@@ -319,6 +319,7 @@ export default {
       confirmVisible: false,
 
       intelAudio,
+      iconTemperature,
       audioSerialId: '',
       oldAudioSerialId: '',
       audioEditable: false
