@@ -15,12 +15,15 @@
       <a-radio-group v-model="powers[index]" :name="`radioGroup${index}`" :key="index" @change="handleChange">
         <a-radio :value="2">
           <i class="obicon obicon-power"></i>
+          <label>开</label>
         </a-radio>
         <a-radio :value="0">
           <a-icon type="border" style="font-size: 16px;" />
+          <label>关</label>
         </a-radio>
         <a-radio :value="1">
           <a-icon type="pause" />
+          <label>停</label>
         </a-radio>
       </a-radio-group>
     </template>
@@ -127,6 +130,7 @@ export default {
       margin-left: 0;
     }
     span{
+      position: relative;
       transition: all .3s;
 
       border: 1px solid #cfcbcb;
@@ -142,6 +146,13 @@ export default {
       background-color: #e7e7e7;
       object-fit: contain;
       box-shadow: inset 0 5px white, inset 0 -5px #bbb, inset 5px 0 #d7d7d7, inset -5px 0 #d7d7d7;
+
+      > label{
+        position: absolute;
+        bottom: -30px;
+        font-size: 14px;
+        color: #000;
+      }
 
       > i{
         font-size: 30px;
