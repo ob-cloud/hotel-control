@@ -65,6 +65,7 @@
           //   ]},
           description: {
             rules: [
+              { required: true, message: '请输入角色描述信息!' },
               { min: 0, max: 126, message: '长度不超过 126 个字符', trigger: 'blur' }
             ]}
         },
