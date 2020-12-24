@@ -20,7 +20,7 @@
 <script>
 import { Descriptor, WireConditionEquip } from 'hardware-suit'
 import WireCondition from '@/components/IoT/WireCondition'
-import { controlHotelDevice } from '@/api/device'
+import { controlHotelDevice, getHotelDeviceList } from '@/api/device'
 export default {
   components: { WireCondition },
   props: {
@@ -81,6 +81,17 @@ export default {
       controlHotelDevice(this.model.deviceSerialId, status).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.$message.success('操作成功')
+          if (status.slice(0, 2) === '01') {
+            setTimeout(() => {
+              this.loading = true
+              getHotelDeviceList({pageNo: 1, pageSize: 10, deviceSerialId: this.model.deviceSerialId, hotelId: this.$store.getters.hotelId}).then(res => {
+                if (this.$isAjaxSuccess(res.code)) {
+                  const record = res.result.records[0]
+                  if (record) this.equip = new WireConditionEquip(record.deviceState, record.deviceType, record.deviceChildType)
+                }
+              }).finally(() => this.loading = false)
+            }, 1000)
+          }
         } else this.$message.error(res.message || '操作失败')
       }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
     }
