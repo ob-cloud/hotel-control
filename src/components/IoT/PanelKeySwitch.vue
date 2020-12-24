@@ -1,15 +1,15 @@
 <template>
   <div class="container">
-    <h4 class="key-tips" v-if="showTips">{{ keyText }}</h4>
     <a-checkbox-group v-model="powers">
       <template v-for="(item, index) in keyTotalCount" :value="index">
-        <a-checkbox :class="{snap: keyTotalCount % 3 !== 0}" v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})" @mouseover.native="keyText = getKeyTips()" @mouseout.native="keyText = ''">
+        <a-checkbox :class="{snap: keyTotalCount % 3 !== 0}" v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})">
           <slot name="icon">
             <i class="obicon obicon-power" :title="getKeyTips()"></i>
+            <label v-if="tips">{{ getKeyTips() }}</label>
           </slot>
         </a-checkbox>
-        <a-checkbox v-else :class="{snap: keyTotalCount % 3 !== 0}" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})" @mouseover.native="keyText = getKeyTips(1)" @mouseout.native="keyText = ''">
-          <slot name="icon"><i class="obicon obicon-power" :title="getKeyTips(1)"></i></slot>
+        <a-checkbox v-else :class="{snap: keyTotalCount % 3 !== 0}" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})">
+          <slot name="icon"><i class="obicon obicon-power" :title="getKeyTips(1)"></i><label v-if="tips">{{ getKeyTips(1) }}</label></slot>
         </a-checkbox>
       </template>
       <!-- <a-checkbox v-for="(item, index) in keyTotalCount" :value="index" :key="index" @change="(e) => handleChange(e, {index})">
@@ -49,15 +49,14 @@ export default {
       type: Array,
       default: () => []
     },
-    showTips: {
+    tips: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data () {
     return {
-      powers: [],
-      keyText: ''
+      powers: []
     }
   },
   computed: {
@@ -198,6 +197,7 @@ export default {
     }
     span{
       // display: inline-block;
+      position: relative;
       transition: all .3s;
 
       border: 1px solid #cfcbcb;
@@ -213,6 +213,13 @@ export default {
       background-color: #e7e7e7;
       object-fit: contain;
       box-shadow: inset 0 5px white, inset 0 -5px #bbb, inset 5px 0 #d7d7d7, inset -5px 0 #d7d7d7;
+
+      > label{
+        position: absolute;
+        bottom: -30px;
+        font-size: 14px;
+        color: #000;
+      }
 
       > i{
         font-size: 30px;

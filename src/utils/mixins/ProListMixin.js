@@ -27,7 +27,7 @@ export const ProListMixin = {
         showTotal: (total, range) => {
           return range[0] + '-' + range[1] + ' 共' + total + '条'
         },
-        showQuickJumper: true,
+        showQuickJumper: false,
         showSizeChanger: true,
         total: 0
       },

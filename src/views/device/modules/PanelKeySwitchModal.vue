@@ -13,7 +13,7 @@
 
     <a-spin :spinning="confirmLoading">
       <curtain v-if="isCurtain" ref="curtain" :dataSource="dataSource" :group="curtainGroup" @change="onCurtainKeyChange"></curtain>
-      <panel-key-switch v-else ref="switch" :dataSource="dataSource" :count="switchCount" :showTips="false" :keyTypes="keyTypes" @change="onKeyChange"></panel-key-switch>
+      <panel-key-switch v-else ref="switch" :dataSource="dataSource" :count="switchCount" :tips="showKeyName" :keyTypes="keyTypes" @change="onKeyChange"></panel-key-switch>
     </a-spin>
   </a-drawer>
 </template>
@@ -58,7 +58,8 @@ export default {
       switchCount: 3,
       keyTypes: {},
       isCurtain: false,
-      curtainGroup: 0
+      curtainGroup: 0,
+      showKeyName: false
     }
   },
   watch: {
@@ -74,11 +75,11 @@ export default {
       const count = this.switchEquip.orderCount
       const keyTypes = this.switchEquip.keyTypes
       this.isCurtain = this.switchEquip.isCurtain
+      this.showKeyName = this.switchEquip.isMixScene // 混合面板展示按键名称
 
       this.$nextTick(() => {
-        if (this.isCurtain) {
+        if (this.isCurtain) { // 分组 3个一组
           power = this.switchEquip.getCurtainPowerInt()
-          // 3个一组
           this.curtainGroup = count.length ? count[0] / 3 : 0
         }
         this.dataSource = power
@@ -164,7 +165,8 @@ export default {
     }
   },
   destroyed () {
-    // this.dataSource = []
+    this.dataSource = []
+    this.showKeyName = false
   }
 }
 </script>

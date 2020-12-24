@@ -65,13 +65,18 @@
         :loading="loading"
         @change="handleTableChange"
       >
-
+        <span slot="state" slot-scope="text, record">
+          <template v-for="(tag, index) in getStateTag(record)">
+            <a-tag color="blue" style="margin-right: 4px; margin-top: 4px; padding: 0 4px;" :key="index" v-if="tag">{{ tag }}</a-tag>
+          </template>
+        </span>
         <span slot="action" slot-scope="text, record">
           <a v-isPermitted="'device:edit'" @click="handleEdit(record)">编辑</a>
           <a-divider v-isPermitted="'device:edit'" type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">
               更多 <a-icon type="down" />
+              <!-- <a-icon type="more" /> -->
             </a>
             <a-menu slot="overlay">
               <a-menu-item v-isPermitted="'device:control'" v-if="TypeHints.isXkeySocketSwitch(record.deviceChildType, record.deviceType)">
@@ -184,9 +189,13 @@
             title: '设备状态',
             align: 'center',
             dataIndex: 'deviceState',
-            customRender (status, row) {
-              return Descriptor.getStatusDescriptor(status, row.deviceType, row.deviceChildType)
-            }
+            width: 120,
+            scopedSlots: { customRender: 'state' },
+            // customRender (status, row) {
+            //   const descriptor = Descriptor.getStatusDescriptor(status, row.deviceType, row.deviceChildType)
+            //   if (descriptor.indexOf(',') !== -1 || descriptor.indexOf('|') !== -1)
+            //   // return Descriptor.getStatusDescriptor(status, row.deviceType, row.deviceChildType)
+            // }
           },
           // {
           //   title: '使能状态',
@@ -244,6 +253,15 @@
       this.$bus.$on('state', () => this.loadData())
     },
     methods: {
+      getStateTag (record) {
+        const descriptor = Descriptor.getStatusDescriptor(record.deviceState, record.deviceType, record.deviceChildType)
+        console.log(descriptor)
+        if (descriptor.indexOf(',') !== -1 || descriptor.indexOf('|') !== -1) {
+          const sep = descriptor.indexOf(',') !== -1 ? ',' : '|'
+          return descriptor.split(sep)
+        }
+        return [descriptor]
+      },
       getCardActionStatus (status) {
         return new CardPowerEquip(status).getActionStatus()
       },

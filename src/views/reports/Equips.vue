@@ -84,7 +84,7 @@ const columns = [{
   align:"center",
   dataIndex: 'time'
 },{
-  title: '酒店名字',
+  title: '酒店名',
   align:"center",
   dataIndex: 'hotelName'
 },{
