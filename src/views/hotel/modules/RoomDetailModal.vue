@@ -55,7 +55,7 @@
           </div>
 
         </a-space>
-        <a-space v-else style="display: inline-block;">
+        <a-space v-else>
           <a-input style="width: 140px; " size="small" placeholder="请输入序列号" v-model="audioSerialId" />
           <a-icon class="icon" type="check" title="确认" @click="handleAudioBind()"></a-icon>
           <a-icon class="icon" type="delete" title="取消" @click="handleAudioCancel()"></a-icon>
