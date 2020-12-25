@@ -1,7 +1,7 @@
 <template>
   <div class="user-wrapper">
     <div class="content-box">
-      <bizz-conserve-select :value="hotelId" :dataSource="hotelList" :optionItemProp="{label: 'hotelName'}" @select="onHotelSelect" placeholder="请选择酒店" />
+      <bizz-conserve-select class="h-select" :value="hotelId" :dataSource="hotelList" :optionItemProp="{label: 'hotelName'}" @select="onHotelSelect" placeholder="请选择酒店" />
       <notice-icon class="action" />
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">
@@ -100,3 +100,19 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+  .layout.ant-layout {
+    &.mobile,
+    &.tablet {
+      .user-wrapper .h-select{
+        width: inherit!important;
+      }
+      .user-wrapper .action {
+        padding: 0;
+      }
+      .user-wrapper .action /deep/ .ant-avatar{
+        display: none;
+      }
+    }
+  }
+</style>
