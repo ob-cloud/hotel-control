@@ -2,13 +2,13 @@
   <div class="container">
     <a-checkbox-group v-model="powers">
       <template v-for="(item, index) in keyTotalCount" :value="index">
-        <a-checkbox :class="{snap: keyTotalCount % 3 !== 0}" v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})">
+        <a-checkbox :class="{snap: [2, 4].includes(primaryCount)}" v-if="countList[0] >= index + 1" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 0})">
           <slot name="icon">
             <i class="obicon obicon-power" :title="getKeyTips()"></i>
             <label v-if="tips">{{ getKeyTips() }}</label>
           </slot>
         </a-checkbox>
-        <a-checkbox v-else :class="{snap: keyTotalCount % 3 !== 0}" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})">
+        <a-checkbox v-else :class="{snap: [2, 4].includes(primaryCount)}" :value="index" :key="index" @change="(e) => handleChange(e, {index, extra: 1})">
           <slot name="icon"><i class="obicon obicon-power" :title="getKeyTips(1)"></i><label v-if="tips">{{ getKeyTips(1) }}</label></slot>
         </a-checkbox>
       </template>
@@ -184,6 +184,9 @@ export default {
 
     &.snap {
       width: 140px;
+    }
+    &.normal {
+      width: 120px;
     }
     width: 120px;
     height: 100px;

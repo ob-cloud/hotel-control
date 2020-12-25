@@ -133,7 +133,7 @@
         </a-table>
       </a-tab-pane>
       <a-tab-pane key="2" tab="红外设备" force-render>
-        <a-table bordered size="small" rowKey="indexOsm" :columns="infraredColumns" :dataSource="irDeviceList" :loading="loading">
+        <a-table bordered size="small" rowKey="indexOsm" :columns="infraredColumns" :dataSource="irDeviceList" :pagination="pagination" :loading="loading" @change="handleIrTableChange">
           <span slot="action" slot-scope="text, record">
             <!--  v-if="TypeHints.isInfrared(record.deviceType)" -->
             <a @click="handleAction(50, record)">控制</a>
@@ -312,6 +312,7 @@ export default {
       infraredColumns: infraredColumns,
       infraredList: [],
       irDeviceList: [],
+      pagination: {...this.ipagination},
       queryirParam: {pageNo: 1, pageSize: 10},
       TypeHints,
 
@@ -373,7 +374,7 @@ export default {
       }).finally(() => this.loadingInfrared = false)
     },
     loadData () {
-      // this.roomId && this.getDeviceList(arg)
+      this.roomId && this.getDeviceList()
     },
     getDeviceList (arg) {
       if (arg === 1) {
@@ -387,23 +388,29 @@ export default {
       getRoomGatewayDeviceList(params).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.deviceList = res.result.records
+          this.ipagination.total = res.result.total
         }
       }).finally(() => this.loading = false)
     },
     getIrdDeviceList (arg) {
       if (arg === 1) {
-        this.ipagination.current = 1
+        this.pagination.current = 1
       }
       this.loading = true
       const params = {...this.queryParam}
-      params.pageNo = this.ipagination.current
-      params.pageSize = this.ipagination.pageSize
+      params.pageNo = this.pagination.current
+      params.pageSize = this.pagination.pageSize
       params.roomId = this.roomId
       getRoomInfraredDeviceList(params).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.irDeviceList = res.result.records
+          this.pagination.total = res.result.total
         }
       }).finally(() => this.loading = false)
+    },
+    handleIrTableChange (pagination) {
+      this.pagination = pagination
+      this.getIrdDeviceList()
     },
     show (record) {
       this.visible = true
