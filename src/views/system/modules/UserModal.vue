@@ -245,7 +245,7 @@
         }).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             // this.selectedRole = res.result
-            this.form.setFieldsValue({selectedroles: res.result})
+            this.form.setFieldsValue({selectedroles: res.result ? res.result[0] : ''})
           } else {
             console.log(res.message)
           }
@@ -292,7 +292,7 @@
             values.birthday = values.birthday ? values.birthday.format(this.dateFormat) : ''
             let formData = Object.assign(this.model, values)
             // formData.avatar = avatar
-            formData.selectedroles = formData.selectedroles.length > 0 ? formData.selectedroles.join(',') : ''
+            // formData.selectedroles = formData.selectedroles.length > 0 ? formData.selectedroles.join(',') : ''
 
             if (!this.model.id) {
               formData.id = this.userId
