@@ -292,7 +292,7 @@
             values.birthday = values.birthday ? values.birthday.format(this.dateFormat) : ''
             let formData = Object.assign(this.model, values)
             // formData.avatar = avatar
-            // formData.selectedroles = this.selectedRole.length > 0 ? this.selectedRole.join(',') : ''
+            formData.selectedroles = formData.selectedroles.length > 0 ? formData.selectedroles.join(',') : ''
 
             if (!this.model.id) {
               formData.id = this.userId
