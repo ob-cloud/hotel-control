@@ -312,7 +312,16 @@ export default {
       infraredColumns: infraredColumns,
       infraredList: [],
       irDeviceList: [],
-      pagination: {...this.ipagination},
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        pageSizeOptions: ['10', '20', '30'],
+        showTotal: (total, range) => {
+          return range[0] + '-' + range[1] + ' 共' + total + '条'
+        },
+        showSizeChanger: true,
+        total: 0
+      },
       queryirParam: {pageNo: 1, pageSize: 10},
       TypeHints,
 
