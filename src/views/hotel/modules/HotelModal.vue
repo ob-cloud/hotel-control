@@ -83,9 +83,9 @@
           <a-range-picker
             :disabled="disableSubmit"
             v-decorator="[ 'operTime', {} ]"
-            format="h:mm"
-            valueFormat="h:mm"
-            :showTime="true"
+            format="HH:mm"
+            valueFormat="HH:mm"
+            :showTime="{use12Hours: false, format: 'HH:mm'}"
             :mode="['time', 'time']"
             :placeholder="['开始时间', '结束时间']"
           />
