@@ -22,13 +22,6 @@
         <div class="table-page-search-wrapper">
           <a-form layout="inline" @submit.prevent="query()" v-if="toggleSearchStatus">
             <a-row :gutter="24">
-
-              <a-col :md="6" :sm="12">
-                <a-form-item label="序列号">
-                  <a-input placeholder="请输入设备序列号" v-model="queryParam.deviceId"></a-input>
-                </a-form-item>
-
-              </a-col>
               <a-col :md="6" :sm="12">
                 <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="日期">
                   <a-range-picker
