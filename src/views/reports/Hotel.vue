@@ -63,7 +63,7 @@
               </a-col> -->
             </a-row>
           </div>
-          <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="stamp" :columns="columns" :pagination="ipagination" @change="handleTableChange">
+          <a-table bordered :loading="loading" :dataSource="dataSource" size="small" rowKey="time" :columns="columns" :pagination="ipagination" @change="handleTableChange">
           </a-table>
         </div>
       </div>
@@ -145,21 +145,12 @@ export default {
       this.loading = true
       getHotelReportList({...params, hotelId: this.$store.getters.hotelId}).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
-          this.dataSource = res.result.tableHotelResponseList || []
-          this.dataSource = this.dataSource.map(item => {
-            if (item) {
-              item.stamp = Date.now() + parseInt(Math.random(10) * 1000)
-              return item
-            }
-          })
+          this.dataSource = res.result.tableHotelResponseList
           this.ipagination.total = res.result.total || 0
         } else {
           this.$message.warning(res.message)
         }
-        this.loading = false
-      }).finally(() => {
-        this.loading = false
-      })
+      }).finally(() => this.loading = false)
     },
   },
 }
