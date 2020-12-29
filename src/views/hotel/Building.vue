@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     searchReset () {
-      this.queryParam = { pageNo: 1, pageSize: 10 }
+      // this.queryParam = { pageNo: 1, pageSize: 10 }
       this.loadData(1)
     },
     loadData (arg) {
@@ -143,10 +143,11 @@ export default {
     },
     getDataList (arg) {
       if (arg === 1) {
-        this.queryParam.pageNo = 1
+        this.ipagination.current = 1
       }
+      const params = this.getQueryParams()
       this.loading = true
-      getBuildingList({...this.queryParam, hotelId: this.$store.getters.hotelId}).then(res => {
+      getBuildingList({...params, hotelId: this.$store.getters.hotelId}).then(res => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dataList = res.result.records
           this.ipagination.total = res.result.total
