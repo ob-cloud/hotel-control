@@ -10,7 +10,7 @@
               </a-form-item>
             </a-col>
             <a-col :sm="12" :md="6" :lg="5">
-              <a-form-item label="楼栋">
+              <a-form-item label="楼层">
                 <a-input allowClear @keyup.enter.native="handleSearch" v-model="queryParam.floorName" placeholder="请输入楼层名称"></a-input>
               </a-form-item>
             </a-col>
