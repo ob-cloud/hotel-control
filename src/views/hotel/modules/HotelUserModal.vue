@@ -129,7 +129,10 @@
           }else this.$message.error(res.message)
         }).catch(() => this.$message.error('服务异常')).finally(() => this.loading = false)
       },
-      handleUnbindBatch () {}
+      handleUnbindBatch () {
+        const ids = this.selectedRowKeys.join(',')
+        this.handleUnbind(ids)
+      }
     }
   }
 </script>
