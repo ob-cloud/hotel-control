@@ -255,6 +255,7 @@
     methods: {
       getStateTag (record) {
         const descriptor = Descriptor.getStatusDescriptor(record.deviceState, record.deviceType, record.deviceChildType)
+        if (!descriptor) return []
         if (descriptor.indexOf(',') !== -1 || descriptor.indexOf('|') !== -1) {
           const sep = descriptor.indexOf(',') !== -1 ? ',' : '|'
           return descriptor.split(sep)
