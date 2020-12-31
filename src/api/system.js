@@ -76,7 +76,7 @@ const queryPermissionTreeList = (params) => getAction('/sys/role/queryTreeList',
 ///// Annoucement
 // const getAnnouncementList = (params) => getAction('/sys/announcement/list', params)
 const getAnnouncementList = ({title, type, pageNo, pageSize}) => getAction('/sys/sysAnnouncementSend/list', {title, type, pageNo, pageSize})
-const delAnnouncementList = (annId) => getAction('/sys/sysAnnouncementSend/delAnnouncement', {annId})
+const delAnnouncementList = (annId) => deleteAction('/sys/sysAnnouncementSend/delAnnouncement', {annId})
 const readAllAnnouncement = () => putAction('/sys/sysAnnouncementSend/readAll')
 
 // 发布
