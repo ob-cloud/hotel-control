@@ -149,7 +149,7 @@ export default {
       > label{
         position: absolute;
         bottom: -30px;
-        font-size: 14px;
+        font-size: 12px;
         color: #000;
       }
 
