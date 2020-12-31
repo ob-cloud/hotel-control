@@ -43,10 +43,13 @@
       // 确定
       handleOk () {
         if(!this.pickerValue) return
+        if (!this.$store.getters.hotelId) {
+          return this.$message.error('账号没有绑定酒店')
+        }
         const start = this.pickerValue[0]
         const end = this.pickerValue[1]
         const fmt = 'YYYY-MM-DD'
-        window.open(exportsLogs(start.format(fmt), end.format(fmt)))
+        window.open(exportsLogs(start.format(fmt), end.format(fmt), this.$store.getters.hotelId))
       },
       // 关闭
       handleCancel () {

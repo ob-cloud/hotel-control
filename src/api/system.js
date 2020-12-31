@@ -105,8 +105,8 @@ const delBatchMessageTemplate = (params) => deleteAction('/message/sysMessageTem
 const getSystemConfig = () => getAction('/sys/common/setting')
 
 const getSysLogList = (log = {}) => getAction('/log/getLog', log)
-const exportsLogs = (startTime, endTime) => {
-  return getRequestUrl('/log/getExportLog', {startTime, endTime})
+const exportsLogs = (startTime, endTime, hotelId) => {
+  return getRequestUrl('/log/getExportLog', {startTime, endTime, hotelId})
 }
 
 export {
